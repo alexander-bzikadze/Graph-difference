@@ -20,6 +20,9 @@ class GraphWithRepetitiveNodesWithRoot():
         def __repr__(self):
             return "Node: (" + str(self.Label) + ", " + str(self.Number) + ")"
 
+        def __lt__(self, other):
+            return self.Label < other.Label if self.Label != other.Label else self.Number < other.Number
+
         @property
         def Label(self):
             return self.__Label

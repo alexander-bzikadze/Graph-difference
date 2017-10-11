@@ -4,6 +4,24 @@ from .graph_diff_algorithm import GraphDiffAlgorithm
 
 
 class BaselineAlgorithm(GraphDiffAlgorithm):
+    class BLPermutations():
+        def __init__(self, label: int, graph):
+            self._label = label
+            self._length_of_another_graph = len(graph.get(label))
+
+        def list_map_permutations(self, list_to_perm, current):
+            if self._length_of_another_graph <= current:
+                return [ [] ]
+            res = []
+            for i in range(0, len(list_to_perm)):
+                l = list_to_perm.copy()
+                l[0], l[i] = l[i], l[0]
+                res += [ [l[0]] + perm for perm in self.list_map_permutations(l[1:], current + 1) ]
+            res += [ [lr_node(self._label, 0)] + perm for perm in self.list_map_permutations(l[1:], current + 1) ]
+            return res
+
+
+
     class RNRGraphForBLAlg():
         def __init__(self, graph: GraphWithRepetitiveNodesWithRoot):
             from collections import defaultdict
@@ -32,23 +50,27 @@ class BaselineAlgorithm(GraphDiffAlgorithm):
             return self
 
         def graph_maps_for_each_label(self, graph):
-
-            def list_map_permutations(l1):
-                from itertools import permutations
-                return [list(l) for l in permutations(l1)]
+            def zip_all(l1, l2_perms):
+                return [ (l1, l2) for l2 in l2_perms ]
 
             def remove_duplicates_from_iterable(l1):
                 res = []
+                dupli_num = 0
+                all = 0
                 for elem in l1:
+                    all += 1
                     if elem not in res:
                         res.append(elem)
+                    else:
+                        dupli_num += 1
+                print(dupli_num, all)
                 return res
-            from itertools import product
+
             res = {
                 label: remove_duplicates_from_iterable(
                 {node_from_self: node_from_graph for node_from_self, node_from_graph in zip(lr1, lr2)
                         if node_from_self.Number != 0 or node_from_graph.Number != 0}
-                    for lr1, lr2 in product(list_map_permutations(l1), list_map_permutations(l2))
+                    for lr1, lr2 in zip_all(l1, BaselineAlgorithm.BLPermutations(label, graph).list_map_permutations(l2, 0))
                 ) for (label, l1), (_, l2) in zip(sorted(self.items()), sorted(graph.items()))
             }
             return res
@@ -63,11 +85,16 @@ class BaselineAlgorithm(GraphDiffAlgorithm):
                 edge_metric = 0
                 for node in graph_map._graph1:
                     # If 0 in num of one of the nodes, it means that there is no match for another.
-                    if node.Number == 0 or graph_map.match(node).Number == 0:
+                    if node.Number == 0 or node not in graph_map._graph_map or graph_map.match(node).Number == 0:
                         continue
                     node_metric += 1
                     edge_metric += sum(
-                        [int(graph_map.match(to_node) in graph_map._graph2.get_list_of_adjacent_nodes(graph_map.match(node)))
+                        [int(to_node.Number != 0
+                            and node.Number != 0
+                            and node in graph_map._graph1
+                            and node in graph_map._graph_map
+                            and to_node in graph_map._graph_map and
+                            graph_map.match(to_node) in graph_map._graph2.get_list_of_adjacent_nodes(graph_map.match(node)))
                          for to_node in graph_map._graph1.get_list_of_adjacent_nodes(node)]
                     )
                 return (edge_metric, node_metric)
@@ -91,8 +118,8 @@ class BaselineAlgorithm(GraphDiffAlgorithm):
         graph2_internal = BaselineAlgorithm.RNRGraphForBLAlg(graph2)
         graph1_internal.extend_graph(graph2_internal)
         graph1_internal.extend_graph(graph1_internal)
-        graph1_internal.add_zero_nodes(graph2_internal)
-        graph2_internal.add_zero_nodes(graph1_internal)
+        # graph1_internal.add_zero_nodes(graph2_internal)
+        # graph2_internal.add_zero_nodes(graph1_internal)
 
         def produce_all_possible_maps(graph_maps_for_each_label):
             from functools import reduce
