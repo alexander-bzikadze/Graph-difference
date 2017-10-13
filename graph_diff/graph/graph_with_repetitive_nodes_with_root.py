@@ -2,8 +2,8 @@ from .graph_with_repetitive_nodes_exceptions import LabeledRepetitiveNodePositiv
 from .graph_with_repetitive_nodes_exceptions import GraphWithRepetitiveNodesKeyError
 
 
-class GraphWithRepetitiveNodesWithRoot():
-    class LabeledRepetitiveNode():
+class GraphWithRepetitiveNodesWithRoot:
+    class LabeledRepetitiveNode:
         def __hash__(self) -> int:
             return (self.Label, self.Number).__hash__()
 
@@ -79,7 +79,7 @@ class GraphWithRepetitiveNodesWithRoot():
         return self
 
     def get_list_of_adjacent_nodes(self, node):
-        return self._adjacency_list[node]
+        return self._adjacency_list[node] if node in self else []
 
 
 def lr_node(label: int, number: int):
