@@ -10,6 +10,11 @@ class GraphMap:
         self._graph2 = None
         self._graph_map_1_to_2 = None
         self._graph_map_2_to_1 = None
+        self._nodes_in_1_not_in_2 = None
+        self._nodes_in_2_not_in_1 = None
+        self._edges_in_1_not_in_2 = None
+        self._edges_in_2_not_in_1 = None
+        self._complete_analysis_done = False
 
     @staticmethod
     def construct_graph_map(graph_map_1_to_2, graph1: GraphWithRepetitiveNodesWithRoot,
@@ -34,9 +39,7 @@ class GraphMap:
 
         graph_map._graph1 = graph1
         graph_map._graph2 = graph2
-        graph_map.__eval_difference()
-
-        return graph_map
+        return graph_map.__eval_difference()
 
     def map_from_1(self, node):
         return self._graph_map_1_to_2[node] if node in self._graph_map_1_to_2.keys() else lr_node(node.Label, 0)
@@ -55,16 +58,76 @@ class GraphMap:
                 for to_node_1 in graph1.get_list_of_adjacent_nodes(from_node_1)
                 if self.map_from_1(to_node_1) in graph2.get_list_of_adjacent_nodes(self.map_from_1(from_node_1))
             ]
-        self._node_overlap = nodes_overlap(self._graph1, self._graph2)
-        self._num_node_overlap = len(self._node_overlap)
-        self._edge_overlap = edges_overlap(self._graph1, self._graph2)
-        self._num_edge_overlap = len(self._edge_overlap)
+
+        def complement_of_nodes(graph: GraphWithRepetitiveNodesWithRoot, nodes):
+            return [node for node in graph if node not in nodes]
+
+        self._node_overlap_from_first = nodes_overlap(self._graph1, self._graph2)
+        self._num_node_overlap = len(self._node_overlap_from_first)
+        self._edge_overlap_from_first = edges_overlap(self._graph1, self._graph2)
+        self._num_edge_overlap = len(self._edge_overlap_from_first)
+
+        return self
+
+    def eval_difference_complete(self):
+        def complement_of_nodes(graph: GraphWithRepetitiveNodesWithRoot, nodes):
+            return [node for node in graph if node not in nodes]
+
+        def complement_of_edges(graph: GraphWithRepetitiveNodesWithRoot, edges):
+            return [(from_node, to_node)
+                    for from_node in graph
+                    for to_node in graph.get_list_of_adjacent_nodes(from_node)
+                    if (from_node, to_node) not in edges]
+        if self._complete_analysis_done:
+            return self
+
+        self._node_overlap_from_second = [self.map_from_1(node) for node in self._node_overlap_from_first]
+        self._edge_overlap_from_second = [(self.map_from_1(from_node), self.map_from_1(to_node)) for from_node, to_node in self._edge_overlap_from_first]
+
+        self._nodes_in_1_not_in_2 = complement_of_nodes(self._graph1, self._node_overlap_from_first)
+        self._nodes_in_2_not_in_1 = complement_of_nodes(self._graph2, self._node_overlap_from_second)
+
+        self._edges_in_1_not_in_2 = complement_of_edges(self._graph1, self._edge_overlap_from_first)
+        self._edges_in_2_not_in_1 = complement_of_edges(self._graph2, self._edge_overlap_from_second)
+
+        self._complete_analysis_done = True
+        return self
+
+    def get_node_overlap_from_first(self):
+        return self._node_overlap_from_first
+
+    def get_edge_overlap_from_first(self):
+        return self._edge_overlap_from_first
+
+    def get_node_overlap_from_second(self):
+        return self._node_overlap_from_second
+
+    def get_edge_overlap_from_second(self):
+        return self._edge_overlap_from_second
 
     def get_num_node_overlap(self):
         return self._num_node_overlap
 
     def get_num_edge_overlap(self):
         return self._num_edge_overlap
+
+    def get_nodes_in_1_not_in_2(self):
+        return self._nodes_in_1_not_in_2
+
+    def get_nodes_in_2_not_in_1(self):
+        return self._nodes_in_2_not_in_1
+
+    def get_edges_in_1_not_in_2(self):
+        return self._edges_in_1_not_in_2
+
+    def get_edges_in_2_not_in_1(self):
+        return self._edges_in_2_not_in_1
+
+    def get_first_graph(self):
+        return self._graph1
+
+    def get_second_graph(self):
+        return self._graph2
 
 
 class GraphMapComparator(ABC):
