@@ -1,3 +1,4 @@
+from graph_diff.graph.graph_generator import GraphGenerator
 from graph_diff.graph_map import GraphMapComparatorByEdgeNumAndThenNodeNum
 from graph_diff.baseline_algorithm import BaselineAlgorithm
 from graph_diff.graph import lr_node, RNR_graph
@@ -9,3 +10,7 @@ graph_map = BaselineAlgorithm(GraphMapComparatorByEdgeNumAndThenNodeNum()).const
 write_graph(graph1, "./graph1.png")
 write_graph(graph2, "./graph2.png")
 write_diff(graph_map, "./graph_map.png")
+
+generator = GraphGenerator(2, 10)
+generated = generator.generate_graph()
+write_graph(generated, "./generated.png")

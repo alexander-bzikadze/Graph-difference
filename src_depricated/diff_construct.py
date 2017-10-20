@@ -9,7 +9,7 @@ def diff_construct(g1_or, g2_or):
 
 	# min score.
 	# edge_metric - number of matched edges.
-	# node_metric - numer of matched nodes.
+	# node_metric - number of matched nodes.
 	best = {}
 	score = (0, 0)
 	for g1_to_g2 in graph_maps(g1, g2):

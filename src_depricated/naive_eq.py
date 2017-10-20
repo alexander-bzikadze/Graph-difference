@@ -1,7 +1,7 @@
 # Checks graphs on being isomorphic.
 # g1, g2 - dict of lists (graph)
 def naive_eq(g1, g2):
-	from src.diff_construct import diff_construct
+	from src_depricated.diff_construct import diff_construct
 	# Max number of nodes in g1, g2.
 	N = max([len(gr.keys()) for gr in [g1, g2] ])
 	# Max number of edges in g1, g2.
