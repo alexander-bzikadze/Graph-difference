@@ -18,7 +18,7 @@ class BaselineAlgorithm(GraphDiffAlgorithm):
             for i in range(0, len(list_to_perm)):
                 list_copy[0], list_copy[i] = list_copy[i], list_copy[0]
                 res += [[list_copy[0]] + perm for perm in self.list_map_permutations(list_copy[1:], current + 1)]
-            res += [[lr_node(self._label, 0)] + perm for perm in self.list_map_permutations(list_copy[1:], current + 1)]
+            res += [[lr_node(self._label, 0)] + perm for perm in self.list_map_permutations(list_copy, current + 1)]
             return res
 
     class RNRGraphForBLAlg:
@@ -95,7 +95,7 @@ class BaselineAlgorithm(GraphDiffAlgorithm):
                 {node_from_self: node_from_graph for node_from_self, node_from_graph in zip(lr1, lr2)
                  if node_from_self.Number != 0 or node_from_graph.Number != 0}
                 for lr1, lr2 in
-                self.zip_all(l1, BaselineAlgorithm.BLPermutationsForLabel(label, graph2).list_map_permutations(l2, 0))
+                self.zip_all(l1, BaselineAlgorithm.BLPermutationsForLabel(label, graph1).list_map_permutations(l2, 0))
             ) for (label, l1), (_, l2) in zip(sorted(graph1.items()), sorted(graph2.items()))
         }
         return res
