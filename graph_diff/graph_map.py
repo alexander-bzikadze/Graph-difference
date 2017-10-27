@@ -146,3 +146,15 @@ class GraphMapComparatorByEdgeNumAndThenNodeNum(GraphMapComparator):
 class GraphMapComparatorByEdgeNumAndNodeNumSum(GraphMapComparator):
     def comparable_representation(self, graph_map: GraphMap):
         return graph_map.get_num_node_overlap() + graph_map.get_num_edge_overlap()
+
+class GraphMapComparatorByNodeNumAndThenEdgeNum(GraphMapComparator):
+    def comparable_representation(self, graph_map: GraphMap):
+        return graph_map.get_num_node_overlap(), graph_map.get_num_edge_overlap()
+
+class GraphMapComparatorByNodeNum(GraphMapComparator):
+    def comparable_representation(self, graph_map: GraphMap):
+        return graph_map.get_num_node_overlap()
+
+class GraphMapComparatorByEdgeNum(GraphMapComparator):
+    def comparable_representation(self, graph_map: GraphMap):
+        return graph_map.get_num_edge_overlap()

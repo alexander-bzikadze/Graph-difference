@@ -18,7 +18,7 @@ def baseline_on_different_comparators(graph1: GraphWithRepetitiveNodesWithRoot,
     return [graph_comparison_with_baseline(graph1, graph2, comparator) for comparator in comparators]
 
 
-def generate_n_comparator_tests(n: int, comparators: [GraphMapComparator], directory="./comparator_png/"):
+def generate_n_comparator_tests(n: int, comparators: [GraphMapComparator], directory):
     generate_n_comparator_tests._graph_generator = GraphGenerator(0, 10)
     import os
     if not os.path.exists(directory):
