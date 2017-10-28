@@ -4,7 +4,7 @@ import pydot
 
 
 class RNRGraphToDotConverter:
-    def __init__(self, separator = ""):
+    def __init__(self, separator=""):
         self._separator = separator
 
     def __node_to_str_converter(self, node: GraphWithRepetitiveNodesWithRoot.LabeledRepetitiveNode, addition="") -> str:
@@ -13,7 +13,8 @@ class RNRGraphToDotConverter:
     def convert_graph(self, graph: GraphWithRepetitiveNodesWithRoot) -> pydot.Dot:
         dot = pydot.Dot(graph_type='digraph')
 
-        node_to_dot = {node: pydot.Node(self.__node_to_str_converter(node), label=str(node.Label), shape='circle') for node in graph}
+        node_to_dot = {node: pydot.Node(self.__node_to_str_converter(node), label=str(node.Label), shape='circle') for
+                       node in graph}
 
         for _, dot_node in node_to_dot.items():
             dot.add_node(dot_node)
@@ -34,18 +35,23 @@ class RNRGraphToDotConverter:
 
         node_to_dot = {}
         for node in graph_map.get_node_overlap_from_first():
-            node_to_dot[node, 1] = pydot.Node(self.__node_to_str_converter(node, '1'), label=str(node.Label), shape='circle')
+            node_to_dot[node, 1] = pydot.Node(self.__node_to_str_converter(node, '1'), label=str(node.Label),
+                                              shape='circle')
         for node in graph_map.get_nodes_in_1_not_in_2():
-            node_to_dot[node, 1] = pydot.Node(self.__node_to_str_converter(node, '1'), color='red', label=str(node.Label), shape='circle')
+            node_to_dot[node, 1] = pydot.Node(self.__node_to_str_converter(node, '1'), color='red',
+                                              label=str(node.Label), shape='circle')
         for node in graph_map.get_nodes_in_2_not_in_1():
-            node_to_dot[node, 2] = pydot.Node(self.__node_to_str_converter(node, '2'), color='green', label=str(node.Label), shape='circle')
+            node_to_dot[node, 2] = pydot.Node(self.__node_to_str_converter(node, '2'), color='green',
+                                              label=str(node.Label), shape='circle')
 
         for _, dot_node in node_to_dot.items():
             dot.add_node(dot_node)
 
-        def try_match_from1(node, graph_map: GraphMap):
-            node, n = node
-            return (graph_map.map_from_2(node), abs(n-1)) if node in graph_map.get_node_overlap_from_second() else (node, n)
+        def try_match_from1(try_node, try_graph_map: GraphMap):
+            try_node, n = try_node
+            return (try_graph_map.map_from_2(try_node), abs(n - 1)) \
+                if try_node in try_graph_map.get_node_overlap_from_second() \
+                else (try_node, n)
 
         for (from_node, to_node) in graph_map.get_edge_overlap_from_first():
             dot.add_edge(pydot.Edge(node_to_dot[from_node, 1], node_to_dot[to_node, 1]))
@@ -60,17 +66,20 @@ class RNRGraphToDotConverter:
 
         return dot
 
-def write_graph(graph: GraphWithRepetitiveNodesWithRoot, path, separator = ""):
+
+def write_graph(graph: GraphWithRepetitiveNodesWithRoot, path, separator=""):
     write_graph.converter = RNRGraphToDotConverter(separator)
     write_graph.converter.convert_graph(graph).write(path, format="png")
 
-def convert_graph(graph: GraphWithRepetitiveNodesWithRoot, separator = ""):
+
+def convert_graph(graph: GraphWithRepetitiveNodesWithRoot, separator=""):
     return RNRGraphToDotConverter(separator).convert_graph(graph)
 
-def write_diff(graph_map: GraphMap, path, separator = ""):
+
+def write_diff(graph_map: GraphMap, path, separator=""):
     write_graph.converter = RNRGraphToDotConverter(separator)
     write_graph.converter.convert_graph_map(graph_map).write(path, format="png")
 
-def convert_diff(graph_map: GraphMap, separator = ""):
-    return RNRGraphToDotConverter(separator).convert_graph_map(graph_map)
 
+def convert_diff(graph_map: GraphMap, separator=""):
+    return RNRGraphToDotConverter(separator).convert_graph_map(graph_map)

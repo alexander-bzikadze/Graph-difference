@@ -1,3 +1,3 @@
 from .graph_with_repetitive_nodes_with_root import GraphWithRepetitiveNodesWithRoot
-from .graph_with_repetitive_nodes_with_root import lr_node, RNR_graph
-from .graph_generator import GraphGenerator
+from .graph_with_repetitive_nodes_with_root import lr_node, rnr_graph
+from .standard_graph_generator import StandardGraphGenerator

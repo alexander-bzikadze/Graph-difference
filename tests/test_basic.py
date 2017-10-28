@@ -1,17 +1,17 @@
 import unittest
 from graph_diff.graph import GraphWithRepetitiveNodesWithRoot
 from graph_diff.graph import lr_node
-from graph_diff.graph import RNR_graph
+from graph_diff.graph import rnr_graph
 
 from graph_diff.graph.graph_with_repetitive_nodes_exceptions import GraphWithRepetitiveNodesKeyError
 
 
 class GraphWithRepetitiveNodesWithRootTest(unittest.TestCase):
-    _ROOT = (GraphWithRepetitiveNodesWithRoot._ROOT.Label,
-             GraphWithRepetitiveNodesWithRoot._ROOT.Number)
+    _ROOT = (GraphWithRepetitiveNodesWithRoot.ROOT.Label,
+             GraphWithRepetitiveNodesWithRoot.ROOT.Number)
 
     def setUp(self):
-        self.test_graph = RNR_graph()
+        self.test_graph = rnr_graph()
 
     def test_add_node(self):
         self.assertFalse(lr_node(1, 1) in self.test_graph)
@@ -46,8 +46,8 @@ class BaseLineAlgorithmTest(unittest.TestCase):
                          .construct_diff(graph1, graph2)), score)
 
     def template_x_and_y_test_comp1(self, x: int, y: int):
-        graph1 = RNR_graph()
-        graph2 = RNR_graph()
+        graph1 = rnr_graph()
+        graph2 = rnr_graph()
         for i in range(1, x + 1):
             graph1.add_node(lr_node(1, i))
         for i in range(1, y + 1):
@@ -73,14 +73,14 @@ class BaseLineAlgorithmTest(unittest.TestCase):
         self.template_x_and_y_test_comp1(2, 2)
 
     def test_one_and_two_with_edge(self):
-        graph1 = RNR_graph().add_edge(lr_node(1, 2), lr_node(1, 1))
-        graph2 = RNR_graph().add_node(lr_node(1, 1))
+        graph1 = rnr_graph().add_edge(lr_node(1, 2), lr_node(1, 1))
+        graph2 = rnr_graph().add_node(lr_node(1, 1))
         self.template_test(graph1, graph2, (1, 2), self.comparator1)
         self.template_test(graph2, graph1, (1, 2), self.comparator1)
 
     def test_two_with_edge_and_two_with_edge(self):
-        graph1 = RNR_graph().add_edge(lr_node(1, 2), lr_node(1, 1))
-        graph2 = RNR_graph().add_edge(lr_node(1, 2), lr_node(1, 1))
+        graph1 = rnr_graph().add_edge(lr_node(1, 2), lr_node(1, 1))
+        graph2 = rnr_graph().add_edge(lr_node(1, 2), lr_node(1, 1))
         self.template_test(graph1, graph2, (2, 3), self.comparator1)
         self.template_test(graph2, graph1, (2, 3), self.comparator1)
 
@@ -88,22 +88,22 @@ class BaseLineAlgorithmTest(unittest.TestCase):
         self.template_x_and_y_test_comp1(3, 3)
 
     def test_three_and_three_with_dif_labels(self):
-        graph1 = RNR_graph().add_node(lr_node(1, 1)).add_node(lr_node(2, 1)).add_node(lr_node(3, 1))
-        graph2 = RNR_graph().add_node(lr_node(1, 1)).add_node(lr_node(2, 1)).add_node(lr_node(3, 1))
+        graph1 = rnr_graph().add_node(lr_node(1, 1)).add_node(lr_node(2, 1)).add_node(lr_node(3, 1))
+        graph2 = rnr_graph().add_node(lr_node(1, 1)).add_node(lr_node(2, 1)).add_node(lr_node(3, 1))
         self.template_test(graph1, graph2, (3, 4), self.comparator1)
         self.template_test(graph2, graph1, (3, 4), self.comparator1)
 
     def test_three_and_three_with_dif_labels_and_edges_to_center(self):
-        graph1 = RNR_graph().add_node(lr_node(1, 1)).add_node(lr_node(2, 1)).add_node(lr_node(3, 1))
-        graph2 = RNR_graph().add_node(lr_node(1, 1)).add_node(lr_node(2, 1)).add_node(lr_node(3, 1))
+        graph1 = rnr_graph().add_node(lr_node(1, 1)).add_node(lr_node(2, 1)).add_node(lr_node(3, 1))
+        graph2 = rnr_graph().add_node(lr_node(1, 1)).add_node(lr_node(2, 1)).add_node(lr_node(3, 1))
         graph1.add_edge(lr_node(1, 1), lr_node(2, 1)).add_edge(lr_node(3, 1), lr_node(2, 1))
         graph2.add_edge(lr_node(1, 1), lr_node(2, 1)).add_edge(lr_node(3, 1), lr_node(2, 1))
         self.template_test(graph1, graph2, (4, 4), self.comparator1)
         self.template_test(graph2, graph1, (4, 4), self.comparator1)
 
     def test_three_and_three_but_diff_numbers(self):
-        graph1 = RNR_graph().add_node(lr_node(1, 1)).add_node(lr_node(1, 2)).add_node(lr_node(1, 3))
-        graph2 = RNR_graph().add_node(lr_node(1, 1)).add_node(lr_node(1, 3)).add_node(lr_node(1, 3))
+        graph1 = rnr_graph().add_node(lr_node(1, 1)).add_node(lr_node(1, 2)).add_node(lr_node(1, 3))
+        graph2 = rnr_graph().add_node(lr_node(1, 1)).add_node(lr_node(1, 3)).add_node(lr_node(1, 3))
         graph1.add_edge(lr_node(1, 1), lr_node(1, 2)).add_edge(lr_node(1, 3), lr_node(1, 2))
         graph2.add_edge(lr_node(1, 1), lr_node(1, 3)).add_edge(lr_node(1, 2), lr_node(1, 3))
         self.template_test(graph1, graph2, (4, 4), self.comparator1)

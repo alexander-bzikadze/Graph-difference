@@ -43,10 +43,10 @@ class GraphWithRepetitiveNodesWithRoot:
                 raise LabeledRepetitiveNodePositiveArgumentException("Label should not be negative!")
             self.__Number = number
 
-    _ROOT = LabeledRepetitiveNode(0, 1)
+    ROOT = LabeledRepetitiveNode(0, 1)
 
     def __init__(self):
-        self._adjacency_list = {self._ROOT: set()}
+        self._adjacency_list = {self.ROOT: set()}
 
     def __contains__(self, item):
         return item in self._adjacency_list.keys()
@@ -56,7 +56,7 @@ class GraphWithRepetitiveNodesWithRoot:
 
     def add_node(self, new_node):
         if new_node not in self._adjacency_list.keys():
-            self._adjacency_list[self._ROOT].add(new_node)
+            self._adjacency_list[self.ROOT].add(new_node)
             self._adjacency_list[new_node] = set()
         return self
 
@@ -64,8 +64,8 @@ class GraphWithRepetitiveNodesWithRoot:
         self.add_node(from_node)
         self.add_node(to_node)
         self._adjacency_list[from_node].add(to_node)
-        if to_node in self._adjacency_list[self._ROOT]:
-            self._adjacency_list[self._ROOT].remove(to_node)
+        if to_node in self._adjacency_list[self.ROOT]:
+            self._adjacency_list[self.ROOT].remove(to_node)
         return self
 
     # Add edge explicitly.
@@ -74,8 +74,8 @@ class GraphWithRepetitiveNodesWithRoot:
         if from_node not in self or to_node not in self:
             raise GraphWithRepetitiveNodesKeyError("Adding edge from or to not valid nodes")
         self._adjacency_list[from_node].add(to_node)
-        if to_node in self._adjacency_list[self._ROOT]:
-            self._adjacency_list[self._ROOT].remove(to_node)
+        if to_node in self._adjacency_list[self.ROOT]:
+            self._adjacency_list[self.ROOT].remove(to_node)
         return self
 
     def get_list_of_adjacent_nodes(self, node):
@@ -86,5 +86,5 @@ def lr_node(label: int, number: int):
     return GraphWithRepetitiveNodesWithRoot.LabeledRepetitiveNode(label, number)
 
 
-def RNR_graph():
+def rnr_graph():
     return GraphWithRepetitiveNodesWithRoot()

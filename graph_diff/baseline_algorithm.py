@@ -90,13 +90,13 @@ class BaselineAlgorithm(GraphDiffAlgorithm):
         return max(graph_maps, key=lambda x: self.comparator.comparable_representation(x))
 
     def graph_maps_for_each_label(self, graph1, graph2):
-        res = {
-            label: (
-                {node_from_self: node_from_graph for node_from_self, node_from_graph in zip(lr1, lr2)
-                 if node_from_self.Number != 0 or node_from_graph.Number != 0}
-                for lr1, lr2 in
-                self.zip_all(l1, BaselineAlgorithm.BLPermutationsForLabel(label, graph1).list_map_permutations(l2, 0))
-            ) for (label, l1), (_, l2) in zip(sorted(graph1.items()), sorted(graph2.items()))
+        res = { label: self.zip_all(l1, BaselineAlgorithm.BLPermutationsForLabel(label, graph1).list_map_permutations(l2, 0))
+                for (label, l1), (_, l2) in zip(sorted(graph1.items()), sorted(graph2.items()))
+        }
+        res = { label: ({node_from_self: node_from_graph for node_from_self, node_from_graph in zip(lr1, lr2)
+                        if node_from_self.Number != 0 or node_from_graph.Number != 0}
+                        for lr1, lr2 in label_permutes)
+                for label, label_permutes in res.items()
         }
         return res
 
