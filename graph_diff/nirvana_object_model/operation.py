@@ -1,11 +1,16 @@
 class Operation:
     def __init__(self,
-                 operationId: str,
-                 inputs: tuple=(),
-                 outputs: tuple=()):
-        self.operationId = operationId
-        self.inputs = inputs
-        self.outputs = outputs
+                 operation_id: str,
+                 inputs=(),
+                 outputs=()):
+        self.operation_id = operation_id
+        self.inputs = tuple(inputs)
+        self.outputs = tuple(outputs)
 
     def __hash__(self) -> int:
-        return hash(self.operationId) ^ hash(self.inputs) ^ hash(self.outputs)
+        return hash(self.operation_id) ^ hash(self.inputs) ^ hash(self.outputs)
+
+    def __eq__(self, other):
+        return other.operation_id == self.operation_id\
+            and self.inputs == other.inputs\
+            and self.outputs == other.outputs

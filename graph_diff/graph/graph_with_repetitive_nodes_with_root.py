@@ -10,7 +10,7 @@ class GraphWithRepetitiveNodesWithRoot:
         def __eq__(self, node) -> bool:
             return self.Label == node.Label and self.Number == node.Number
 
-        def __init__(self, label: int, number: int):
+        def __init__(self, label, number: int):
             self.__Label = label
             self.__Number = number
 
@@ -78,11 +78,11 @@ class GraphWithRepetitiveNodesWithRoot:
             self._adjacency_list[self.ROOT].remove(to_node)
         return self
 
-    def get_list_of_adjacent_nodes(self, node):
+    def get_list_of_adjacent_nodes(self, node) -> [LabeledRepetitiveNode]:
         return self._adjacency_list[node] if node in self else []
 
 
-def lr_node(label: int, number: int):
+def lr_node(label, number: int):
     return GraphWithRepetitiveNodesWithRoot.LabeledRepetitiveNode(label, number)
 
 

@@ -49,9 +49,8 @@ class RNRGraphToDotConverter:
 
         def try_match_from1(try_node, try_graph_map: GraphMap):
             try_node, n = try_node
-            return (try_graph_map.map_from_2(try_node), abs(n - 1)) \
-                if try_node in try_graph_map.get_node_overlap_from_second() \
-                else (try_node, n)
+            return (try_graph_map.map_from_2(try_node), abs(n - 1)) if try_node in try_graph_map.get_node_overlap_from_second() else (
+                try_node, n)
 
         for (from_node, to_node) in graph_map.get_edge_overlap_from_first():
             dot.add_edge(pydot.Edge(node_to_dot[from_node, 1], node_to_dot[to_node, 1]))
