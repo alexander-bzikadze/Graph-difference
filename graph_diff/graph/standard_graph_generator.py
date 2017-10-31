@@ -44,7 +44,7 @@ class StandardGraphGenerator(GraphGenerator):
         for label, label_size in enumerate(node_labels):
             label += 1  # labels start from 1
             for i in range(1, label_size + 1):  # numbers start from 1
-                new_node = lr_node(label, i)
+                new_node = lr_node(str(label), i)
                 graph.add_node(new_node)
                 for node in graph:
                     if 1 == numpy.random.randint(2) and node not in [new_node, GraphWithRepetitiveNodesWithRoot.ROOT]:

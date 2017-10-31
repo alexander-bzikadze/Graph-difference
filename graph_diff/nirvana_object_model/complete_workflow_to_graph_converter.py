@@ -82,7 +82,7 @@ class CompleteWorkflowToGraphConverter(WorkflowToGraphConverter):
                 outputs[operation_id, node.Number].add(nest)
                 block_blank.add((operation_id, node.Number))
 
-            elif node.Label != 0:
+            elif node != GraphWithRepetitiveNodesWithRoot.ROOT:
                 block_blank.add((node.Label, node.Number))
 
         for operation_id, number in block_blank:
@@ -115,15 +115,16 @@ class CompleteWorkflowToGraphConverter(WorkflowToGraphConverter):
                     )
             elif INPUT_LABEL in str(from_node.Label):
                 pass
-            elif from_node.Label != 0:
+            elif from_node != GraphWithRepetitiveNodesWithRoot.ROOT:
                 for to_node in graph.get_list_of_adjacent_nodes(from_node):
                     if INPUT_LABEL not in to_node.Label and OUTPUT_LABEL not in to_node.Label:
-                        workflow.add_connection_by_execution(from_block=Block(Operation(operation_id=from_node.Label,
-                                                                                        inputs=inputs[from_node.Label, from_node.Number],
-                                                                                        outputs=outputs[from_node.Label, from_node.Number])),
-                                                             from_number=from_node.Number,
-                                                             to_block=Block(Operation(operation_id=to_node.Label,
-                                                                                      inputs=inputs[to_node.Label, to_node.Number],
-                                                                                      outputs=outputs[to_node.Label, to_node.Number])),
-                                                             to_number=to_node.Number)
+                        workflow.add_connection_by_execution(
+                            from_block=Block(Operation(operation_id=from_node.Label,
+                                                       inputs=inputs[from_node.Label, from_node.Number],
+                                                       outputs=outputs[from_node.Label, from_node.Number])),
+                            from_number=from_node.Number,
+                            to_block=Block(Operation(operation_id=to_node.Label,
+                                                     inputs=inputs[to_node.Label, to_node.Number],
+                                                     outputs=outputs[to_node.Label, to_node.Number])),
+                            to_number=to_node.Number)
         return workflow

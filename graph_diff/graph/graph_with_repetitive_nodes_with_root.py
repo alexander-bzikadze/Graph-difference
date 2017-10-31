@@ -11,7 +11,7 @@ class GraphWithRepetitiveNodesWithRoot:
             return self.Label == node.Label and self.Number == node.Number
 
         def __init__(self, label, number: int):
-            self.__Label = label
+            self.__Label = str(label)
             self.__Number = number
 
         def __str__(self):
@@ -43,7 +43,7 @@ class GraphWithRepetitiveNodesWithRoot:
                 raise LabeledRepetitiveNodePositiveArgumentException("Label should not be negative!")
             self.__Number = number
 
-    ROOT = LabeledRepetitiveNode(0, 1)
+    ROOT = LabeledRepetitiveNode("0", 1)
 
     def __init__(self):
         self._adjacency_list = {self.ROOT: set()}

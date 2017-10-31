@@ -78,11 +78,13 @@ class GraphMap:
                     for from_node in graph
                     for to_node in graph.get_list_of_adjacent_nodes(from_node)
                     if (from_node, to_node) not in edges]
+
         if self._complete_analysis_done:
             return self
 
         self._node_overlap_from_second = [self.map_from_1(node) for node in self._node_overlap_from_first]
-        self._edge_overlap_from_second = [(self.map_from_1(from_node), self.map_from_1(to_node)) for from_node, to_node in self._edge_overlap_from_first]
+        self._edge_overlap_from_second = [(self.map_from_1(from_node), self.map_from_1(to_node)) for from_node, to_node
+                                          in self._edge_overlap_from_first]
 
         self._nodes_in_1_not_in_2 = complement_of_nodes(self._graph1, self._node_overlap_from_first)
         self._nodes_in_2_not_in_1 = complement_of_nodes(self._graph2, self._node_overlap_from_second)
@@ -132,7 +134,7 @@ class GraphMap:
 
 class GraphMapComparator(ABC):
     def compare(self, graph_map: GraphMap, other_graph_map: GraphMap):
-        return self.comparable_representation(graph_map) < self.comparable_representation(other_graph_map)
+        return self.comparable_representation(graph_map) <= self.comparable_representation(other_graph_map)
 
     @abstractmethod
     def comparable_representation(self, graph_map: GraphMap): pass
@@ -147,14 +149,34 @@ class GraphMapComparatorByEdgeNumAndNodeNumSum(GraphMapComparator):
     def comparable_representation(self, graph_map: GraphMap):
         return graph_map.get_num_node_overlap() + graph_map.get_num_edge_overlap()
 
+
 class GraphMapComparatorByNodeNumAndThenEdgeNum(GraphMapComparator):
     def comparable_representation(self, graph_map: GraphMap):
         return graph_map.get_num_node_overlap(), graph_map.get_num_edge_overlap()
+
 
 class GraphMapComparatorByNodeNum(GraphMapComparator):
     def comparable_representation(self, graph_map: GraphMap):
         return graph_map.get_num_node_overlap()
 
+
 class GraphMapComparatorByEdgeNum(GraphMapComparator):
     def comparable_representation(self, graph_map: GraphMap):
         return graph_map.get_num_edge_overlap()
+
+
+class GraphMapComparatorNegative(GraphMapComparator):
+    def compare(self, graph_map: GraphMap, other_graph_map: GraphMap):
+        return self.comparable_representation(graph_map) > self.comparable_representation(other_graph_map)
+
+    @abstractmethod
+    def comparable_representation(self, graph_map: GraphMap): pass
+
+
+class GraphMapComparatorByEdgeDiffAndThenNodeDiff(GraphMapComparatorNegative):
+    def comparable_representation(self, graph_map: GraphMap):
+        graph_map.eval_difference_complete()
+        return -(len(graph_map.get_nodes_in_1_not_in_2()) +
+                 len(graph_map.get_nodes_in_2_not_in_1()) +
+                 len(graph_map.get_edges_in_1_not_in_2()) +
+                 len(graph_map.get_edges_in_2_not_in_1()))
