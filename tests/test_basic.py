@@ -148,9 +148,12 @@ class BaseLineAlgorithmTest(unittest.TestCase):
     def test_seven_and_seven(self):
         self.template_x_and_y_test_comp1(7, 7)
 
+    def test_eight_and_eight(self):
+        self.template_x_and_y_test_comp1(8, 8)
+
     # one minute long
-    # def test_eight_and_eight(self):
-    #     self.template_x_and_y_test(8, 8)
+    def test_nine_and_nine(self):
+        self.template_x_and_y_test_comp1(9, 9)
 
 
 if __name__ == '__main__':

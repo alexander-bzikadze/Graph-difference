@@ -18,7 +18,8 @@ class BaselineAlgorithm(GraphDiffAlgorithm):
             for i in range(0, len(list_to_perm)):
                 list_copy[0], list_copy[i] = list_copy[i], list_copy[0]
                 res += [[list_copy[0]] + perm for perm in self.list_map_permutations(list_copy[1:], current + 1)]
-            res += [[lr_node(self._label, 0)] + perm for perm in self.list_map_permutations(list_copy, current + 1)]
+            if len(list_to_perm) + current < self._length_of_another_graph:
+                res += [[lr_node(self._label, 0)] + perm for perm in self.list_map_permutations(list_copy, current + 1)]
             return res
 
     class RNRGraphForBLAlg:
