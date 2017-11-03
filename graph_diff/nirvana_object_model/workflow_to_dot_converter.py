@@ -25,8 +25,15 @@ class WorkflowToDotConverter:
     def __edge_node_conversion(self, block: Block, num: int, nest: str, where: str = ""):
         return block.operation.operation_id + str(num) + self._separator + ":" + where + nest
 
-    def convert_workflow(self, workflow: Workflow) -> pydot.Dot:
+    def convert_workflow(self, workflow: Workflow, colors=None) -> pydot.Dot:
         dot = pydot.Dot(graph_type='digraph')
+
+        if colors is None:
+            block_colors = lambda block, number: 'black'
+            data_colors = lambda from_block, from_number, output_nest, to_block, to_number, input_nest: 'black'
+            exc_colors = lambda from_block, from_number, to_block, to_number: 'black'
+        else:
+            block_colors, data_colors, exc_colors = colors
 
         from collections import defaultdict
         number_of_blocks = defaultdict(int)
@@ -34,19 +41,22 @@ class WorkflowToDotConverter:
             number_of_blocks[block] += 1
             node = pydot.Node(self.__block_id_generator(block, addition=str(number_of_blocks[block])),
                               label=self.__block_body_printer(block),
-                              shape='record')
+                              shape='record',
+                              color=block_colors(block, number_of_blocks[block]))
             dot.add_node(node)
 
         for (from_block, from_num, output_nest), a2 in workflow.items():
             for to_block, to_num, input_nest in a2:
                 edge = pydot.Edge(src=self.__edge_node_conversion(from_block, from_num, output_nest, 'o'),
-                                  dst=self.__edge_node_conversion(to_block, to_num, input_nest, 'i'))
+                                  dst=self.__edge_node_conversion(to_block, to_num, input_nest, 'i'),
+                                  color=data_colors(from_block, from_num, output_nest, to_block, to_num, input_nest))
                 dot.add_edge(edge)
 
         for (from_block, from_num), a2 in workflow.items_by_exc():
             for to_block, to_num in a2:
                 edge = pydot.Edge(src=self.__edge_node_conversion(from_block, from_num, self.by_exc),
-                                  dst=self.__edge_node_conversion(to_block, to_num, self.by_exc))
+                                  dst=self.__edge_node_conversion(to_block, to_num, self.by_exc),
+                                  color=exc_colors(from_block, from_num, to_block, to_num))
                 dot.add_edge(edge)
 
         return dot

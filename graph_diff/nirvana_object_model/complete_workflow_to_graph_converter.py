@@ -59,8 +59,8 @@ class CompleteWorkflowToGraphConverter(WorkflowToGraphConverter):
     def reverse_graph(graph: GraphWithRepetitiveNodesWithRoot):
         workflow = Workflow()
 
-        INPUT_LABEL = CompleteWorkflowToGraphConverter.INPUT_LABEL
-        OUTPUT_LABEL = CompleteWorkflowToGraphConverter.OUTPUT_LABEL
+        input_label = CompleteWorkflowToGraphConverter.INPUT_LABEL
+        output_label = CompleteWorkflowToGraphConverter.OUTPUT_LABEL
 
         from collections import defaultdict
         inputs = defaultdict(set)
@@ -68,15 +68,15 @@ class CompleteWorkflowToGraphConverter(WorkflowToGraphConverter):
         block_blank = set()
 
         for node in graph:
-            if INPUT_LABEL in str(node.Label):
-                splitted = str(node.Label).split(INPUT_LABEL)
+            if input_label in str(node.Label):
+                splitted = str(node.Label).split(input_label)
                 assert len(splitted) == 2
                 operation_id, nest = splitted[0], splitted[1]
                 inputs[operation_id, node.Number].add(nest)
                 block_blank.add((operation_id, node.Number))
 
-            elif OUTPUT_LABEL in str(node.Label):
-                splitted = str(node.Label).split(OUTPUT_LABEL)
+            elif output_label in str(node.Label):
+                splitted = str(node.Label).split(output_label)
                 assert len(splitted) == 2
                 operation_id, nest = splitted[0], splitted[1]
                 outputs[operation_id, node.Number].add(nest)
@@ -91,14 +91,14 @@ class CompleteWorkflowToGraphConverter(WorkflowToGraphConverter):
                                                outputs=outputs[operation_id, number])))
 
         for from_node in graph:
-            if OUTPUT_LABEL in str(from_node.Label):
-                splitted = str(from_node.Label).split(OUTPUT_LABEL)
+            if output_label in str(from_node.Label):
+                splitted = str(from_node.Label).split(output_label)
                 assert len(splitted) == 2
                 from_operation_id, output_nest = splitted[0], splitted[1]
                 for to_node in graph.get_list_of_adjacent_nodes(from_node):
-                    if INPUT_LABEL not in str(to_node.Label):
+                    if input_label not in str(to_node.Label):
                         continue
-                    splitted = str(to_node.Label).split(INPUT_LABEL)
+                    splitted = str(to_node.Label).split(input_label)
                     assert len(splitted) == 2
                     to_operation_id, input_nest = splitted[0], splitted[1]
                     workflow.add_connection_by_data(
@@ -113,11 +113,11 @@ class CompleteWorkflowToGraphConverter(WorkflowToGraphConverter):
                         to_number=to_node.Number,
                         input_nest=input_nest
                     )
-            elif INPUT_LABEL in str(from_node.Label):
+            elif input_label in str(from_node.Label):
                 pass
             elif from_node != GraphWithRepetitiveNodesWithRoot.ROOT:
                 for to_node in graph.get_list_of_adjacent_nodes(from_node):
-                    if INPUT_LABEL not in to_node.Label and OUTPUT_LABEL not in to_node.Label:
+                    if input_label not in to_node.Label and output_label not in to_node.Label:
                         workflow.add_connection_by_execution(
                             from_block=Block(Operation(operation_id=from_node.Label,
                                                        inputs=inputs[from_node.Label, from_node.Number],

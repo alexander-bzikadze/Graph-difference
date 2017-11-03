@@ -34,8 +34,10 @@ class GraphWithRepetitiveNodesWithRootTest(unittest.TestCase):
 class BaseLineAlgorithmTest(unittest.TestCase):
     def setUp(self):
         from graph_diff.graph_map import GraphMapComparatorByEdgeNumAndThenNodeNum,\
-            GraphMapComparatorByEdgeNumAndNodeNumSum
-        self.comparator1 = GraphMapComparatorByEdgeNumAndThenNodeNum()
+            GraphMapComparatorByEdgeNumAndNodeNumSum, \
+            GraphMapComparatorByEdgeNum
+        # self.comparator1 = GraphMapComparatorByEdgeNumAndThenNodeNum()
+        self.comparator1 = GraphMapComparatorByEdgeNum()
         self.comparator2 = GraphMapComparatorByEdgeNumAndNodeNumSum()
 
     def template_test(self, graph1, graph2, score, comparator):

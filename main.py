@@ -2,6 +2,7 @@ from graph_diff.baseline_algorithm import BaselineAlgorithm
 from graph_diff.graph import rnr_graph, lr_node
 from graph_diff.graph_map import GraphMapComparatorByEdgeNum
 from graph_diff.nirvana_object_model.block import Block
+from graph_diff.nirvana_object_model.complete_workflow_map import CompleteWorkflowMap
 from graph_diff.nirvana_object_model.complete_workflow_to_graph_converter import CompleteWorkflowToGraphConverter
 from graph_diff.nirvana_object_model.operation import Operation
 from graph_diff.nirvana_object_model.workflow import Workflow
@@ -46,9 +47,12 @@ workflow2.add_block(b3)
 workflow2.add_connection_by_data(b1, 1, "json", b2, 1, "json")
 workflow2.add_connection_by_data(b1, 2, "json", b2, 1, "json")
 workflow2.add_connection_by_data(b2, 1, "json", b3, 1, "json")
-g1 = SimpleWorkflowToGraphConverter().convert(workflow1)
-g2 = SimpleWorkflowToGraphConverter().convert(workflow2)
+g1 = CompleteWorkflowToGraphConverter().convert(workflow1)
+g2 = CompleteWorkflowToGraphConverter().convert(workflow2)
 gm = BaselineAlgorithm(GraphMapComparatorByEdgeNum()).construct_diff(g1, g2)
 write_graph(g1, "g1.png")
 write_graph(g2, "g2.png")
 write_diff(gm, "gm.png")
+
+workflow, block_colors = CompleteWorkflowMap().convert_graph_map(gm)
+WorkflowToDotConverter("1").convert_workflow(workflow, block_colors).write("./nirvana+.png", format="png")
