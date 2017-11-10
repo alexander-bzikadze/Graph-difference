@@ -6,7 +6,7 @@ from graph_diff.nirvana_object_model.workflow import Workflow
 class WorkflowToDotConverter:
     def __init__(self, separator=""):
         self._separator = separator
-        self.by_exc = "by_exc"
+        self.BY_EXC = "by_exc"
 
     def __block_id_generator(self, block: Block, addition="") -> str:
         return block.operation.operation_id + addition + self._separator
@@ -54,8 +54,8 @@ class WorkflowToDotConverter:
 
         for (from_block, from_num), a2 in workflow.items_by_exc():
             for to_block, to_num in a2:
-                edge = pydot.Edge(src=self.__edge_node_conversion(from_block, from_num, self.by_exc),
-                                  dst=self.__edge_node_conversion(to_block, to_num, self.by_exc),
+                edge = pydot.Edge(src=self.__edge_node_conversion(from_block, from_num, self.BY_EXC),
+                                  dst=self.__edge_node_conversion(to_block, to_num, self.BY_EXC),
                                   color=exc_colors(from_block, from_num, to_block, to_num))
                 dot.add_edge(edge)
 

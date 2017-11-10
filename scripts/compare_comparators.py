@@ -8,8 +8,8 @@ DIRECTORY = "../comparator_png/"
 
 comparators = [
     GraphMapComparatorByEdgeNumAndThenNodeNum(),
-    GraphMapComparatorByEdgeNumAndNodeNumSum(),
-    GraphMapComparatorByNodeNumAndThenEdgeNum(),
+    # GraphMapComparatorByEdgeNumAndNodeNumSum(),
+    # GraphMapComparatorByNodeNumAndThenEdgeNum(),
     GraphMapComparatorByNodeNum(),
     GraphMapComparatorByEdgeNum(),
     GraphMapComparatorByEdgeDiffAndThenNodeDiff()

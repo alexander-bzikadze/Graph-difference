@@ -64,7 +64,7 @@ class BaselineAlgorithm(GraphDiffAlgorithm):
         graph1_internal = BaselineAlgorithm.RNRGraphForBLAlg(graph1)
         graph2_internal = BaselineAlgorithm.RNRGraphForBLAlg(graph2)
         graph1_internal.extend_graph(graph2_internal)
-        graph1_internal.extend_graph(graph1_internal)
+        graph2_internal.extend_graph(graph1_internal)
 
         # graph1_internal.add_zero_nodes(graph2_internal)
         # graph2_internal.add_zero_nodes(graph1_internal)
@@ -92,7 +92,7 @@ class BaselineAlgorithm(GraphDiffAlgorithm):
 
     def graph_maps_for_each_label(self, graph1, graph2):
         res = { label: self.zip_all(l1, BaselineAlgorithm.BLPermutationsForLabel(label, graph1).list_map_permutations(l2, 0))
-                for (label, l1), (_, l2) in zip(sorted(graph1.items()), sorted(graph2.items()))
+                for (label, l1), (label2, l2) in zip(sorted(graph1.items()), sorted(graph2.items()))
         }
         res = { label: ({node_from_self: node_from_graph for node_from_self, node_from_graph in zip(lr1, lr2)
                         if node_from_self.Number != 0 or node_from_graph.Number != 0}
