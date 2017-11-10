@@ -9,21 +9,21 @@ class WorkflowToDotConverter:
         self.BY_EXC = "by_exc"
 
     def __block_id_generator(self, block: Block, addition="") -> str:
-        return block.operation.operation_id + addition + self._separator
+        return block.operation.operation_id + str(hash(block.options)) + '_' + addition + self._separator
 
     @staticmethod
     def __block_body_printer(block: Block) -> str:
         outputs = block.operation.outputs
         outputs = zip(outputs, outputs)
-        outputs = "<by_exc>by execution|" + "|".join(["<o" + a + "> " + b for a, b in outputs])
+        outputs = '<by_exc>by execution|' + '|'.join(['<o' + a + '>' + b for a, b in outputs])
         inputs = block.operation.inputs
         inputs = zip(inputs, inputs)
-        inputs = "|".join(["<i" + a + "> " + b for a, b in inputs])
+        inputs = '|'.join(['<i' + a + '>' + b for a, b in inputs])
 
         return '{ {' + inputs + '} | ' + block.operation.operation_id + ' | {' + outputs + '}}'
 
     def __edge_node_conversion(self, block: Block, num: int, nest: str, where: str = ""):
-        return block.operation.operation_id + str(num) + self._separator + ":" + where + nest
+        return '\"' + self.__block_id_generator(block, str(num)) + '\"' + ':' + where + nest
 
     def convert_workflow(self, workflow: Workflow, colors=None) -> pydot.Dot:
         dot = pydot.Dot(graph_type='digraph')
@@ -62,15 +62,17 @@ class WorkflowToDotConverter:
         return dot
 
 
-def print_together(*args) -> pydot.Dot:
+def print_together(*args, **kwargs) -> pydot.Dot:
     def dot_to_subgraph(graph: pydot.Dot, label: str) -> pydot.Cluster:
         graph_s = pydot.Cluster(label, label=label)
+        graph_s.set_edge_defaults(style='dashed', color='gray', penwidth=.5)
         for node in graph.get_nodes():
             graph_s.add_node(node)
         for edge in graph.get_edges():
             graph_s.add_edge(edge)
         return graph_s
-    res = pydot.Dot()
-    for i, workflow in enumerate(args):
-        res.add_subgraph(dot_to_subgraph(workflow, "workflow" + str(i)))
+
+    res = pydot.Dot(splines=False)
+    for name, workflow in zip(kwargs['names'], args):
+        res.add_subgraph(dot_to_subgraph(workflow, name))
     return res

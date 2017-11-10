@@ -37,17 +37,20 @@ workflow2.add_connection_by_data(b1, 1, "json", b2, 1, "json")
 workflow2.add_connection_by_data(b1, 2, "json", b2, 1, "json")
 workflow2.add_connection_by_data(b2, 1, "json", b3, 1, "json")
 
-
-w = StandardWorkflowGenerator().generate_workflow()
-w1 = StandardWorkflowGenerator().generate_workflow()
-
 Pipeline(BaselineAlgorithm(GraphMapComparatorByEdgeNum()), CompleteWorkflowToGraphConverter()).print_diff(
     workflow1=workflow1, workflow2=workflow2, path="./nirvana+.png")
 
-w2 = Pipeline(BaselineAlgorithm(GraphMapComparatorByEdgeNum()), CompleteWorkflowToGraphConverter()).get_diff(
-    workflow1=w1, workflow2=w)
+generator = StandardWorkflowGenerator().generate_blocks()
 
-w = WorkflowToDotConverter().convert_workflow(w)
-w1 = WorkflowToDotConverter().convert_workflow(w1)
+w = generator.generate_workflow()
+w1 = generator.generate_workflow()
 
-print_together(w, w1).write("./w.png", format='png')
+w_dot = WorkflowToDotConverter('1').convert_workflow(w)
+w1_dot = WorkflowToDotConverter('2').convert_workflow(w1)
+
+w_dot.write("./w.png", format='png')
+w1_dot.write("./w1.png", format='png')
+
+w2_dot = Pipeline(BaselineAlgorithm(GraphMapComparatorByEdgeNum()), CompleteWorkflowToGraphConverter()).get_diff(w, w1)
+
+print_together(w_dot, w2_dot, w1_dot).write("./w2.png", format='png')
