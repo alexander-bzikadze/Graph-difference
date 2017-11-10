@@ -38,7 +38,7 @@ class StandardGraphGenerator(GraphGenerator):
             right=b_label_number
         )))
 
-        node_labels = numpy.random.multinomial(n=node_number-label_number, pvals=[1/label_number] * label_number)
+        node_labels = numpy.random.multinomial(n=node_number, pvals=[1/label_number] * label_number)
         node_labels = [ls + 1 for ls in node_labels]
 
         for label, label_size in enumerate(node_labels):

@@ -12,7 +12,7 @@ class Pipeline:
         self._to_abstract_converter = workflow_converter
         self._to_dot_converter = WorkflowToDotConverter()
 
-    def print_diff(self, workflow1: Workflow, workflow2: Workflow, path: str):
+    def get_diff(self, workflow1: Workflow, workflow2: Workflow):
         # Transforming given workflow to abstract graphs
         graph1 = self._to_abstract_converter.convert(workflow=workflow1)
         graph2 = self._to_abstract_converter.convert(workflow=workflow2)
@@ -28,6 +28,11 @@ class Pipeline:
 
         # Conversion of workflow with colors to dot.
         dot_diff = self._to_dot_converter.convert_workflow(workflow=workflow_diff, colors=block_colors)
+
+        return dot_diff
+
+    def print_diff(self, workflow1: Workflow, workflow2: Workflow, path: str):
+        dot_diff = self.get_diff(workflow1, workflow2)
 
         # Printing dot object to the given path.
         dot_diff.write(path=path, format="png")

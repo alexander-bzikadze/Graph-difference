@@ -60,3 +60,17 @@ class WorkflowToDotConverter:
                 dot.add_edge(edge)
 
         return dot
+
+
+def print_together(*args) -> pydot.Dot:
+    def dot_to_subgraph(graph: pydot.Dot, label: str) -> pydot.Cluster:
+        graph_s = pydot.Cluster(label, label=label)
+        for node in graph.get_nodes():
+            graph_s.add_node(node)
+        for edge in graph.get_edges():
+            graph_s.add_edge(edge)
+        return graph_s
+    res = pydot.Dot()
+    for i, workflow in enumerate(args):
+        res.add_subgraph(dot_to_subgraph(workflow, "workflow" + str(i)))
+    return res
