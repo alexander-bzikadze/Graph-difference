@@ -26,7 +26,7 @@ class GraphWithRepetitiveNodesWithRootTest(unittest.TestCase):
                                      BaselineAlgorithm(GraphMapComparatorByEdgeNum()),
                                      GraphMapComparatorByEdgeNum(),
                                      NUMBER_OF_TESTS,
-                                     StandardGraphGenerator(0, 10))
+                                     StandardGraphGenerator(0, 5))
 
     @parameterized.expand(parameters)
     def test_random(self,
