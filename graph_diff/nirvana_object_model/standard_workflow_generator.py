@@ -1,9 +1,9 @@
+import math
 import random
 import string
 from collections import defaultdict
 
 import numpy.random
-import math
 
 from graph_diff.nirvana_object_model.block import Block
 from graph_diff.nirvana_object_model.operation import Operation
@@ -86,7 +86,7 @@ class StandardWorkflowGenerator(WorkflowGenerator):
 
         workflow = Workflow()
 
-        block_types = numpy.random.multinomial(n=len(self.types_of_block),
+        block_types = numpy.random.multinomial(n=int(len(self.types_of_block) * 0.7),
                                                pvals=[1 / len(self.types_of_block)] * len(self.types_of_block))
 
         block_types = sum([

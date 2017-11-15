@@ -1,16 +1,12 @@
 from graph_diff.baseline_algorithm import BaselineAlgorithm
-from graph_diff.graph import rnr_graph, lr_node
 from graph_diff.graph_map import GraphMapComparatorByEdgeNum
 from graph_diff.nirvana_object_model.block import Block
 from graph_diff.nirvana_object_model.complete_workflow_to_graph_converter import CompleteWorkflowToGraphConverter
 from graph_diff.nirvana_object_model.operation import Operation
 from graph_diff.nirvana_object_model.standard_workflow_generator import StandardWorkflowGenerator
 from graph_diff.nirvana_object_model.workflow import Workflow
-from graph_diff.nirvana_object_model.workflow_to_dot_converter import WorkflowToDotConverter, print_together
-from graph_diff.nirvana_object_model.simple_workflow_to_graph_converter import WorkflowToGraphConverter, \
-    SimpleWorkflowToGraphConverter
+from graph_diff.nirvana_object_model.workflow_to_dot_converter import WorkflowToDotConverter
 from graph_diff.pipeline import Pipeline
-from graph_diff.to_dot_converter import write_graph, write_diff
 
 workflow = Workflow()
 b1 = Block(operation=Operation("1", (), ["json", "html"]))
@@ -53,4 +49,4 @@ w1_dot.write("./w1.png", format='png')
 
 w2_dot = Pipeline(BaselineAlgorithm(GraphMapComparatorByEdgeNum()), CompleteWorkflowToGraphConverter()).get_diff(w, w1)
 
-print_together(w_dot, w2_dot, w1_dot).write("./w2.png", format='png')
+# print_together(w_dot, w2_dot, w1_dot, names=['w_dot', 'w2_dot', 'w1_dot']).write("./w2.png", format='png')

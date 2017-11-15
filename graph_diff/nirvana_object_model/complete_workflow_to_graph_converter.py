@@ -50,6 +50,10 @@ class CompleteWorkflowToGraphConverter(WorkflowToGraphConverter):
     def is_output_nest(self, node: GraphWithRepetitiveNodesWithRoot.LabeledRepetitiveNode):
         return self.OUTPUT_DIVIDER in str(node.Label)
 
+    def is_block(self, node: GraphWithRepetitiveNodesWithRoot.LabeledRepetitiveNode):
+        return not self.is_input_nest(node) and not self.is_output_nest(
+            node) and not node == GraphWithRepetitiveNodesWithRoot.ROOT
+
     def get_input_nest(self, node: GraphWithRepetitiveNodesWithRoot.LabeledRepetitiveNode):
         splitted = str(node.Label).split(self.NEST_DIVIDER)
         assert len(splitted) == 3
@@ -127,12 +131,12 @@ class CompleteWorkflowToGraphConverter(WorkflowToGraphConverter):
             if self.is_input_nest(node):
                 operation_id, key_values, nest = self.get_input_nest(node)
                 inputs[operation_id, tuple(key_values.items()), node.Number].add(nest)
-                block_blank.add((operation_id, key_values, node.Number))
+                block_blank.add((operation_id, tuple(key_values.items()), node.Number))
 
             elif self.is_output_nest(node):
                 operation_id, key_values, nest = self.get_output_nest(node)
                 outputs[operation_id, tuple(key_values.items()), node.Number].add(nest)
-                block_blank.add((operation_id, key_values, node.Number))
+                block_blank.add((operation_id, tuple(key_values.items()), node.Number))
 
             elif node != GraphWithRepetitiveNodesWithRoot.ROOT:
                 operation_id, key_values = self.get_block_id(node)
@@ -196,135 +200,183 @@ class CompleteWorkflowToGraphConverter(WorkflowToGraphConverter):
         return workflow
 
     def convert_graph_map(self, graph_map: GraphMap):
+        graph_map.eval_difference_complete()
+
         workflow = Workflow()
 
-        def construct_set(graph_map_sub_set):
-            from collections import defaultdict
-            inputs = defaultdict(set)
-            outputs = defaultdict(set)
-            block_blank = set()
-
-            for node in graph_map_sub_set:
-                if self.is_input_nest(node):
-                    operation_id, key_values, nest = self.get_input_nest(node)
-                    inputs[operation_id, tuple(key_values.items()), node.Number].add(nest)
-                    block_blank.add((operation_id, tuple(key_values.items()), node.Number))
-
-                elif self.is_output_nest(node):
-                    operation_id, key_values, nest = self.get_output_nest(node)
-                    outputs[operation_id, tuple(key_values.items()), node.Number].add(nest)
-                    block_blank.add((operation_id, tuple(key_values.items()), node.Number))
-
-                elif node != GraphWithRepetitiveNodesWithRoot.ROOT:
-                    operation_id, key_values = self.get_block_id(node)
-                    block_blank.add((operation_id, tuple(key_values.items()), node.Number))
-
-            return [
-                       Block(Operation(operation_id=operation_id,
-                                       inputs=inputs[operation_id, key_values_tuple, number],
-                                       outputs=outputs[operation_id, key_values_tuple, number]),
-                             options=key_values_tuple)
-                       for operation_id, key_values_tuple, number in block_blank
-                   ], {(operation_id, key_values_tuple, number): i for i, (operation_id, key_values_tuple, number) in
-                       enumerate(block_blank)}
-
-        # Construction of different lists of blocks and their parameters and number in list.
-        block_overlap_from_first, map_for_matched = construct_set(graph_map.get_node_overlap_from_first())
-        blocks_in_1_not_in_2, map_for_deleted = construct_set(graph_map.get_nodes_in_1_not_in_2())
-        blocks_in_2_not_in_1, map_for_added = construct_set(graph_map.get_nodes_in_2_not_in_1())
-
-        matcher = {}
-        for (operation_id, key_values_tuple, number), i in map_for_matched.items():
-            matcher[operation_id, key_values_tuple, number, 1] = block_overlap_from_first[i]
-        for (operation_id, key_values_tuple, number), i in map_for_deleted.items():
-            matcher[operation_id, key_values_tuple, number, 1] = blocks_in_1_not_in_2[i]
-        for (operation_id, key_values_tuple, number), i in map_for_added.items():
-            matcher[operation_id, key_values_tuple, number, 2] = blocks_in_2_not_in_1[i]
-
         from collections import defaultdict
-        blocks_nums = defaultdict(int)
-        num_of_the_block = {}
+        inputs = defaultdict(set)
+        outputs = defaultdict(set)
+        nest_to_center = {}
+
+        for from_node, to_node in graph_map.get_edge_overlap_from_second() + graph_map.get_edges_in_2_not_in_1():
+            if self.is_input_nest(from_node) and self.is_block(to_node):
+                from_operation_id, from_key_values, from_nest = self.get_input_nest(from_node)
+                to_operation_id, to_key_values = self.get_block_id(to_node)
+
+                assert to_operation_id == from_operation_id
+                assert to_key_values == from_key_values
+
+                inputs[to_node, 2].add(from_nest)
+                nest_to_center[from_node, 2] = to_node, 2
+
+            elif self.is_block(from_node) and self.is_output_nest(to_node):
+                from_operation_id, from_key_values = self.get_block_id(from_node)
+                to_operation_id, to_key_values, to_nest = self.get_output_nest(to_node)
+
+                assert to_operation_id == from_operation_id
+                assert to_key_values == from_key_values
+
+                outputs[from_node, 2].add(to_nest)
+                nest_to_center[to_node, 2] = from_node, 2
+
+        for from_node, to_node in graph_map.get_edges_in_1_not_in_2() + graph_map.get_edge_overlap_from_first():
+            if self.is_input_nest(from_node) and self.is_block(to_node):
+                from_operation_id, from_key_values, from_nest = self.get_input_nest(from_node)
+                to_operation_id, to_key_values = self.get_block_id(to_node)
+
+                assert to_operation_id == from_operation_id
+                assert to_key_values == from_key_values
+
+                inputs[to_node, 1].add(from_nest)
+                nest_to_center[from_node, 1] = to_node, 1
+
+            elif self.is_block(from_node) and self.is_output_nest(to_node):
+                from_operation_id, from_key_values = self.get_block_id(from_node)
+                to_operation_id, to_key_values, to_nest = self.get_output_nest(to_node)
+
+                assert to_operation_id == from_operation_id
+                assert to_key_values == from_key_values
+
+                outputs[from_node, 1].add(to_nest)
+                nest_to_center[to_node, 1] = from_node, 1
+
         block_colors = {}
-        for block in block_overlap_from_first:
-            blocks_nums[block] += 1
-            num_of_the_block[id(block)] = blocks_nums[block]
-            block_colors[block, blocks_nums[block]] = 'black'
-            workflow.add_block(block)
-        for block in blocks_in_1_not_in_2:
-            blocks_nums[block] += 1
-            num_of_the_block[id(block)] = blocks_nums[block]
-            block_colors[block, blocks_nums[block]] = 'red'
-            workflow.add_block(block)
-        for block in blocks_in_2_not_in_1:
-            blocks_nums[block] += 1
-            num_of_the_block[id(block)] = blocks_nums[block]
-            block_colors[block, blocks_nums[block]] = 'green'
-            workflow.add_block(block)
+        blocks = {}
+
+        for node in graph_map.get_node_overlap_from_second():
+            if not self.is_block(node):
+                continue
+            operation_id, key_values = self.get_block_id(node)
+            key_values_tuple = tuple(key_values.items())
+            block = Block(Operation(operation_id=operation_id,
+                                    inputs=inputs[node, 2],
+                                    outputs=outputs[node, 2]),
+                          options=key_values_tuple)
+            blocks[node, 2] = block, workflow.add_block(block)
+            block_colors[blocks[node, 2]] = 'black'
+
+        for node in graph_map.get_nodes_in_2_not_in_1():
+            if not self.is_block(node):
+                continue
+            operation_id, key_values = self.get_block_id(node)
+            key_values_tuple = tuple(key_values.items())
+            block = Block(Operation(operation_id=operation_id,
+                                    inputs=inputs[node, 2],
+                                    outputs=outputs[node, 2]),
+                          options=key_values_tuple)
+            blocks[node, 2] = block, workflow.add_block(block)
+            block_colors[blocks[node, 2]] = 'green'
+
+        for node in graph_map.get_nodes_in_1_not_in_2():
+            if not self.is_block(node):
+                continue
+            operation_id, key_values = self.get_block_id(node)
+            key_values_tuple = tuple(key_values.items())
+            block = Block(Operation(operation_id=operation_id,
+                                    inputs=inputs[node, 1],
+                                    outputs=outputs[node, 1]),
+                          options=key_values_tuple)
+            blocks[node, 1] = block, workflow.add_block(block)
+            block_colors[blocks[node, 1]] = 'red'
+
+        for node in graph_map.get_node_overlap_from_first():
+            if not self.is_block(node):
+                continue
+            map_node = graph_map.map_from_1(node)
+            blocks[node, 1] = blocks[map_node, 2]
+            block_colors[blocks[node, 1]] = 'black'
 
         data_connection_colors = {}
         exc_connection_colors = {}
 
-        def add_set_of_edges(graph_map_edge_set, graph_number, color, trans_graph_number, transform_node=lambda x: x):
-            for from_node, to_node in graph_map_edge_set:
-                if transform_node(from_node).Number != 0:
-                    from_node = transform_node(from_node)
-                    from_graph_number = trans_graph_number
-                else:
-                    from_graph_number = graph_number
-                if transform_node(to_node).Number != 0:
-                    to_node = transform_node(to_node)
-                    to_graph_number = trans_graph_number
-                else:
-                    to_graph_number = graph_number
-                if self.is_output_nest(from_node) and self.is_input_nest(to_node):
-                    from_operation_id, from_key_values, from_nest = self.get_output_nest(from_node)
-                    to_operation_id, to_key_values, to_nest = self.get_input_nest(to_node)
-                    from_block = matcher[
-                        from_operation_id, tuple(from_key_values.items()), from_node.Number, from_graph_number]
-                    to_block = matcher[to_operation_id, tuple(to_key_values.items()), to_node.Number, to_graph_number]
-                    workflow.add_connection_by_data(
-                        from_block=from_block,
-                        from_number=num_of_the_block[id(from_block)],
-                        output_nest=from_nest,
-                        to_block=to_block,
-                        to_number=num_of_the_block[id(to_block)],
-                        input_nest=to_nest
-                    )
-                    data_connection_colors[
-                        from_block,
-                        num_of_the_block[id(from_block)],
-                        from_nest,
-                        to_block,
-                        num_of_the_block[id(to_block)],
-                        to_nest
-                    ] = color
-                elif self.is_input_nest(from_node):
-                    pass
-                elif from_node != GraphWithRepetitiveNodesWithRoot.ROOT:
-                    if not self.is_input_nest(to_node) and not self.is_output_nest(to_node):
-                        from_operation_id, from_key_values = self.get_block_id(from_node)
-                        to_operation_id, to_key_values = self.get_block_id(to_node)
-                        from_block = matcher[
-                            from_operation_id, tuple(from_key_values.items()), from_node.Number, from_graph_number]
-                        to_block = matcher[
-                            to_operation_id, tuple(to_key_values.items()), to_node.Number, to_graph_number]
-                        workflow.add_connection_by_execution(
-                            from_block=from_block,
-                            from_number=num_of_the_block[id(from_block)],
-                            to_block=to_block,
-                            to_number=num_of_the_block[id(to_block)]
-                        )
-                        exc_connection_colors[
-                            from_block,
-                            num_of_the_block[id(from_block)],
-                            to_block,
-                            num_of_the_block[id(to_block)]
-                        ] = color
+        for from_node, to_node in graph_map.get_edge_overlap_from_second() + graph_map.get_edges_in_2_not_in_1():
+            if self.is_output_nest(from_node) and self.is_input_nest(to_node):
+                _, _, from_nest = self.get_output_nest(from_node)
+                _, _, to_nest = self.get_input_nest(to_node)
+                from_nest_block, from_nest_block_number = blocks[nest_to_center[from_node, 2]]
+                to_nest_block, to_nest_block_number = blocks[nest_to_center[to_node, 2]]
+                workflow.add_connection_by_data(
+                    from_block=from_nest_block,
+                    from_number=from_nest_block_number,
+                    output_nest=from_nest,
+                    to_block=to_nest_block,
+                    to_number=to_nest_block_number,
+                    input_nest=to_nest
+                )
+                data_connection_colors[
+                    from_nest_block,
+                    from_nest_block_number,
+                    from_nest,
+                    to_nest_block,
+                    to_nest_block_number,
+                    to_nest
+                ] = 'black' if from_node in graph_map.get_node_overlap_from_second() and \
+                               to_node in graph_map.get_node_overlap_from_second() else 'green'
+            elif self.is_block(from_node) and self.is_block(to_node):
+                from_block, from_number = blocks[from_node, 2]
+                to_block, to_number = blocks[to_node, 2]
+                workflow.add_connection_by_execution(
+                    from_block=from_block,
+                    from_number=from_number,
+                    to_block=to_block,
+                    to_number=to_number
+                )
+                exc_connection_colors[
+                    from_block,
+                    from_number,
+                    to_block,
+                    to_number
+                ] = 'black' if from_node in graph_map.get_node_overlap_from_second() and \
+                               to_node in graph_map.get_node_overlap_from_second() else 'green'
 
-        # Constructing sets and setting colors
-        add_set_of_edges(graph_map.get_edge_overlap_from_first(), 1, 'black', 1)
-        add_set_of_edges(graph_map.get_edges_in_1_not_in_2(), 1, 'red', 1)
-        add_set_of_edges(graph_map.get_edges_in_2_not_in_1(), 2, 'green', 1, graph_map.map_from_2)
+        for from_node, to_node in graph_map.get_edges_in_1_not_in_2():
+            if self.is_output_nest(from_node) and self.is_input_nest(to_node):
+                _, _, from_nest = self.get_output_nest(from_node)
+                _, _, to_nest = self.get_input_nest(to_node)
+                from_nest_block, from_nest_block_number = blocks[nest_to_center[from_node, 1]]
+                to_nest_block, to_nest_block_number = blocks[nest_to_center[to_node, 1]]
+                workflow.add_connection_by_data(
+                    from_block=from_nest_block,
+                    from_number=from_nest_block_number,
+                    output_nest=from_nest,
+                    to_block=to_nest_block,
+                    to_number=to_nest_block_number,
+                    input_nest=to_nest
+                )
+                data_connection_colors[
+                    from_nest_block,
+                    from_nest_block_number,
+                    from_nest,
+                    to_nest_block,
+                    to_nest_block_number,
+                    to_nest
+                ] = 'red'
+            elif self.is_block(from_node) and self.is_block(to_node):
+                from_block, from_number = blocks[from_node, 1]
+                to_block, to_number = blocks[to_node, 1]
+                workflow.add_connection_by_execution(
+                    from_block=from_block,
+                    from_number=from_number,
+                    to_block=to_block,
+                    to_number=to_number
+                )
+                exc_connection_colors[
+                    from_block,
+                    from_number,
+                    to_block,
+                    to_number
+                ] = 'red'
 
         return workflow, (lambda lam_block, lam_number: block_colors[lam_block, lam_number],
                           lambda from_block, from_number, output_nest, to_block, to_number, input_nest:
