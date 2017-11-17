@@ -1,7 +1,7 @@
 from .graph import GraphWithRepetitiveNodesWithRoot
 from .graph import lr_node
 from .graph_diff_algorithm import GraphDiffAlgorithm
-from .graph_map import GraphMap, GraphMapComparator
+from .graph_map import GraphMap, GraphMapComparator, GraphMapComparatorByEdgeNum
 
 
 class BaselineAlgorithm(GraphDiffAlgorithm):
@@ -56,7 +56,7 @@ class BaselineAlgorithm(GraphDiffAlgorithm):
                 list_of_nodes += [lr_node(label, 0)] * len([node for node in graph.get(label) if bool(node.Number)])
             return self
 
-    def __init__(self, comparator: GraphMapComparator):
+    def __init__(self, comparator: GraphMapComparator = GraphMapComparatorByEdgeNum()):
         self.comparator = comparator
 
     def construct_diff(self, graph1: GraphWithRepetitiveNodesWithRoot,

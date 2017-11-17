@@ -1,52 +1,37 @@
-import sys
+import logging
+import os
 
 from graph_diff.baseline_algorithm import BaselineAlgorithm
-from graph_diff.graph_map import GraphMapComparatorByEdgeNum
 from graph_diff.nirvana_object_model.complete_workflow_to_graph_converter import CompleteWorkflowToGraphConverter
 from graph_diff.nirvana_object_model.standard_workflow_generator import StandardWorkflowGenerator
-from graph_diff.nirvana_object_model.workflow_to_dot_converter import WorkflowToDotConverter, print_together
 from graph_diff.pipeline import Pipeline
 
 NUMBER_OF_TESTS = 1000
-DIRECTORY = "../nirvana_diffs/"
 
-import os
+# DIRECTORY = "../nirvana_diffs_simple/"
+# converter = SimpleWorkflowToGraphConverter()
+
+converter = CompleteWorkflowToGraphConverter()
+DIRECTORY = '../nirvana_diffs/'
 
 if not os.path.exists(DIRECTORY):
+    logging.info('Creating directory {0}'.format(DIRECTORY))
     os.makedirs(DIRECTORY)
 
+logging.info('Starting series of {} pipeline tests, results to {}'.format(NUMBER_OF_TESTS, DIRECTORY))
+logging.info('Used converter is {}'.format(type(converter).__class__.__name__))
+
 for i in range(0, NUMBER_OF_TESTS):
+    logging.info('Running test {}'.format(i))
+    logging.debug('Generation two workflows')
     generator = StandardWorkflowGenerator().generate_blocks()
     workflow1 = generator.generate_workflow()
     workflow2 = generator.generate_workflow()
 
-    workflow1_dot = WorkflowToDotConverter('1').convert_workflow(workflow1)
-    workflow2_dot = WorkflowToDotConverter('2').convert_workflow(workflow2)
+    logging.debug('Running pipeline on two generated workflows')
+    Pipeline(
+        algorithm=BaselineAlgorithm(),
+        workflow_converter=converter
+    ).print_diff(workflow1=workflow1, workflow2=workflow2, path=DIRECTORY + str(i) + '.png')
 
-    try:
-        workflow_diff_dot = Pipeline(
-            algorithm=BaselineAlgorithm(GraphMapComparatorByEdgeNum()),
-            workflow_converter=CompleteWorkflowToGraphConverter()
-        ).get_diff(workflow1=workflow1, workflow2=workflow2)
-    except AssertionError:
-        print("Assert error" + str(sys.exc_info()[0]))
-        workflow1_dot.write("./workflow1_error.png", format='png')
-        workflow2_dot.write("./workflow2_error.png", format='png')
-        workflow_diff_dot = Pipeline(
-            algorithm=BaselineAlgorithm(GraphMapComparatorByEdgeNum()),
-            workflow_converter=CompleteWorkflowToGraphConverter()
-        ).get_diff(workflow1=workflow1, workflow2=workflow2)
-        continue
-
-    try:
-        print_together(workflow1_dot,
-                       workflow_diff_dot,
-                       workflow2_dot,
-                       names=['workflow_1', 'workflow_diff', 'workflow_2']
-        ).write(DIRECTORY + str(i) + '.png', format='png')
-    except AssertionError:
-        print("Dot fail" + str(sys.exc_info()[0]))
-        workflow1_dot.write("./workflow1_error.png", format='png')
-        workflow2_dot.write("./workflow2_error.png", format='png')
-
-    print("Test i=" + str(i) + " of n=" + str(NUMBER_OF_TESTS) + " done.")
+    logging.info("Test i={0} of n={1} done.".format(i, NUMBER_OF_TESTS))

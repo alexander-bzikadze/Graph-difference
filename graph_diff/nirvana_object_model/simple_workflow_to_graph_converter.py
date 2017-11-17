@@ -1,6 +1,7 @@
 from graph_diff.graph import rnr_graph, lr_node, GraphWithRepetitiveNodesWithRoot
 from graph_diff.graph_map import GraphMap
 from graph_diff.nirvana_object_model.block import Block
+from graph_diff.nirvana_object_model.graph_map_dot_colorer import GraphMapDotColorer
 from graph_diff.nirvana_object_model.operation import Operation
 from graph_diff.nirvana_object_model.workflow import Workflow
 
@@ -159,8 +160,4 @@ class SimpleWorkflowToGraphConverter(WorkflowToGraphConverter):
         add_set_of_edges(graph_map.get_edges_in_1_not_in_2(), 1, 'red', 1)
         add_set_of_edges(graph_map.get_edges_in_2_not_in_1(), 2, 'green', 1, graph_map.map_from_2)
 
-        return workflow, (lambda block, number: block_colors[block, number],
-                          lambda from_block, from_number, output_nest, to_block, to_number, input_nest:
-                          data_connection_colors[from_block, from_number, output_nest, to_block, to_number, input_nest],
-                          lambda from_block, from_number, to_block, to_number:
-                          exc_connection_colors[from_block, from_number, to_block, to_number])
+        return workflow, GraphMapDotColorer(block_colors, data_connection_colors, exc_connection_colors)

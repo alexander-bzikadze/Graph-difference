@@ -1,6 +1,7 @@
 from graph_diff.graph import rnr_graph, lr_node, GraphWithRepetitiveNodesWithRoot
 from graph_diff.graph_map import GraphMap
 from graph_diff.nirvana_object_model.block import Block
+from graph_diff.nirvana_object_model.graph_map_dot_colorer import GraphMapDotColorer
 from graph_diff.nirvana_object_model.operation import Operation
 from graph_diff.nirvana_object_model.workflow import Workflow
 
@@ -378,8 +379,4 @@ class CompleteWorkflowToGraphConverter(WorkflowToGraphConverter):
                     to_number
                 ] = 'red'
 
-        return workflow, (lambda lam_block, lam_number: block_colors[lam_block, lam_number],
-                          lambda from_block, from_number, output_nest, to_block, to_number, input_nest:
-                          data_connection_colors[from_block, from_number, output_nest, to_block, to_number, input_nest],
-                          lambda from_block, from_number, to_block, to_number:
-                          exc_connection_colors[from_block, from_number, to_block, to_number])
+        return workflow, GraphMapDotColorer(block_colors, data_connection_colors, exc_connection_colors)

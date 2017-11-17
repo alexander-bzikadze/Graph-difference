@@ -1,6 +1,8 @@
+import logging
+
 from graph_diff.graph.graph_generator import GraphGenerator
-from .graph import GraphWithRepetitiveNodesWithRoot, StandardGraphGenerator
 from .baseline_algorithm import BaselineAlgorithm
+from .graph import GraphWithRepetitiveNodesWithRoot, StandardGraphGenerator
 from .graph_map import GraphMap
 from .graph_map import GraphMapComparator
 from .to_dot_converter import convert_graph, convert_diff
@@ -27,6 +29,9 @@ def generate_n_comparator_tests(n: int,
     if not os.path.exists(directory):
         os.makedirs(directory)
     for i in range(0, n):
+        logging.info('Start test {0}'.format(i))
+
+        logging.debug('Generating two graphs')
         graph1 = graph_generator.generate_graph()
         graph2 = graph_generator.generate_graph()
 
@@ -42,6 +47,8 @@ def generate_n_comparator_tests(n: int,
 
         res = pydot.Dot()
         res.add_subgraph(dot_to_subgraph(convert_graph(graph1, "graph1"), "graph1"))
+
+        logging.debug('Running different comparators on baseline algorithm')
         for j, graph_map in enumerate(baseline_on_different_comparators(graph1, graph2, comparators)):
             res.add_subgraph(dot_to_subgraph(convert_diff(
                 graph_map=graph_map,
@@ -52,4 +59,4 @@ def generate_n_comparator_tests(n: int,
 
         res.write(directory + "comparison" + str(i) + ".png", format="png")
 
-        print("Test i=" + str(i) + " of n=" + str(n) + " done.")
+        logging.info("Test i={0} of n={1} done.".format(i, n))

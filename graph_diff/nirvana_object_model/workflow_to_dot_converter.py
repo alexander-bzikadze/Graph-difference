@@ -1,5 +1,7 @@
 import pydot
+
 from graph_diff.nirvana_object_model.block import Block
+from graph_diff.nirvana_object_model.graph_map_dot_colorer import StandardGraphDotColorer, GraphDotColorer
 from graph_diff.nirvana_object_model.workflow import Workflow
 
 
@@ -25,15 +27,8 @@ class WorkflowToDotConverter:
     def __edge_node_conversion(self, block: Block, num: int, nest: str, where: str = ""):
         return '\"' + self.__block_id_generator(block, str(num)) + '\"' + ':' + where + nest
 
-    def convert_workflow(self, workflow: Workflow, colors=None) -> pydot.Dot:
+    def convert_workflow(self, workflow: Workflow, colors: GraphDotColorer = StandardGraphDotColorer()) -> pydot.Dot:
         dot = pydot.Dot(graph_type='digraph')
-
-        if colors is None:
-            block_colors = lambda block, number: 'black'
-            data_colors = lambda from_block, from_number, output_nest, to_block, to_number, input_nest: 'black'
-            exc_colors = lambda from_block, from_number, to_block, to_number: 'black'
-        else:
-            block_colors, data_colors, exc_colors = colors
 
         from collections import defaultdict
         number_of_blocks = defaultdict(int)
@@ -42,21 +37,22 @@ class WorkflowToDotConverter:
             node = pydot.Node(self.__block_id_generator(block, addition=str(number_of_blocks[block])),
                               label=self.__block_body_printer(block),
                               shape='record',
-                              color=block_colors(block, number_of_blocks[block]))
+                              color=colors.color_of_block(block, number_of_blocks[block]))
             dot.add_node(node)
 
         for (from_block, from_num, output_nest), a2 in workflow.items():
             for to_block, to_num, input_nest in a2:
                 edge = pydot.Edge(src=self.__edge_node_conversion(from_block, from_num, output_nest, 'o'),
                                   dst=self.__edge_node_conversion(to_block, to_num, input_nest, 'i'),
-                                  color=data_colors(from_block, from_num, output_nest, to_block, to_num, input_nest))
+                                  color=colors.color_data_connection(from_block, from_num, output_nest, to_block,
+                                                                     to_num, input_nest))
                 dot.add_edge(edge)
 
         for (from_block, from_num), a2 in workflow.items_by_exc():
             for to_block, to_num in a2:
                 edge = pydot.Edge(src=self.__edge_node_conversion(from_block, from_num, self.BY_EXC),
                                   dst=self.__edge_node_conversion(to_block, to_num, self.BY_EXC),
-                                  color=exc_colors(from_block, from_num, to_block, to_num))
+                                  color=colors.color_exc_connection(from_block, from_num, to_block, to_num))
                 dot.add_edge(edge)
 
         return dot
