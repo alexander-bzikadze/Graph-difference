@@ -1,7 +1,7 @@
 from graph_diff.graph import rnr_graph, lr_node, GraphWithRepetitiveNodesWithRoot
 from graph_diff.graph_map import GraphMap
 from graph_diff.nirvana_object_model.block import Block
-from graph_diff.nirvana_object_model.graph_map_dot_colorer import GraphMapDotColorer
+from graph_diff.nirvana_object_model.graph_map_dot_colorer import GraphMapDotColorer, GraphDotColorer
 from graph_diff.nirvana_object_model.operation import Operation
 from graph_diff.nirvana_object_model.workflow import Workflow
 
@@ -20,7 +20,7 @@ class CompleteWorkflowToGraphConverter(WorkflowToGraphConverter):
         return_list = [
             block.operation.operation_id,
             self.KEY_VALUE_BLOCK_DIVIDER.join(
-                [key + self.KEY_VALUE_DIVIDER + value for key, value in block.options]
+                sorted([key + self.KEY_VALUE_DIVIDER + value for key, value in block.options])
             )
         ]
         return self.NEST_DIVIDER.join(return_list)
@@ -29,7 +29,7 @@ class CompleteWorkflowToGraphConverter(WorkflowToGraphConverter):
         return_list = [
             block.operation.operation_id,
             self.KEY_VALUE_BLOCK_DIVIDER.join(
-                [key + self.KEY_VALUE_DIVIDER + value for key, value in block.options]
+                sorted([key + self.KEY_VALUE_DIVIDER + value for key, value in block.options])
             ),
             nest_id + self.INPUT_DIVIDER
         ]
@@ -39,7 +39,7 @@ class CompleteWorkflowToGraphConverter(WorkflowToGraphConverter):
         return_list = [
             block.operation.operation_id,
             self.KEY_VALUE_BLOCK_DIVIDER.join(
-                [key + self.KEY_VALUE_DIVIDER + value for key, value in block.options]
+                sorted([key + self.KEY_VALUE_DIVIDER + value for key, value in block.options])
             ),
             nest_id + self.OUTPUT_DIVIDER
         ]
@@ -200,7 +200,7 @@ class CompleteWorkflowToGraphConverter(WorkflowToGraphConverter):
                             to_number=to_node.Number)
         return workflow
 
-    def convert_graph_map(self, graph_map: GraphMap):
+    def convert_graph_map(self, graph_map: GraphMap) -> (Workflow, GraphDotColorer):
         graph_map.eval_difference_complete()
 
         workflow = Workflow()
@@ -261,8 +261,8 @@ class CompleteWorkflowToGraphConverter(WorkflowToGraphConverter):
             operation_id, key_values = self.get_block_id(node)
             key_values_tuple = tuple(key_values.items())
             block = Block(Operation(operation_id=operation_id,
-                                    inputs=inputs[node, 2],
-                                    outputs=outputs[node, 2]),
+                                    inputs=sorted(inputs[node, 2]),
+                                    outputs=sorted(outputs[node, 2])),
                           options=key_values_tuple)
             blocks[node, 2] = block, workflow.add_block(block)
             block_colors[blocks[node, 2]] = 'black'
@@ -273,8 +273,8 @@ class CompleteWorkflowToGraphConverter(WorkflowToGraphConverter):
             operation_id, key_values = self.get_block_id(node)
             key_values_tuple = tuple(key_values.items())
             block = Block(Operation(operation_id=operation_id,
-                                    inputs=inputs[node, 2],
-                                    outputs=outputs[node, 2]),
+                                    inputs=sorted(inputs[node, 2]),
+                                    outputs=sorted(outputs[node, 2])),
                           options=key_values_tuple)
             blocks[node, 2] = block, workflow.add_block(block)
             block_colors[blocks[node, 2]] = 'green'
@@ -285,8 +285,8 @@ class CompleteWorkflowToGraphConverter(WorkflowToGraphConverter):
             operation_id, key_values = self.get_block_id(node)
             key_values_tuple = tuple(key_values.items())
             block = Block(Operation(operation_id=operation_id,
-                                    inputs=inputs[node, 1],
-                                    outputs=outputs[node, 1]),
+                                    inputs=sorted(inputs[node, 1]),
+                                    outputs=sorted(outputs[node, 1])),
                           options=key_values_tuple)
             blocks[node, 1] = block, workflow.add_block(block)
             block_colors[blocks[node, 1]] = 'red'

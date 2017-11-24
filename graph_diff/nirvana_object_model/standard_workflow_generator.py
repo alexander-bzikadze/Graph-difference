@@ -56,10 +56,10 @@ class StandardWorkflowGenerator(WorkflowGenerator):
                 max_input_output_number - min_input_output_number) + min_input_output_number
             output_number = numpy.random.randint(
                 max_input_output_number - min_input_output_number) + min_input_output_number
-            inputs = [generate_new_string() for _
-                      in range(0, input_number)]
-            outputs = [generate_new_string() for _
-                       in range(0, output_number)]
+            inputs = sorted([generate_new_string() for _
+                             in range(0, input_number)])
+            outputs = sorted([generate_new_string() for _
+                              in range(0, output_number)])
 
             key_value = numpy.random.randint(
                 max_key_value_number - min_key_value_number) + min_key_value_number

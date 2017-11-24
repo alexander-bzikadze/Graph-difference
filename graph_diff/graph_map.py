@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+
 from graph_diff.graph import lr_node
 from .graph import GraphWithRepetitiveNodesWithRoot
 from .graph_map_exceptions import *
@@ -17,7 +18,8 @@ class GraphMap:
         self._complete_analysis_done = False
 
     @staticmethod
-    def construct_graph_map(graph_map_1_to_2, graph1: GraphWithRepetitiveNodesWithRoot,
+    def construct_graph_map(graph_map_1_to_2,
+                            graph1: GraphWithRepetitiveNodesWithRoot,
                             graph2: GraphWithRepetitiveNodesWithRoot):
         error_list = []
         for node1, node2 in graph_map_1_to_2.items():

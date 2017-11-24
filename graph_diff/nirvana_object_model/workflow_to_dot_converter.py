@@ -37,7 +37,9 @@ class WorkflowToDotConverter:
             node = pydot.Node(self.__block_id_generator(block, addition=str(number_of_blocks[block])),
                               label=self.__block_body_printer(block),
                               shape='record',
-                              color=colors.color_of_block(block, number_of_blocks[block]))
+                              color=colors.color_of_block(block, number_of_blocks[block]),
+                              style="filled",
+                              fillcolor='#' + str(hex(hash(block) % 0x1000000))[2:])
             dot.add_node(node)
 
         for (from_block, from_num, output_nest), a2 in workflow.items():
@@ -61,7 +63,7 @@ class WorkflowToDotConverter:
 def print_together(*args, **kwargs) -> pydot.Dot:
     def dot_to_subgraph(graph: pydot.Dot, label: str) -> pydot.Cluster:
         graph_s = pydot.Cluster(label, label=label)
-        graph_s.set_edge_defaults(style='dashed', color='gray', penwidth=.5)
+        graph_s.set_edge_defaults(style='dashed', color='gray', penwidth=1)
         for node in graph.get_nodes():
             graph_s.add_node(node)
         for edge in graph.get_edges():

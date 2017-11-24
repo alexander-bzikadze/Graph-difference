@@ -6,7 +6,7 @@ from graph_diff.nirvana_object_model.complete_workflow_to_graph_converter import
 from graph_diff.nirvana_object_model.standard_workflow_generator import StandardWorkflowGenerator
 from graph_diff.pipeline import Pipeline
 
-NUMBER_OF_TESTS = 1000
+NUMBER_OF_TESTS = 100
 
 # DIRECTORY = "../nirvana_diffs_simple/"
 # converter = SimpleWorkflowToGraphConverter()

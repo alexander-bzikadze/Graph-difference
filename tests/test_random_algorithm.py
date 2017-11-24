@@ -2,6 +2,7 @@ import unittest
 
 from parameterized import parameterized
 
+from graph_diff.ant_algorithm.algorithm import Algorithm as AntAlgorithm
 from graph_diff.baseline_algorithm import BaselineAlgorithm
 from graph_diff.graph import StandardGraphGenerator, GraphWithRepetitiveNodesWithRoot
 from graph_diff.graph_diff_algorithm import GraphDiffAlgorithm
@@ -21,9 +22,9 @@ def generate_parameters(algo1, algo2, comparator, number_of_tests, *args):
 
 
 class GraphWithRepetitiveNodesWithRootTest(unittest.TestCase):
-    NUMBER_OF_TESTS = 1000
-    parameters = generate_parameters(BaselineAlgorithm(GraphMapComparatorByEdgeNum()),
-                                     BaselineAlgorithm(GraphMapComparatorByEdgeNum()),
+    NUMBER_OF_TESTS = 100
+    parameters = generate_parameters(BaselineAlgorithm(),
+                                     AntAlgorithm(),
                                      GraphMapComparatorByEdgeNum(),
                                      NUMBER_OF_TESTS,
                                      StandardGraphGenerator(0, 5))

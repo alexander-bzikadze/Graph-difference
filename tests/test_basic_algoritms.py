@@ -2,7 +2,7 @@ import unittest
 
 from parameterized import parameterized
 
-from graph_diff.baseline_algorithm import BaselineAlgorithm
+from graph_diff.ant_algorithm.algorithm import Algorithm as AntAlgorithm
 from graph_diff.graph import rnr_graph, lr_node
 from graph_diff.graph_diff_algorithm import GraphDiffAlgorithm
 from graph_diff.graph_map import GraphMapComparatorByEdgeNum
@@ -10,7 +10,8 @@ from graph_diff.graph_map import GraphMapComparatorByEdgeNum
 
 class BaseLineAlgorithmTest(unittest.TestCase):
     parameters = [
-        ("baseline", BaselineAlgorithm())
+        # ("baseline", BaselineAlgorithm())
+        ('Ant', AntAlgorithm())
     ]
 
     def template_test(self, graph1, graph2, score, algorithm):
@@ -151,9 +152,15 @@ class BaseLineAlgorithmTest(unittest.TestCase):
     def test_eight_and_eight(self, name, algorithm: GraphDiffAlgorithm):
         self.template_x_and_y_test_comp1(8, 8, algorithm)
 
-    # one minute long
-    # def test_nine_and_nine(self):
-        #     self.template_x_and_y_test_comp1(9, 9, algorithm)
+    # one minute long on baseline
+    @parameterized.expand(parameters)
+    def test_nine_and_nine(self, name, algorithm: GraphDiffAlgorithm):
+        self.template_x_and_y_test_comp1(9, 9, algorithm)
+
+    # death to stoppers
+    @parameterized.expand(parameters)
+    def test_hundred_and_hundred(self, name, algorithm: GraphDiffAlgorithm):
+        self.template_x_and_y_test_comp1(100, 100, algorithm)
 
 if __name__ == '__main__':
     unittest.main()

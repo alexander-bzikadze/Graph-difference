@@ -6,7 +6,7 @@ class Block:
         if options is None:
             options = {}
         self.operation = operation
-        self.options = tuple(options.items()) if type(options) is dict else tuple(options)
+        self.options = tuple(sorted(options.items())) if type(options) is dict else tuple(sorted(options))
 
     def __hash__(self):
         return hash(self.operation) ^ hash(self.options)
