@@ -1,0 +1,2 @@
+a268f81e-d43e-4a96-9ce1-5c1a9622203a (№1) output_json -> 5fbdec5c-255f-4b0c-9a33-1e74ed8366e6 (№1) queries
+a268f81e-d43e-4a96-9ce1-5c1a9622203a (№2) output_text -> 5fbdec5c-255f-4b0c-9a33-1e74ed8366e6 (№1) cgi
