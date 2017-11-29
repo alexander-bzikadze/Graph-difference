@@ -36,6 +36,8 @@ def deserialize(json):
     for block_json in json['result']['configurationSnapshot']['flowchart']['blocks']:
         for incoming in block_json['incoming']:
             source_id = incoming['source']['@value']
+            if source_id not in all_outputs:
+                continue
             (source_name, source_block_id) = all_outputs[source_id]
             (source_block, source_block_count) = blocks[source_block_id]
 
