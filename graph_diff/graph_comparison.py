@@ -67,7 +67,7 @@ def generate_n_comparator_tests(n: int,
 def generate_n_algo_tests(n: int,
                           algoes: [GraphDiffAlgorithm],
                           directory: str,
-                          graph_generator: GraphGenerator = StandardGraphGenerator(0, 100)):
+                          graph_generator: GraphGenerator = StandardGraphGenerator(0, 50)):
     import os
     if not os.path.exists(directory):
         os.makedirs(directory)

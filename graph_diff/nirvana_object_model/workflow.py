@@ -1,5 +1,6 @@
-from graph_diff.nirvana_object_model.block import Block
 from collections import defaultdict
+
+from graph_diff.nirvana_object_model.block import Block
 
 
 class Workflow:
@@ -42,6 +43,8 @@ class Workflow:
                                input_nest: str):
         assert from_block in self._blocks
         assert to_block in self._blocks
+        assert from_number <= self._blocks.count(from_block)
+        assert to_number <= self._blocks.count(to_block)
         assert output_nest in from_block.operation.outputs
         assert input_nest in to_block.operation.inputs
         self._connections_by_data[from_block, from_number, output_nest].add((to_block, to_number, input_nest))

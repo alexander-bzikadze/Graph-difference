@@ -21,82 +21,111 @@ class Pathfinder:
     def __init__(self,
                  graph1: AntGraph,
                  graph2: AntGraph,
-                 pheromon: [dict]):
+                 pheromon: [dict],
+                 matched: dict):
         self.graph1 = graph1
         self.graph2 = graph2
         self.route = None
         self.number_of_nodes_in_first_graph = None
         self.inverse_route = None
+        self.initial_score = 0
         self.score = None
         self.scores = {}
+        self.chosen_zeroes_label = None
+
+        self.initial_route = [None] * self.graph1.len
+        self.initial_route_set = set()
+        self.initial_inverse_route = {}
+        for node1, node2 in matched.items():
+            if node2 is not None:
+                self.initial_score += 1
+                self.update(
+                    graph1.node_indices[node1],
+                    graph2.node_indices[node2]
+                )
+
+            self.initial_route[graph1.node_indices[node1]] = graph2.node_indices[node2] if node2 is not None else 0
+            if node2 is not None:
+                self.initial_route_set.add(graph1.node_indices[node2])
+                self.initial_inverse_route[graph2.node_indices[node2]] = graph1.node_indices[node1]
+        self.initial_scores = self.scores.copy()
+
         self.pheromon = pheromon
+
+    def copy_initials(self):
+        self.route = self.initial_route.copy()
+        self.inverse_route = self.initial_inverse_route.copy()
+        self.route_set = self.initial_route_set.copy()
+        self.score = self.initial_score
+        self.scores = self.initial_scores.copy()
+
+    def choose(self, u_score, v):
+        discussed_label = self.graph1.get_label(v)
+
+        number_of_zeroes = max(0,
+                               self.graph1.label_size(discussed_label) - self.graph2.label_size(discussed_label) -
+                               self.chosen_zeroes_label[discussed_label])
+
+        probability = [(self.pheromon[v][u] ** self.ALPHA) * (us ** self.BETA) if u not in self.route_set else 0 for
+                       u, us in u_score.items()]
+        values = list(u_score.keys())
+        if number_of_zeroes > 0:
+            values.append(0)
+            probability.append(self.pheromon[v][0] ** self.ALPHA)
+
+        values = [v for i, v in enumerate(values) if probability[i] != 0]
+        probability = [p for p in probability if p != 0]
+
+        prob_sum = sum(probability)
+        probability = [p / prob_sum for p in probability]
+        # chosen = numpy.random.choice(a=values, p=probability)
+
+        prob_sum = 0
+        PRESISION = 1
+        chosen = sum([numpy.random.sample() for _ in range(0, PRESISION)]) / PRESISION
+        flag = False
+        for i, p in enumerate(probability):
+            prob_sum += p
+            if chosen < prob_sum:
+                chosen = values[i]
+                flag = True
+        if not flag:
+            chosen = values[-1] if len(values) > 0 else 0
+        return chosen
 
     def find_route(self):
 
         logging.debug('Finding new route')
+        self.copy_initials()
 
-        self.route = [None] * self.graph1.len
-        self.route_set = set()
-        self.inverse_route = {}
-        self.score = 0
-        self.number_of_nodes_in_first_graph = self.graph2.len
-
-        chosen_zeroes_label = defaultdict(int)
+        self.chosen_zeroes_label = defaultdict(int)
         for v in self.graph1:
+            assert self.route[v] is None
             timer.time = time.time()
 
             u_score = self.find_pair(v)
 
+            chosen = self.choose(u_score, v)
             discussed_label = self.graph1.get_label(v)
-            logging.debug('Node {} has label {}'.format(v, discussed_label))
-
-            logging.debug(
-                '{}, {}, {}'.format(self.graph1.label_size(discussed_label), self.graph2.label_size(discussed_label),
-                                    chosen_zeroes_label[discussed_label]))
-            number_of_zeroes = max(0,
-                                   self.graph1.label_size(discussed_label) - self.graph2.label_size(discussed_label) -
-                                   chosen_zeroes_label[discussed_label])
-            logging.debug('Number of possible zeroes is {}'.format(number_of_zeroes))
-
-            if number_of_zeroes > 0:
-                zeroes = [0]
-                zeroes_probs = [self.pheromon[v][0] ** self.ALPHA + number_of_zeroes ** self.BETA]
-            else:
-                zeroes = []
-                zeroes_probs = []
-
-            logging.debug('{}, {}'.format(zeroes, zeroes_probs))
-            probability = [(self.pheromon[v][u] ** self.ALPHA) * (us ** self.BETA) if u not in self.route_set else 0 for
-                           u, us in u_score.items()] + zeroes_probs
-            logging.debug('Probability is {}'.format(probability))
-
-            prob_sum = sum(probability)
-            probability = [p / prob_sum for p in probability]
-            values = self.graph2.label(self.graph1.get_label(v)) + zeroes
-            chosen = numpy.random.choice(a=values, p=probability)
 
             self.route[v] = chosen
-            self.route_set.add(chosen)
             self.inverse_route[chosen] = v
             self.update(v, chosen)
             if chosen == 0:
-                chosen_zeroes_label[discussed_label] += 1
+                self.chosen_zeroes_label[discussed_label] += 1
             else:
+                self.route_set.add(chosen)
                 self.score += u_score[chosen]
 
         logging.debug('route is {}'.format(self.route))
         self.route = self.route[1:]
-        self.scores = {}
 
     def find_pair(self, v):
         u_score = {}
-        logging.debug('Finding pair for node {}'.format(v))
-        logging.debug('Score is number of adjacent nodes, that being mapped to first graph have edge with v.')
         for u in self.graph2.label(self.graph1.get_label(v)):
             if (v, u) not in self.scores.keys():
                 self.scores[v, u] = 1
             u_score[u] = self.scores[v, u]
-        logging.debug('Scores for node {} are dict {}'.format(v, dict(u_score)))
         return u_score
 
     def update(self, v, u):

@@ -1,6 +1,6 @@
-from nirvana_object_model.block import Block
-from nirvana_object_model.operation import Operation
-from nirvana_object_model.workflow import Workflow
+from graph_diff.nirvana_object_model.block import Block
+from graph_diff.nirvana_object_model.operation import Operation
+from graph_diff.nirvana_object_model.workflow import Workflow
 
 
 def deserialize(json):

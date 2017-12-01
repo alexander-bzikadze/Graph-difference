@@ -74,6 +74,7 @@ class StandardWorkflowGenerator(WorkflowGenerator):
                 options=key_values
             ))
 
+        self.types_of_block = tuple(self.types_of_block)
         return self
 
 

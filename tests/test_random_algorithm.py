@@ -23,11 +23,26 @@ def generate_parameters(algo1, algo2, comparator, number_of_tests, *args):
 
 class GraphWithRepetitiveNodesWithRootTest(unittest.TestCase):
     NUMBER_OF_TESTS = 100
-    parameters = generate_parameters(BaselineAlgorithm(),
-                                     AntAlgorithm(),
+
+    ERROR = 0
+    FAILED_NUMBER = 0
+
+    # parameters = generate_parameters(BaselineAlgorithm(),
+    #                                  Algorithm(),
+    #                                  GraphMapComparatorByEdgeNum(),
+    #                                  NUMBER_OF_TESTS,
+    #                                  StandardGraphGenerator(0, 5))
+    parameters = generate_parameters(AntAlgorithm(),
+                                     BaselineAlgorithm(),
                                      GraphMapComparatorByEdgeNum(),
                                      NUMBER_OF_TESTS,
                                      StandardGraphGenerator(0, 5))
+
+    # parameters = generate_parameters(AntAlgorithm(),
+    #                                  AntAlgorithm(),
+    #                                  GraphMapComparatorByEdgeNum(),
+    #                                  NUMBER_OF_TESTS,
+    #                                  StandardGraphGenerator(0, 60))
 
     @parameterized.expand(parameters)
     def test_random(self,
@@ -39,9 +54,19 @@ class GraphWithRepetitiveNodesWithRootTest(unittest.TestCase):
                     comparator: GraphMapComparator):
         algo1_result = algo1.construct_diff(graph1, graph2)
         algo2_result = algo2.construct_diff(graph1, graph2)
+
+        if comparator.comparable_representation(algo1_result) != comparator.comparable_representation(algo2_result):
+            GraphWithRepetitiveNodesWithRootTest.FAILED_NUMBER += 1
+            GraphWithRepetitiveNodesWithRootTest.ERROR += abs(
+                comparator.comparable_representation(algo1_result) - comparator.comparable_representation(algo2_result))
+
         self.assertEqual(first=comparator.comparable_representation(algo1_result),
                          second=comparator.comparable_representation(algo2_result))
 
+    @classmethod
+    def tearDownClass(cls):
+        print(GraphWithRepetitiveNodesWithRootTest.ERROR / GraphWithRepetitiveNodesWithRootTest.NUMBER_OF_TESTS)
+        print(GraphWithRepetitiveNodesWithRootTest.ERROR / GraphWithRepetitiveNodesWithRootTest.FAILED_NUMBER)
 
 if __name__ == '__main__':
     unittest.main()

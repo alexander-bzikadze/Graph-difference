@@ -1,0 +1,150 @@
+{
+  "result": {
+    "configurationSnapshot": {
+      "flowchart": {
+        "blocks": [
+          {
+            "_id": "58e12163-3162-4791-a8cf-e77bca0ac8b5",
+            "incoming": [
+              {
+                "_id": "819ace6b-224b-4c51-9c8a-4d56aa3662d0",
+                "source": {
+                  "@value": "4dc3cb05-f2c0-4b23-9920-8d14d02c8b69"
+                },
+                "target": {
+                  "@value": "8dd15be9-dd8f-4656-8dfd-e8fc15cb27ce"
+                }
+              },
+              {
+                "_id": "5147950d-cb55-48a9-a1f4-e2f2e6da2a11",
+                "source": {
+                  "@value": "f3de846b-91e7-4350-9b27-623521992b72"
+                },
+                "target": {
+                  "@value": "321ba8e8-192e-48d0-a6f8-e2b41aa41976"
+                }
+              }
+            ],
+            "outgoing": [],
+            "inputs": [
+              {
+                "_id": "8dd15be9-dd8f-4656-8dfd-e8fc15cb27ce",
+                "name": "queries"
+              },
+              {
+                "_id": "321ba8e8-192e-48d0-a6f8-e2b41aa41976",
+                "name": "cgi"
+              },
+              {
+                "_id": "8d16d2ba-f58b-44a5-87b3-9c7bef8b1916",
+                "name": "filter"
+              }
+            ],
+            "outputs": [
+              {
+                "_id": "0b000ed7-b4a2-4ed9-b3b9-34facb416527",
+                "name": "serps"
+              }
+            ],
+            "type": {
+              "_id": "5fbdec5c-255f-4b0c-9a33-1e74ed8366e6"
+            }
+          },
+          {
+            "_id": "063e8d3d-d466-4837-a1de-110be2818df2",
+            "incoming": [],
+            "outgoing": [
+              {
+                "_id": "819ace6b-224b-4c51-9c8a-4d56aa3662d0",
+                "source": {
+                  "@value": "4dc3cb05-f2c0-4b23-9920-8d14d02c8b69"
+                },
+                "target": {
+                  "@value": "8dd15be9-dd8f-4656-8dfd-e8fc15cb27ce"
+                }
+              }
+            ],
+            "inputs": [],
+            "outputs": [
+              {
+                "_id": "7b7fee4e-2e3d-41ba-b2c4-337deb017416",
+                "name": "output_tsv"
+              },
+              {
+                "_id": "723b8626-e914-4440-b50f-597d248ff492",
+                "name": "output_file"
+              },
+              {
+                "_id": "b409ed53-4f86-4e60-8985-80b66cc583ca",
+                "owner": {
+                  "@value": "063e8d3d-d466-4837-a1de-110be2818df2"
+                },
+                "name": "output_text"
+              },
+              {
+                "_id": "7cb38593-7658-4041-aca1-ec0a40f47b79",
+                "name": "output_binary"
+              },
+              {
+                "_id": "4dc3cb05-f2c0-4b23-9920-8d14d02c8b69",
+                "name": "output_json"
+              },
+              {
+                "_id": "465509cc-c09c-417b-8f84-4b34bb4f78ce",
+                "name": "output_executable"
+              }
+            ],
+            "type": {
+              "_id": "a268f81e-d43e-4a96-9ce1-5c1a9622203a"
+            }
+          },
+          {
+            "_id": "58bbfafc-942a-41da-8c9e-96b6873537cf",
+            "incoming": [],
+            "outgoing": [
+              {
+                "_id": "5147950d-cb55-48a9-a1f4-e2f2e6da2a11",
+                "source": {
+                  "@value": "f3de846b-91e7-4350-9b27-623521992b72"
+                },
+                "target": {
+                  "@value": "321ba8e8-192e-48d0-a6f8-e2b41aa41976"
+                }
+              }
+            ],
+            "inputs": [],
+            "outputs": [
+              {
+                "_id": "dd009717-d25d-445a-959f-8383cbdc15ad",
+                "name": "output_tsv"
+              },
+              {
+                "_id": "2285a77f-4f2b-4fac-a1bf-8738a4087e84",
+                "name": "output_file"
+              },
+              {
+                "_id": "f3de846b-91e7-4350-9b27-623521992b72",
+                "name": "output_text"
+              },
+              {
+                "_id": "1794e4ff-8f3e-4659-abf0-8fd092b40963",
+                "name": "output_binary"
+              },
+              {
+                "_id": "ac138bb7-2e72-46aa-94fb-0da36549849e",
+                "name": "output_json"
+              },
+              {
+                "_id": "b512a1f9-0bf0-4697-8c8a-9bd047daa41a",
+                "name": "output_executable"
+              }
+            ],
+            "type": {
+              "_id": "a268f81e-d43e-4a96-9ce1-5c1a9622203a"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

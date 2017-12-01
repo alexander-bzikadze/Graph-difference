@@ -255,6 +255,9 @@ class CompleteWorkflowToGraphConverter(WorkflowToGraphConverter):
         block_colors = {}
         blocks = {}
 
+        matched_color = 'black'
+        added_color = 'green3'
+        deleted_color = 'red'
         for node in graph_map.get_node_overlap_from_second():
             if not self.is_block(node):
                 continue
@@ -265,7 +268,7 @@ class CompleteWorkflowToGraphConverter(WorkflowToGraphConverter):
                                     outputs=sorted(outputs[node, 2])),
                           options=key_values_tuple)
             blocks[node, 2] = block, workflow.add_block(block)
-            block_colors[blocks[node, 2]] = 'black'
+            block_colors[blocks[node, 2]] = matched_color
 
         for node in graph_map.get_nodes_in_2_not_in_1():
             if not self.is_block(node):
@@ -277,7 +280,7 @@ class CompleteWorkflowToGraphConverter(WorkflowToGraphConverter):
                                     outputs=sorted(outputs[node, 2])),
                           options=key_values_tuple)
             blocks[node, 2] = block, workflow.add_block(block)
-            block_colors[blocks[node, 2]] = 'green'
+            block_colors[blocks[node, 2]] = added_color
 
         for node in graph_map.get_nodes_in_1_not_in_2():
             if not self.is_block(node):
@@ -289,14 +292,14 @@ class CompleteWorkflowToGraphConverter(WorkflowToGraphConverter):
                                     outputs=sorted(outputs[node, 1])),
                           options=key_values_tuple)
             blocks[node, 1] = block, workflow.add_block(block)
-            block_colors[blocks[node, 1]] = 'red'
+            block_colors[blocks[node, 1]] = deleted_color
 
         for node in graph_map.get_node_overlap_from_first():
             if not self.is_block(node):
                 continue
             map_node = graph_map.map_from_1(node)
             blocks[node, 1] = blocks[map_node, 2]
-            block_colors[blocks[node, 1]] = 'black'
+            block_colors[blocks[node, 1]] = matched_color
 
         data_connection_colors = {}
         exc_connection_colors = {}
@@ -322,8 +325,8 @@ class CompleteWorkflowToGraphConverter(WorkflowToGraphConverter):
                     to_nest_block,
                     to_nest_block_number,
                     to_nest
-                ] = 'black' if from_node in graph_map.get_node_overlap_from_second() and \
-                               to_node in graph_map.get_node_overlap_from_second() else 'green'
+                ] = matched_color if from_node in graph_map.get_node_overlap_from_second() and \
+                                     to_node in graph_map.get_node_overlap_from_second() else added_color
             elif self.is_block(from_node) and self.is_block(to_node):
                 from_block, from_number = blocks[from_node, 2]
                 to_block, to_number = blocks[to_node, 2]
@@ -338,8 +341,8 @@ class CompleteWorkflowToGraphConverter(WorkflowToGraphConverter):
                     from_number,
                     to_block,
                     to_number
-                ] = 'black' if from_node in graph_map.get_node_overlap_from_second() and \
-                               to_node in graph_map.get_node_overlap_from_second() else 'green'
+                ] = matched_color if from_node in graph_map.get_node_overlap_from_second() and \
+                                     to_node in graph_map.get_node_overlap_from_second() else added_color
 
         for from_node, to_node in graph_map.get_edges_in_1_not_in_2():
             if self.is_output_nest(from_node) and self.is_input_nest(to_node):
@@ -362,7 +365,7 @@ class CompleteWorkflowToGraphConverter(WorkflowToGraphConverter):
                     to_nest_block,
                     to_nest_block_number,
                     to_nest
-                ] = 'red'
+                ] = deleted_color
             elif self.is_block(from_node) and self.is_block(to_node):
                 from_block, from_number = blocks[from_node, 1]
                 to_block, to_number = blocks[to_node, 1]
@@ -377,6 +380,6 @@ class CompleteWorkflowToGraphConverter(WorkflowToGraphConverter):
                     from_number,
                     to_block,
                     to_number
-                ] = 'red'
+                ] = deleted_color
 
         return workflow, GraphMapDotColorer(block_colors, data_connection_colors, exc_connection_colors)
