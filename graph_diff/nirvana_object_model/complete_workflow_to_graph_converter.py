@@ -304,6 +304,44 @@ class CompleteWorkflowToGraphConverter(WorkflowToGraphConverter):
         data_connection_colors = {}
         exc_connection_colors = {}
 
+        for from_node, to_node in graph_map.get_edges_in_2_not_in_1():
+            if self.is_output_nest(from_node) and self.is_input_nest(to_node):
+                _, _, from_nest = self.get_output_nest(from_node)
+                _, _, to_nest = self.get_input_nest(to_node)
+                from_nest_block, from_nest_block_number = blocks[nest_to_center[from_node, 2]]
+                to_nest_block, to_nest_block_number = blocks[nest_to_center[to_node, 2]]
+                workflow.add_connection_by_data(
+                    from_block=from_nest_block,
+                    from_number=from_nest_block_number,
+                    output_nest=from_nest,
+                    to_block=to_nest_block,
+                    to_number=to_nest_block_number,
+                    input_nest=to_nest
+                )
+                data_connection_colors[
+                    from_nest_block,
+                    from_nest_block_number,
+                    from_nest,
+                    to_nest_block,
+                    to_nest_block_number,
+                    to_nest
+                ] = added_color
+            elif self.is_block(from_node) and self.is_block(to_node):
+                from_block, from_number = blocks[from_node, 2]
+                to_block, to_number = blocks[to_node, 2]
+                workflow.add_connection_by_execution(
+                    from_block=from_block,
+                    from_number=from_number,
+                    to_block=to_block,
+                    to_number=to_number
+                )
+                exc_connection_colors[
+                    from_block,
+                    from_number,
+                    to_block,
+                    to_number
+                ] = added_color
+
         for from_node, to_node in graph_map.get_edge_overlap_from_second() + graph_map.get_edges_in_2_not_in_1():
             if self.is_output_nest(from_node) and self.is_input_nest(to_node):
                 _, _, from_nest = self.get_output_nest(from_node)

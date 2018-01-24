@@ -1,5 +1,5 @@
-from .graph_with_repetitive_nodes_exceptions import LabeledRepetitiveNodePositiveArgumentException
 from .graph_with_repetitive_nodes_exceptions import GraphWithRepetitiveNodesKeyError
+from .graph_with_repetitive_nodes_exceptions import LabeledRepetitiveNodePositiveArgumentException
 
 
 class GraphWithRepetitiveNodesWithRoot:
@@ -64,7 +64,7 @@ class GraphWithRepetitiveNodesWithRoot:
         self.add_node(from_node)
         self.add_node(to_node)
         self._adjacency_list[from_node].add(to_node)
-        if to_node in self._adjacency_list[self.ROOT]:
+        if to_node in self._adjacency_list[self.ROOT] and from_node != self.ROOT:
             self._adjacency_list[self.ROOT].remove(to_node)
         return self
 
@@ -74,7 +74,7 @@ class GraphWithRepetitiveNodesWithRoot:
         if from_node not in self or to_node not in self:
             raise GraphWithRepetitiveNodesKeyError("Adding edge from or to not valid nodes")
         self._adjacency_list[from_node].add(to_node)
-        if to_node in self._adjacency_list[self.ROOT]:
+        if to_node in self._adjacency_list[self.ROOT] and from_node != self.ROOT:
             self._adjacency_list[self.ROOT].remove(to_node)
         return self
 

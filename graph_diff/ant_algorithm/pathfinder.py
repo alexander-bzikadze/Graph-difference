@@ -78,19 +78,8 @@ class Pathfinder:
 
         prob_sum = sum(probability)
         probability = [p / prob_sum for p in probability]
-        # chosen = numpy.random.choice(a=values, p=probability)
+        chosen = numpy.random.choice(a=values, p=probability)
 
-        prob_sum = 0
-        PRESISION = 1
-        chosen = sum([numpy.random.sample() for _ in range(0, PRESISION)]) / PRESISION
-        flag = False
-        for i, p in enumerate(probability):
-            prob_sum += p
-            if chosen < prob_sum:
-                chosen = values[i]
-                flag = True
-        if not flag:
-            chosen = values[-1] if len(values) > 0 else 0
         return chosen
 
     def find_route(self):

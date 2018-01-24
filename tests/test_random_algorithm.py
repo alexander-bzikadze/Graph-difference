@@ -32,11 +32,18 @@ class GraphWithRepetitiveNodesWithRootTest(unittest.TestCase):
     #                                  GraphMapComparatorByEdgeNum(),
     #                                  NUMBER_OF_TESTS,
     #                                  StandardGraphGenerator(0, 5))
+
     parameters = generate_parameters(AntAlgorithm(),
                                      BaselineAlgorithm(),
                                      GraphMapComparatorByEdgeNum(),
                                      NUMBER_OF_TESTS,
-                                     StandardGraphGenerator(0, 5))
+                                     StandardGraphGenerator(0, 10))
+
+    # parameters = generate_parameters(NewAntAlgorithm(),
+    #                                  BaselineAlgorithm(),
+    #                                  GraphMapComparatorByEdgeNum(),
+    #                                  NUMBER_OF_TESTS,
+    #                                  StandardGraphGenerator(0, 10))
 
     # parameters = generate_parameters(AntAlgorithm(),
     #                                  AntAlgorithm(),
@@ -66,7 +73,9 @@ class GraphWithRepetitiveNodesWithRootTest(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         print(GraphWithRepetitiveNodesWithRootTest.ERROR / GraphWithRepetitiveNodesWithRootTest.NUMBER_OF_TESTS)
-        print(GraphWithRepetitiveNodesWithRootTest.ERROR / GraphWithRepetitiveNodesWithRootTest.FAILED_NUMBER)
+        print(GraphWithRepetitiveNodesWithRootTest.ERROR / GraphWithRepetitiveNodesWithRootTest.FAILED_NUMBER
+              if GraphWithRepetitiveNodesWithRootTest.FAILED_NUMBER is not 0 else 0)
+
 
 if __name__ == '__main__':
     unittest.main()

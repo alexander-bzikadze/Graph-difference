@@ -9,12 +9,12 @@ NUMBER_OF_TESTS = 100
 DIRECTORY = "../comparator_png/"
 
 comparators = [
-    GraphMapComparatorByEdgeNumAndThenNodeNum(),
+    # GraphMapComparatorByEdgeNumAndThenNodeNum(),
     # GraphMapComparatorByEdgeNumAndNodeNumSum(),
     # GraphMapComparatorByNodeNumAndThenEdgeNum(),
     GraphMapComparatorByNodeNum(),
     GraphMapComparatorByEdgeNum(),
-    GraphMapComparatorByEdgeDiffAndThenNodeDiff()
+    # GraphMapComparatorByEdgeDiffAndThenNodeDiff()
 ]
 
 logging.info("Start comparator test with {0} tests".format(NUMBER_OF_TESTS))

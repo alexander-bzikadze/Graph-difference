@@ -2,8 +2,8 @@ import logging
 import os
 
 from graph_diff.baseline_algorithm import BaselineAlgorithm
-from graph_diff.nirvana_object_model.chain_workflow_generator import ChainWorkflowGenerator
 from graph_diff.nirvana_object_model.complete_workflow_to_graph_converter import CompleteWorkflowToGraphConverter
+from graph_diff.nirvana_object_model.similar_workflow_generator import SimilarWorkflowGenerator
 from graph_diff.pipeline import Pipeline
 
 NUMBER_OF_TESTS = 100
@@ -28,8 +28,8 @@ for i in range(0, NUMBER_OF_TESTS):
     logging.info('Running test {}'.format(i))
     logging.debug('Generation two workflows')
     # generator = StandardWorkflowGenerator().generate_blocks()
-    # generator = SimilarWorkflowGenerator()
-    generator = ChainWorkflowGenerator().generate_blocks(chain_number=1)
+    generator = SimilarWorkflowGenerator()
+    # generator = ChainWorkflowGenerator().generate_blocks(chain_number=1)
     workflow1 = generator.generate_workflow()
     workflow2 = generator.generate_workflow()
 

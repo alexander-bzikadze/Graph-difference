@@ -12,6 +12,7 @@ class BaseLineAlgorithmTest(unittest.TestCase):
     parameters = [
         # ("baseline", BaselineAlgorithm())
         ('Ant', AntAlgorithm())
+        # ('NewAnt', NewAntAlgorithm())
     ]
 
     def template_test(self, graph1, graph2, score, algorithm):
