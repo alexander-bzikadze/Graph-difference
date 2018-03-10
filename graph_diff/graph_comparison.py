@@ -10,6 +10,9 @@ from .graph_map import GraphMapComparator
 from .to_dot_converter import convert_graph, convert_diff
 
 
+# TODO: move to scripts
+
+
 def graph_comparison_with_baseline(graph1: GraphWithRepetitiveNodesWithRoot,
                                    graph2: GraphWithRepetitiveNodesWithRoot,
                                    comparator: GraphMapComparator) -> GraphMap:
