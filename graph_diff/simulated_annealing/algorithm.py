@@ -5,6 +5,7 @@ from graph_diff.graph_diff_algorithm import GraphDiffAlgorithm
 from graph_diff.graph_map import GraphMap
 
 
+# TODO: the algorithm
 class Algorithm(GraphDiffAlgorithm):
     def construct_diff(self,
                        graph1: GraphWithRepetitiveNodesWithRoot,

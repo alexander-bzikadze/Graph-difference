@@ -1,6 +1,5 @@
 import itertools
 import logging
-import time
 from collections import defaultdict
 
 from graph_diff.ant_algorithm import parameters
@@ -11,12 +10,15 @@ from graph_diff.graph_diff_algorithm import GraphDiffAlgorithm
 from graph_diff.graph_map import GraphMap
 
 
-def timer():
-    logging.INFO(time.time() - timer.time)
-    timer.time = time.time()
-
-
 class Algorithm(GraphDiffAlgorithm):
+    """
+    Realization of heuristic ant algorithm for graph difference problem.
+    It is not an exact algorithm, so the mistakes may be made.
+    TODO: add accuracy evaluation.
+    Complexity is O(NI * (NA * E_1 + V_1) * V_2)
+    TODO: add references.
+    """
+
     P = parameters.P
     NUMBER_OF_ITERATIONS = parameters.NUMBER_OF_ITERATIONS
     NUMBER_OF_AGENTS = parameters.NUMBER_OF_AGENTS
@@ -25,6 +27,9 @@ class Algorithm(GraphDiffAlgorithm):
     def __init__(self):
         self.best_choice = None
         self.best_score = -1
+        self.pheromon = None
+        self.graph1 = None
+        self.graph2 = None
 
     def construct_diff(self,
                        graph1: GraphWithRepetitiveNodesWithRoot,
@@ -39,32 +44,27 @@ class Algorithm(GraphDiffAlgorithm):
         self.graph1.set_iterator(matched)
 
         logging.debug('pheromon initialized as {} defaultdicts'.format(self.graph1.len + 1))
-        self.pheromon = [defaultdict(itertools.repeat(1).__next__) for _ in range(self.graph1.len)]
+        self.pheromon = [defaultdict(itertools.repeat(1).__next__)
+                         for _ in range(self.graph1.len)]
 
-        pathfinders = [Pathfinder(self.graph1, self.graph2, self.pheromon, matched) for _ in
-                       range(0, self.NUMBER_OF_AGENTS)]
+        pathfinders = [Pathfinder(self.graph1, self.graph2, self.pheromon, matched)
+                       for _ in range(0, self.NUMBER_OF_AGENTS)]
 
         assert self.NUMBER_OF_ITERATIONS > 0
         assert self.NUMBER_OF_AGENTS > 0
 
         route = []
 
-        def T_MIN_f(iteration: int):
-            return 1 / (iteration + 1)
-
-        def T_MAX_f(iteration: int):
-            return iteration / 2
-
         number_of_iterations_with_the_same_score = 0
         score_graphic = []
 
+        # O(NI * inner)
         for _ in range(0, self.NUMBER_OF_ITERATIONS):
-            T_MIN = T_MIN_f(_)
-            T_MAX = T_MAX_f(_)
-
             number_of_iterations_with_the_same_score += 1
 
+            # O(NA * inner)
             for i in range(0, self.NUMBER_OF_AGENTS):
+                # O(E_1 * V_2)
                 pathfinders[i].find_route()
                 if pathfinders[i].score > self.best_score:
                     self.best_choice = pathfinders[i].route
@@ -77,34 +77,38 @@ class Algorithm(GraphDiffAlgorithm):
             routes = [(p.route, p.score) for p in pathfinders]
             m = max(routes, key=lambda x: x[1])
 
+            # O(V_1)
             for i in range(self.graph1.len):
+                # O(V_2)
                 for key in self.pheromon[i]:
                     self.pheromon[i][key] *= 1 - self.P
 
+            # O(V_1)
             for i, u in enumerate(m[0]):
                 self.pheromon[i + 1][u] += 1 / (10 + self.best_score - m[1])
 
             score_graphic.append(self.best_score)
+        # Total complexity is O(NI * (NA * E_1 + V_1) * V_2)
 
-        assert_set = set()
-        for u in route:
-            if not (u not in assert_set or u == 0):
-                print("!")
-            assert u not in assert_set or u == 0
-            assert_set.add(u)
+        route = {self.graph1.nodes[i + 1]: self.graph2.nodes[u]
+                 for i, u in enumerate(self.best_choice)
+                 if u is not None}
 
-        route = {self.graph1.nodes[i + 1]: self.graph2.nodes[u] for i, u in enumerate(self.best_choice) if
-                 u is not None}
-
-        with open('score_graph.txt', 'a') as f:
-            f.write(str(score_graphic))
-            f.write('\n')
+        # with open('score_graph.txt', 'a') as f:
+        #     f.write(str(score_graphic))
+        #     f.write('\n')
 
         return GraphMap().construct_graph_map(route, graph1, graph2)
 
 
 def construct_matched_for_first(graph1: GraphWithRepetitiveNodesWithRoot,
                                 graph2: GraphWithRepetitiveNodesWithRoot):
+    """
+    Constructs map of definitely matched nodes
+    :param graph1:  first graph
+    :param graph2:  second graph
+    :return:        dict of matched nodes
+    """
     dict_matched = {}
 
     labels_first = defaultdict(set)

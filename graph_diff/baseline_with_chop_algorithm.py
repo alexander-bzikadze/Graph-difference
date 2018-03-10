@@ -1,7 +1,7 @@
 from .baseline_algorithm import BaselineAlgorithm
 
 
-# In progress!
+# TODO: the algorithm
 class BaselineWithChopAlgorithm(BaselineAlgorithm):
     class BLPWCPermutations:
         def __init__(self, graph1: BaselineAlgorithm.RNRGraphForBLAlg, graph2: BaselineAlgorithm.RNRGraphForBLAlg):
