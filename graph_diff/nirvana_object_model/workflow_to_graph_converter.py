@@ -7,6 +7,8 @@ from graph_diff.nirvana_object_model.workflow import Workflow
 
 
 class WorkflowToGraphConverter(ABC):
+    """Interface for graph converter"""
+
     @abstractmethod
     def convert(self, workflow: Workflow) -> GraphWithRepetitiveNodesWithRoot: pass
 
