@@ -1,12 +1,19 @@
 from graph_diff.graph import GraphWithRepetitiveNodesWithRoot
-from graph_diff.graph_diff_algorithm import GraphDiffAlgorithm
-from graph_diff.graph_diff_algorithm.graph_map import GraphMap
+from graph_diff.graph_diff_algorithm import GraphDiffAlgorithm, GraphMap
 from graph_diff.new_ant_algorithm import parameters
 from graph_diff.new_ant_algorithm.pathfinder import Pathfinder
 from graph_diff.new_ant_algorithm.pheromon_table import PheromonTable
 
 
 class Algorithm(GraphDiffAlgorithm):
+    """
+    Realization of heuristic ant algorithm for graph difference problem.
+    It is not an exact algorithm, so the mistakes may be made.
+    TODO: add accuracy evaluation.
+    TODO: add complexity
+    TODO: add references.
+    """
+
     P = parameters.P
     NUMBER_OF_ITERATIONS = parameters.NUMBER_OF_ITERATIONS
     NUMBER_OF_AGENTS = parameters.NUMBER_OF_AGENTS

@@ -2,6 +2,8 @@ from graph_diff.new_ant_algorithm import parameters
 
 
 class PheromonTable:
+    """Lazy pheromon table for the ant algorithm"""
+
     P = parameters.P
 
     def __init__(self):
@@ -14,8 +16,8 @@ class PheromonTable:
         if (u, u1, v, v1) not in self.table.keys():
             return (1 - PheromonTable.P) ** self.current_iteration
         else:
-            return self.table[u, u1, v, v1] * (1 - PheromonTable.P) ** (
-                    self.current_iteration - self.last_update[u, u1, v, v1])
+            return self.table[u, u1, v, v1] * (1 - PheromonTable.P) \
+                   ** (self.current_iteration - self.last_update[u, u1, v, v1])
 
     # O(1)
     def add_update(self, u, u1, v, v1, value):
