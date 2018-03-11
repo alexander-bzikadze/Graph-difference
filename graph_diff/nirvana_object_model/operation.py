@@ -1,8 +1,16 @@
 class Operation:
+    """Box type for nirvana operation"""
+
     def __init__(self,
                  operation_id: str,
                  inputs=(),
                  outputs=()):
+        """
+        :param operation_id:    id of the operation
+        :param inputs:          input nests of the operation
+        :param outputs:         output nests of the operation
+        """
+
         self.operation_id = operation_id
         self.inputs = tuple(inputs)
         self.outputs = tuple(outputs)

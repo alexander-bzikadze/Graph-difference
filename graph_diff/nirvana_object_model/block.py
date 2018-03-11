@@ -2,7 +2,16 @@ from graph_diff.nirvana_object_model.operation import Operation
 
 
 class Block:
+    """Class representing nirvana block"""
+
     def __init__(self, operation: Operation, options=None):
+        """
+        Contains operation and options that are key-value
+
+        :param operation:   nirvana operation
+        :param options:     dict of options
+        """
+
         if options is None:
             options = {}
         self.operation = operation

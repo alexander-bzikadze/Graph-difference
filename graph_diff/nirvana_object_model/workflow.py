@@ -4,6 +4,8 @@ from graph_diff.nirvana_object_model.block import Block
 
 
 class Workflow:
+    """Box class for nirvana workflow representation"""
+
     def __init__(self):
         self._blocks = []
         self._connections_by_execution = defaultdict(set)
@@ -31,6 +33,7 @@ class Workflow:
         assert to_block in self._blocks
         assert from_number <= self._blocks.count(from_block)
         assert to_number <= self._blocks.count(to_block)
+
         self._connections_by_execution[from_block, from_number].add((to_block, to_number))
         return self
 
@@ -47,4 +50,6 @@ class Workflow:
         assert to_number <= self._blocks.count(to_block)
         assert output_nest in from_block.operation.outputs
         assert input_nest in to_block.operation.inputs
+
         self._connections_by_data[from_block, from_number, output_nest].add((to_block, to_number, input_nest))
+        return self
