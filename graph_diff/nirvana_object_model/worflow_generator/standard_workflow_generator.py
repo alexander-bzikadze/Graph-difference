@@ -5,10 +5,8 @@ from collections import defaultdict
 import math
 import numpy.random
 
-from graph_diff.nirvana_object_model.block import Block
-from graph_diff.nirvana_object_model.operation import Operation
-from graph_diff.nirvana_object_model.workflow import Workflow
-from graph_diff.nirvana_object_model.workflow_generator import WorkflowGenerator
+from graph_diff.nirvana_object_model.worflow_generator import WorkflowGenerator
+from graph_diff.nirvana_object_model.workflow import Block, Operation, Workflow
 
 
 class StandardWorkflowGenerator(WorkflowGenerator):

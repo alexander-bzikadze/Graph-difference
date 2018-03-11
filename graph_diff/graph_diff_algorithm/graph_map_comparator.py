@@ -1,6 +1,6 @@
 from abc import abstractmethod, ABC
 
-from graph_diff.graph_map import GraphMap
+from graph_diff.graph_diff_algorithm import GraphMap
 
 
 class GraphMapComparator(ABC):

@@ -1,9 +1,8 @@
 import random
 from collections import defaultdict
 
-from graph_diff.nirvana_object_model.standard_workflow_generator import StandardWorkflowGenerator
+from graph_diff.nirvana_object_model.worflow_generator import WorkflowGenerator, StandardWorkflowGenerator
 from graph_diff.nirvana_object_model.workflow import Workflow
-from graph_diff.nirvana_object_model.workflow_generator import WorkflowGenerator
 
 
 class SimilarWorkflowGenerator(WorkflowGenerator):

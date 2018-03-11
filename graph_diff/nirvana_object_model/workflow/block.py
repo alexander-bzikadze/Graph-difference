@@ -1,4 +1,4 @@
-from graph_diff.nirvana_object_model.operation import Operation
+from graph_diff.nirvana_object_model.workflow import Operation
 
 
 class Block:

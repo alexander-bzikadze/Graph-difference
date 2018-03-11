@@ -1,7 +1,7 @@
 import pydot
 
-from .graph import GraphWithRepetitiveNodesWithRoot
-from .graph_map import GraphMap
+from graph_diff.graph import GraphWithRepetitiveNodesWithRoot
+from graph_diff.graph_diff_algorithm import GraphMap
 
 
 class RNRGraphToDotConverter:

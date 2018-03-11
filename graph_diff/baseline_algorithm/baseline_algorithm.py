@@ -1,8 +1,6 @@
-from graph_diff.graph_map import GraphMap
-from graph_diff.graph_map_comparator import GraphMapComparator, GraphMapComparatorByEdgeNum
-from .graph import GraphWithRepetitiveNodesWithRoot
-from .graph import lr_node
-from .graph_diff_algorithm import GraphDiffAlgorithm
+from graph_diff.graph import GraphWithRepetitiveNodesWithRoot, lr_node
+from graph_diff.graph_diff_algorithm import GraphMap, GraphMapComparator, \
+    GraphMapComparatorByEdgeNum, GraphDiffAlgorithm
 
 
 class BaselineAlgorithm(GraphDiffAlgorithm):

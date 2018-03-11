@@ -1,6 +1,6 @@
 from graph_diff.graph import GraphWithRepetitiveNodesWithRoot
 from graph_diff.graph_diff_algorithm import GraphDiffAlgorithm
-from graph_diff.graph_map import GraphMap
+from graph_diff.graph_diff_algorithm.graph_map import GraphMap
 from graph_diff.new_ant_algorithm import parameters
 from graph_diff.new_ant_algorithm.pathfinder import Pathfinder
 from graph_diff.new_ant_algorithm.pheromon_table import PheromonTable

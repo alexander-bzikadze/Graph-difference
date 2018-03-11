@@ -1,11 +1,7 @@
 from graph_diff.graph import rnr_graph, lr_node, GraphWithRepetitiveNodesWithRoot
-from graph_diff.graph_map import GraphMap
-from graph_diff.nirvana_object_model.block import Block
-from graph_diff.nirvana_object_model.graph_map_dot_colorer import GraphMapDotColorer, GraphDotColorer
-from graph_diff.nirvana_object_model.operation import Operation
-from graph_diff.nirvana_object_model.workflow import Workflow
-
-# noinspection PyAssignmentToLoopOrWithParameter
+from graph_diff.graph_diff_algorithm import GraphMap
+from graph_diff.nirvana_object_model.workflow import Block, Operation, Workflow
+from graph_diff.nirvana_object_model.workflow_to_dot_converter import GraphMapDotColorer, GraphDotColorer
 from graph_diff.nirvana_object_model.workflow_to_graph_converter import WorkflowToGraphConverter
 
 

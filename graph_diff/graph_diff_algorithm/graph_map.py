@@ -1,5 +1,4 @@
-from graph_diff.graph import lr_node
-from .graph import GraphWithRepetitiveNodesWithRoot
+from graph_diff.graph import GraphWithRepetitiveNodesWithRoot, lr_node
 from .graph_map_exceptions import *
 
 

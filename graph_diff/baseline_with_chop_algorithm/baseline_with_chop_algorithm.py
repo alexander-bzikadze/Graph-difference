@@ -1,4 +1,4 @@
-from .baseline_algorithm import BaselineAlgorithm
+from graph_diff.baseline_algorithm import BaselineAlgorithm
 
 
 # TODO: the algorithm

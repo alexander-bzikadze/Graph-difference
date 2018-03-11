@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
 
 from graph_diff.graph import GraphWithRepetitiveNodesWithRoot
-from graph_diff.graph_map import GraphMap
-from graph_diff.nirvana_object_model.graph_map_dot_colorer import GraphDotColorer
+from graph_diff.graph_diff_algorithm import GraphMap
 from graph_diff.nirvana_object_model.workflow import Workflow
+from graph_diff.nirvana_object_model.workflow_to_dot_converter import GraphDotColorer
 
 
 class WorkflowToGraphConverter(ABC):

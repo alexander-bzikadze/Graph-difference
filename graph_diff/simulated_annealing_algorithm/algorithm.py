@@ -2,7 +2,7 @@ from collections import defaultdict
 
 from graph_diff.graph import GraphWithRepetitiveNodesWithRoot
 from graph_diff.graph_diff_algorithm import GraphDiffAlgorithm
-from graph_diff.graph_map import GraphMap
+from graph_diff.graph_diff_algorithm.graph_map import GraphMap
 
 
 # TODO: the algorithm

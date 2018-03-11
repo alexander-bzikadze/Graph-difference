@@ -1,13 +1,13 @@
 import logging
 import time
 
+from graph_diff.baseline_algorithm.baseline_algorithm import BaselineAlgorithm
 from graph_diff.graph.graph_generator import GraphGenerator
+from graph_diff.graph.to_dot_converter import convert_graph, convert_diff
 from graph_diff.graph_diff_algorithm import GraphDiffAlgorithm
-from .baseline_algorithm import BaselineAlgorithm
+from graph_diff.graph_diff_algorithm.graph_map import GraphMap
+from graph_diff.graph_diff_algorithm.graph_map_comparator import GraphMapComparator
 from .graph import GraphWithRepetitiveNodesWithRoot, StandardGraphGenerator
-from .graph_map import GraphMap
-from .graph_map import GraphMapComparator
-from .to_dot_converter import convert_graph, convert_diff
 
 
 # TODO: move to scripts

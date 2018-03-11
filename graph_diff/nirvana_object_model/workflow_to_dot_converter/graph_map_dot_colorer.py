@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from graph_diff.nirvana_object_model.block import Block
+from graph_diff.nirvana_object_model.workflow import Block
 
 
 class GraphDotColorer(ABC):
@@ -52,7 +52,7 @@ class StandardGraphDotColorer(GraphDotColorer):
                              to_number: int): return self.STANDARD_COLOR
 
 
-class GraphMapDotColorer:
+class GraphMapDotColorer(GraphDotColorer):
     """Realization of GraphDotColorer that is interface over three dictionaries"""
 
     def __init__(self, block_colors, data_connection_colors, exc_connection_colors):
