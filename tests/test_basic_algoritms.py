@@ -2,25 +2,23 @@ import unittest
 
 from parameterized import parameterized
 
-from graph_diff.ant_algorithm.algorithm import Algorithm as AntAlgorithm
+from graph_diff.ant_algorithm import AntAlgorithm
+from graph_diff.baseline_algorithm import BaselineAlgorithm
 from graph_diff.graph import rnr_graph, lr_node
 from graph_diff.graph_diff_algorithm import GraphDiffAlgorithm
-from graph_diff.graph_map import GraphMapComparatorByEdgeNum
+from graph_diff.graph_diff_algorithm.graph_map_comparator import GraphMapComparatorByEdgeNum
+from graph_diff.new_ant_algorithm import NewAntAlgorithm
 
 
-class BaseLineAlgorithmTest(unittest.TestCase):
-    parameters = [
-        # ("baseline", BaselineAlgorithm())
-        ('Ant', AntAlgorithm())
-        # ('NewAnt', NewAntAlgorithm())
-    ]
+class BasicAlgorithmTest(unittest.TestCase):
+    parameters = [("baseline", BaselineAlgorithm()),
+                  ('Ant', AntAlgorithm()),
+                  ('NewAnt', NewAntAlgorithm())]
 
     def template_test(self, graph1, graph2, score, algorithm):
-        self.assertEqual(
-            first=GraphMapComparatorByEdgeNum()
-                .comparable_representation(algorithm.construct_diff(graph1, graph2)),
-            second=score
-        )
+        self.assertEqual(first=GraphMapComparatorByEdgeNum()
+                         .comparable_representation(algorithm.construct_diff(graph1, graph2)),
+                         second=score)
 
     def template_x_and_y_test_comp1(self, x: int, y: int, algorithm):
         graph1 = rnr_graph()
@@ -161,7 +159,9 @@ class BaseLineAlgorithmTest(unittest.TestCase):
     # death to stoppers
     @parameterized.expand(parameters)
     def test_hundred_and_hundred(self, name, algorithm: GraphDiffAlgorithm):
-        self.template_x_and_y_test_comp1(100, 100, algorithm)
+        if type(algorithm) != BaselineAlgorithm:  # If ran on baseline we can wait 3 months
+            self.template_x_and_y_test_comp1(20, 20, algorithm)
+
 
 if __name__ == '__main__':
     unittest.main()

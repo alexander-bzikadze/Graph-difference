@@ -2,14 +2,15 @@ import pydot
 
 from graph_diff.baseline_algorithm import BaselineAlgorithm
 from graph_diff.graph import rnr_graph, lr_node, GraphWithRepetitiveNodesWithRoot
-from graph_diff.graph_map import GraphMap
-from graph_diff.nirvana_object_model.block import Block
-from graph_diff.nirvana_object_model.complete_workflow_to_graph_converter import CompleteWorkflowToGraphConverter
-from graph_diff.nirvana_object_model.operation import Operation
+from graph_diff.graph.to_dot_converter import convert_graph, convert_diff
+from graph_diff.graph_diff_algorithm.graph_map import GraphMap
+from graph_diff.nirvana_object_model.pipeline import Pipeline
 from graph_diff.nirvana_object_model.workflow import Workflow
+from graph_diff.nirvana_object_model.workflow.block import Block
+from graph_diff.nirvana_object_model.workflow.operation import Operation
 from graph_diff.nirvana_object_model.workflow_to_dot_converter import print_together, WorkflowToDotConverter
-from graph_diff.pipeline import Pipeline
-from graph_diff.to_dot_converter import convert_graph, convert_diff
+from graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter import \
+    CompleteWorkflowToGraphConverter
 
 
 def print_images(name: str, graph1: GraphWithRepetitiveNodesWithRoot, graph2: GraphWithRepetitiveNodesWithRoot):

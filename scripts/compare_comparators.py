@@ -3,7 +3,8 @@ import logging
 from graph_diff.graph import rnr_graph
 from graph_diff.graph.graph_generator import GraphGenerator
 from graph_diff.graph_comparison import generate_n_comparator_tests
-from graph_diff.graph_map import *
+from graph_diff.graph_diff_algorithm import GraphMapComparatorByNodeNum, GraphMapComparatorByEdgeNum
+from graph_diff.graph_diff_algorithm.graph_map import *
 
 NUMBER_OF_TESTS = 100
 DIRECTORY = "../comparator_png/"

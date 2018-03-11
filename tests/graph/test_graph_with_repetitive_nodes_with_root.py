@@ -23,7 +23,11 @@ class GraphWithRepetitiveNodesWithRootTest(unittest.TestCase):
     def test_add_edge_exp(self):
         self.assertFalse(lr_node(1, 1) in self.test_graph)
         self.assertFalse(lr_node(1, 2) in self.test_graph)
-        self.assertRaises(GraphWithRepetitiveNodesKeyError, self.test_graph.add_edge_exp, lr_node(1, 1), lr_node(1, 2))
+        self.assertRaises(GraphWithRepetitiveNodesKeyError,
+                          self.test_graph.add_edge_exp,
+                          lr_node(1, 1),
+                          lr_node(1, 2))
+
 
 if __name__ == '__main__':
     unittest.main()

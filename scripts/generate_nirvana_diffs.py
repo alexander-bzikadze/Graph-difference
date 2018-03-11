@@ -2,9 +2,10 @@ import logging
 import os
 
 from graph_diff.baseline_algorithm import BaselineAlgorithm
-from graph_diff.nirvana_object_model.complete_workflow_to_graph_converter import CompleteWorkflowToGraphConverter
-from graph_diff.nirvana_object_model.similar_workflow_generator import SimilarWorkflowGenerator
-from graph_diff.pipeline import Pipeline
+from graph_diff.nirvana_object_model.pipeline import Pipeline
+from graph_diff.nirvana_object_model.worflow_generator.similar_workflow_generator import SimilarWorkflowGenerator
+from graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter import \
+    CompleteWorkflowToGraphConverter
 
 NUMBER_OF_TESTS = 100
 
