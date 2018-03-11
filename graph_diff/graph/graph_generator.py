@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from graph_diff.graph import GraphWithRepetitiveNodesWithRoot
+from .graph_with_repetitive_nodes_with_root import GraphWithRepetitiveNodesWithRoot
 
 
 class GraphGenerator(ABC):

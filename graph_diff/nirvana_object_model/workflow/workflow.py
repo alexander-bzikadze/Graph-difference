@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-from graph_diff.nirvana_object_model.workflow import Block
+from .block import Block
 
 
 class Workflow:

@@ -74,6 +74,4 @@ class Algorithm(GraphDiffAlgorithm):
                 for v, v1 in m[0].items():
                     self.pheromon_table.add_update(u, u1, v, v1, 1 / (1 + self.best_score - m[1]))
 
-            print(self.best_score)
-
         return GraphMap.construct_graph_map(self.best_choice, self.graph1, self.graph2)

@@ -30,11 +30,11 @@ When constructing it you may specify way of transformation of the workflow,
 algorithm to be used, etc.
 """
 
-import graph_diff.ant_algorithm
-import graph_diff.baseline_algorithm
-import graph_diff.baseline_with_chop_algorithm
-import graph_diff.graph
-import graph_diff.graph_diff_algorithm
-import graph_diff.new_ant_algorithm
-import graph_diff.nirvana_object_model
-import graph_diff.simulated_annealing_algorithm
+# import graph_diff.ant_algorithm
+# import graph_diff.baseline_algorithm
+# import graph_diff.baseline_with_chop_algorithm
+# import graph_diff.graph
+# import graph_diff.graph_diff_algorithm
+# import graph_diff.new_ant_algorithm
+# import graph_diff.nirvana_object_model
+# import graph_diff.simulated_annealing_algorithm

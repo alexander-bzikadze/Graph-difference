@@ -2,7 +2,7 @@ from graph_diff.graph import rnr_graph, lr_node, GraphWithRepetitiveNodesWithRoo
 from graph_diff.graph_diff_algorithm import GraphMap
 from graph_diff.nirvana_object_model.workflow import Block, Operation, Workflow
 from graph_diff.nirvana_object_model.workflow_to_dot_converter import GraphMapDotColorer
-from graph_diff.nirvana_object_model.workflow_to_graph_converter import WorkflowToGraphConverter
+from .workflow_to_graph_converter import WorkflowToGraphConverter
 
 
 class SimpleWorkflowToGraphConverter(WorkflowToGraphConverter):
@@ -179,7 +179,7 @@ class SimpleWorkflowToGraphConverter(WorkflowToGraphConverter):
                              graph_number,
                              color,
                              trans_graph_number,
-                             transform_node=id):
+                             transform_node=lambda x: x):
             for from_node, to_node in graph_map_edge_set:
                 if transform_node(from_node).Number != 0:
                     from_node = transform_node(from_node)

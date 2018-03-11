@@ -1,7 +1,8 @@
 import pydot
 
-from graph_diff.graph import GraphWithRepetitiveNodesWithRoot
-from graph_diff.graph_diff_algorithm import GraphMap
+# exception in rules of importing
+from graph_diff.graph_diff_algorithm.graph_map import GraphMap
+from .graph_with_repetitive_nodes_with_root import GraphWithRepetitiveNodesWithRoot
 
 
 class RNRGraphToDotConverter:
@@ -122,8 +123,8 @@ class RNRGraphToDotConverter:
             """
 
             if try_node in graph_map.get_node_overlap_from_second():
-                return graph_map.map_from_2(try_node), 2
-            return try_node, 1
+                return graph_map.map_from_2(try_node), 1
+            return try_node, 2
 
         for (from_node, to_node) in graph_map.get_edge_overlap_from_first():
             dot.add_edge(pydot.Edge(node_to_dot[from_node, 1],

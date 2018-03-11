@@ -2,7 +2,7 @@ from graph_diff.graph import rnr_graph, lr_node, GraphWithRepetitiveNodesWithRoo
 from graph_diff.graph_diff_algorithm import GraphMap
 from graph_diff.nirvana_object_model.workflow import Block, Operation, Workflow
 from graph_diff.nirvana_object_model.workflow_to_dot_converter import GraphMapDotColorer, GraphDotColorer
-from graph_diff.nirvana_object_model.workflow_to_graph_converter import WorkflowToGraphConverter
+from .workflow_to_graph_converter import WorkflowToGraphConverter
 
 
 class CompleteWorkflowToGraphConverter(WorkflowToGraphConverter):

@@ -3,11 +3,11 @@ import logging
 from collections import defaultdict
 
 from graph_diff.ant_algorithm import parameters
-from graph_diff.ant_algorithm.ant_graph import AntGraph
-from graph_diff.ant_algorithm.pathfinder import Pathfinder
 from graph_diff.graph import GraphWithRepetitiveNodesWithRoot
 from graph_diff.graph_diff_algorithm import GraphDiffAlgorithm
 from graph_diff.graph_diff_algorithm.graph_map import GraphMap
+from .ant_graph import AntGraph
+from .pathfinder import Pathfinder
 
 
 class Algorithm(GraphDiffAlgorithm):

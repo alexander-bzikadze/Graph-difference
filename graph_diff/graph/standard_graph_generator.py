@@ -1,5 +1,5 @@
-from graph_diff.graph import GraphGenerator, lr_node, rnr_graph
-from .graph_with_repetitive_nodes_with_root import GraphWithRepetitiveNodesWithRoot
+from .graph_generator import GraphGenerator
+from .graph_with_repetitive_nodes_with_root import GraphWithRepetitiveNodesWithRoot, lr_node, rnr_graph
 
 
 class StandardGraphGenerator(GraphGenerator):

@@ -107,7 +107,11 @@ class Pathfinder:
         prob_sum = sum(probability)
         probability = [p / prob_sum
                        for p in probability]
-        chosen = numpy.random.choice(a=values, p=probability)
+
+        if not prob_sum:
+            chosen = 0
+        else:
+            chosen = numpy.random.choice(a=values, p=probability)
 
         return chosen
 

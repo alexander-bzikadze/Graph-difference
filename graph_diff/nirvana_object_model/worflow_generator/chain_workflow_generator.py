@@ -2,8 +2,8 @@ import random
 
 import numpy
 
-from graph_diff.nirvana_object_model.worflow_generator import StandardWorkflowGenerator
 from graph_diff.nirvana_object_model.workflow import Workflow
+from .standard_workflow_generator import StandardWorkflowGenerator
 
 
 class ChainWorkflowGenerator(StandardWorkflowGenerator):

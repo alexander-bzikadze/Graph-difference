@@ -1,7 +1,7 @@
 import pydot
 
 from graph_diff.nirvana_object_model.workflow import Block, Workflow
-from graph_diff.nirvana_object_model.workflow_to_dot_converter import StandardGraphDotColorer, GraphDotColorer
+from .graph_map_dot_colorer import StandardGraphDotColorer, GraphDotColorer
 
 
 class WorkflowToDotConverter:
