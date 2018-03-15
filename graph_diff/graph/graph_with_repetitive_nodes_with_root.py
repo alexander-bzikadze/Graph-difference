@@ -66,6 +66,9 @@ class GraphWithRepetitiveNodesWithRoot:
     def __iter__(self):
         return iter(self._adjacency_list.keys())
 
+    def __len__(self):
+        return len(self._adjacency_list)
+
     def add_node(self,
                  new_node: LabeledRepetitiveNode):
         """
