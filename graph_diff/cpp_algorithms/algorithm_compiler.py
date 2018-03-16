@@ -1,11 +1,11 @@
 import os
 import subprocess
 
-import stringcase
-
 from graph_diff.cpp_algorithms import parameters
+from graph_diff.cpp_algorithms.decorators import clone_method
 
 
+@clone_method('compile', *parameters.SUPPORTED_ALGORITHMS)
 class AlgorithmCompiler:
     """Class for compiling cpp source to get certain algorithms"""
 
@@ -15,15 +15,6 @@ class AlgorithmCompiler:
     CPP_COMPILER = parameters.CPP_COMPILER
     CPP_OPTIMIZATION = parameters.CPP_OPTIMIZATION
     CPP_STANDARD = parameters.CPP_STANDARD
-
-    def __init__(self):
-        for algo in self.SUPPORTED_ALGORITHMS:
-            def new_method():
-                """Refer to docstring of method `new_method`."""
-                return self.compile(algo)
-
-            name = 'compile_{}'.format(stringcase.snakecase(algo))
-            self.__setattr__(name, new_method)
 
     def compile(self, algorithm: str) -> str:
         """

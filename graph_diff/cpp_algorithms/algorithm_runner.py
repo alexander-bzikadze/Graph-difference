@@ -1,31 +1,21 @@
 import os
 import subprocess
 
-import stringcase
-
 from graph_diff.cpp_algorithms import parameters
 from graph_diff.cpp_algorithms.algorithm_compiler import AlgorithmCompiler
+from graph_diff.cpp_algorithms.decorators import clone_method
 from graph_diff.graph import GraphWithRepetitiveNodesWithRoot
 from graph_diff.graph.graph_printer import GraphPrinter
 from graph_diff.graph_diff_algorithm import GraphMap
 
 
+@clone_method('construct_diff', *parameters.SUPPORTED_ALGORITHMS)
 class AlgorithmRunner:
     """Class for running cpp executables and constructing graph differences"""
 
     RECOMPILE = parameters.RECOMPILE
     SUPPORTED_ALGORITHMS = parameters.SUPPORTED_ALGORITHMS
     EXE_FILENAME = parameters.EXE_FILENAME
-
-    def __init__(self):
-        for algo in self.SUPPORTED_ALGORITHMS:
-            def new_method(graph1: GraphWithRepetitiveNodesWithRoot,
-                           graph2: GraphWithRepetitiveNodesWithRoot) -> GraphMap:
-                """Refer to docstring of method `construct_diff`."""
-                return self.construct_diff(algo, graph1, graph2)
-
-            name = '{}_construct_diff'.format(stringcase.snakecase(algo))
-            self.__setattr__(name, new_method)
 
     def construct_diff(self,
                        algorithm: str,

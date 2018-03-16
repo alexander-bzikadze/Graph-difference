@@ -1,26 +1,17 @@
-from graph_diff.cpp_algorithms.algorithm_runner import AlgorithmRunner
-from graph_diff.cpp_algorithms.parameters import SUPPORTED_ALGORITHMS
-from graph_diff.graph import GraphWithRepetitiveNodesWithRoot
-from graph_diff.graph_diff_algorithm import GraphDiffAlgorithm, GraphMap
-
-
-def add_algorithms(cls: type):
-    for algo in SUPPORTED_ALGORITHMS:
-        class CppAlgorithm(GraphDiffAlgorithm):
-            def __init__(self):
-                self.runner = AlgorithmRunner()
-
-            def construct_diff(self,
-                               graph1: GraphWithRepetitiveNodesWithRoot,
-                               graph2: GraphWithRepetitiveNodesWithRoot) -> GraphMap:
-                return self.runner.construct_diff(algo,
-                                                  graph1,
-                                                  graph2)
-
-        setattr(cls, algo, CppAlgorithm)
-    return cls
+from graph_diff.cpp_algorithms.decorators import add_algorithms
 
 
 @add_algorithms
 class Cpp:
+    """
+    Class for running cpp realizations of algorithms.
+    Logical part of the class initialization is contained in the decorator.
+    This class should be considered a module
+    containing algorithms and treated as such.
+    List of the available algorithms contained in parameters.SUPPORTED_ALGORITHMS.
+
+    Example of usage:
+    graph1, graph2
+    diff = Cpp.BaselineAlgorithm().construct_diff(graph1, graph2)
+    """
     pass
