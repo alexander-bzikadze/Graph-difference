@@ -18,7 +18,8 @@ EXE_FILENAME = 'main'
 # are preferred to be used as compile_{} and {}_construct_diff with {} as snake_case version
 # of the class name of the algorithm to be used.
 # For example: compile_baseline_algorithm and baseline_algorithm_construct_diff.
-SUPPORTED_ALGORITHMS = {'BaselineAlgorithm'}
+SUPPORTED_ALGORITHMS = {'BaselineAlgorithm',
+                        'BaselineWithChopAlgorithm'}
 
 # Compiler to be used for pure cpp realizations of algorithms
 CPP_COMPILER = 'g++'

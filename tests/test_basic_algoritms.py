@@ -13,7 +13,8 @@ class BasicAlgorithmTest(unittest.TestCase):
         # ('Baseline', BaselineAlgorithm()),
         # ('Ant', AntAlgorithm()),
         # ('NewAnt', NewAntAlgorithm()),
-        ('BaselineCPP', Cpp.BaselineAlgorithm())
+        # ('BaselineCPP', Cpp.BaselineAlgorithm()),
+        ('BaselineWithChopAlgorithmCPP', Cpp.BaselineWithChopAlgorithm())
     ]
 
     def template_test(self, graph1, graph2, score, algorithm):
