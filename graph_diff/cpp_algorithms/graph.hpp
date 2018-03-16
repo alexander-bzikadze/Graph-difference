@@ -15,8 +15,8 @@ public:
     Graph() = default;
     Graph(std::vector<node> nodes,
           std::vector<std::vector<int>> adjacent_list) :
-        _nodes(std::move(nodes)),
-        _adjacent_list(std::move(adjacent_list))
+        _nodes(nodes),
+        _adjacent_list(adjacent_list)
     {}
 
     Graph(Graph&&) = default;
@@ -26,8 +26,16 @@ public:
         return _nodes;
     }
 
-    std::vector<std::vector<int>> const& get_adjacent_list() const {
-        return _adjacent_list;
+    std::vector<int> const& get_adjacent_list(int i) const {
+        return _adjacent_list[i];
+    }
+
+    int adjacent_to(int i, int j) const {
+        return _adjacent_list[i][j];
+    }
+
+    int size() const {
+        return _nodes.size();
     }
 
 private:
@@ -41,8 +49,8 @@ Graph<T> read_graph() {
     int node_number;
     std::cin >> node_number;
 
-    std::vector<std::pair<int, int>> nodes(node_number);
-    std::vector<std::vector<int>> adjacent_list(node_number);
+    std::vector<std::pair<int, int>> nodes(node_number, std::pair<int, int>());
+    std::vector<std::vector<int>> adjacent_list(node_number, std::vector<int>());
 
     for (int i = 0; i < node_number; ++i) {
         T label;
@@ -66,8 +74,8 @@ Graph<T> read_graph() {
             std::sort(adjacent_list[i].begin(), adjacent_list[i].end());
         }
     }
-    auto graph = Graph<int>(std::move(nodes), std::move(adjacent_list));
-    return std::move(graph);
+    auto graph = Graph<int>(nodes, adjacent_list);
+    return graph;
 }
 
 } // end namespace graph
