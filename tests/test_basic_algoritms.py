@@ -14,12 +14,18 @@ class BasicAlgorithmTest(unittest.TestCase):
         # ('Ant', AntAlgorithm()),
         # ('NewAnt', NewAntAlgorithm()),
         # ('BaselineCPP', Cpp.BaselineAlgorithm()),
-        ('BaselineWithChopAlgorithmCPP', Cpp.BaselineWithChopAlgorithm())
+        # ('BaselineWithChopAlgorithmCPP', Cpp.BaselineWithChopAlgorithm()),
+        # ('BaselineAlgorithmOmp', Cpp.BaselineAlgorithmOmp()),
+        # ('BaselineWithChopAlgorithmOmp', Cpp.BaselineWithChopAlgorithmOmp())
+        ('AntAlgorithmCpp', Cpp.AntAlgorithm())
     ]
 
     def template_test(self, graph1, graph2, score, algorithm):
+        diff = algorithm.construct_diff(graph1, graph2)
+        if GraphMapComparatorByEdgeNum().comparable_representation(diff) != score:
+            print(diff._graph_map_1_to_2)
         self.assertEqual(first=GraphMapComparatorByEdgeNum()
-                         .comparable_representation(algorithm.construct_diff(graph1, graph2)),
+                         .comparable_representation(diff),
                          second=score)
 
     def template_x_and_y_test_comp1(self, x: int, y: int, algorithm):
@@ -162,7 +168,7 @@ class BasicAlgorithmTest(unittest.TestCase):
     @parameterized.expand(parameters)
     def test_hundred_and_hundred(self, name, algorithm: GraphDiffAlgorithm):
         # if type(algorithm) != BaselineAlgorithm:  # If ran on baseline we can wait 3 months
-        #     self.template_x_and_y_test_comp1(20, 20, algorithm)
+        #     self.template_x_and_y_test_comp1(100, 100, algorithm)
         pass
 
 

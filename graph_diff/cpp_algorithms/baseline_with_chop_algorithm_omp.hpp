@@ -6,7 +6,7 @@
 
 namespace graph_diff::algorithm {
 
-class BaselineWithChopAlgorithm {
+class BaselineWithChopAlgorithmOmp {
 public:
     template <typename T>
     std::vector<int> construct_diff(graph_diff::graph::Graph<T> const& graph1, 
@@ -26,6 +26,7 @@ public:
 
         std::vector<int> result(best_choice.size());
 
+        #pragma omp parallel for
         for (int i = 0; i < result.size(); ++i) {
             result[order_of_choice_first[i]] = order_of_choice_second[current_choice[i]];
         }
@@ -40,6 +41,7 @@ private:
         current_choice.clear();
         current_choice.resize(graph2.size());
 
+        #pragma omp parallel for
         for (int i = 0; i < graph2.size(); ++i) {
             current_choice[i] = i;
         }
@@ -50,6 +52,7 @@ private:
 
         order_of_choice_first.clear();
         order_of_choice_first.resize(graph1.size());
+        #pragma omp parallel for
         for (int i = 0; i < order_of_choice_first.size(); ++i) {
         	order_of_choice_first[i] = i;
         }
@@ -60,6 +63,7 @@ private:
 
         order_of_choice_second.clear();
         order_of_choice_second.resize(graph2.size());
+        #pragma omp parallel for
         for (int i = 0; i < order_of_choice_second.size(); ++i) {
         	order_of_choice_second[i] = i;
         }
@@ -70,6 +74,7 @@ private:
 
         current_score = 0;
         max_left_score = 0;
+        #pragma omp parallel for reduction(+:max_left_score)
         for (int i = 0; i < graph1.size(); ++i) {
         	max_left_score += graph1.get_adjacent_list(i).size();
         }
@@ -134,6 +139,7 @@ private:
               int first,
               int second) {
         int score = 0;
+        #pragma omp parallel for reduction(+:score)
         for (int j = 0; j < graph1.get_adjacent_list(first).size(); ++j) {
             auto mapped = current_choice[graph1.adjacent_to(first, j)];
             graph2.get_adjacent_list(second);

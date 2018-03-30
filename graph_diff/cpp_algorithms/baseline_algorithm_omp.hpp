@@ -6,11 +6,11 @@
 
 namespace graph_diff::algorithm {
 
-class BaselineAlgorithm {
+class BaselineAlgorithmOmp {
 public:
     template <typename T>
     std::vector<int> construct_diff(graph_diff::graph::Graph<T> const& graph1, 
-                                    graph_diff::graph::Graph<T> const& graph2) {
+                                           graph_diff::graph::Graph<T> const& graph2) {
         auto const& graph_minimal = graph1.size() <= graph2.size() ?
             graph1 : graph2;
         auto const& graph_maximal = graph1.size() <= graph2.size() ?
@@ -36,6 +36,7 @@ private:
         current_choice.clear();
         current_choice.resize(graph2.size());
 
+        #pragma omp parallel for
         for (int i = 0; i < graph2.size(); ++i) {
             current_choice[i] = i;
         }
@@ -87,12 +88,17 @@ private:
     int score(graph_diff::graph::Graph<T> const& graph1, 
               graph_diff::graph::Graph<T> const& graph2) {
         int score = 0;
+
+
+
+        #pragma omp parallel for reduction(+:score)
         for (int i = 0; i < graph1.size(); ++i) {
             auto first = i;
             auto second = current_choice[i];
             if (second == -1) {
                 continue;
             }
+            #pragma omp parallel for
             for (int j = 0; j < graph1.get_adjacent_list(first).size(); ++j) {
                 auto mapped = current_choice[graph1.adjacent_to(first, j)];
                 graph2.get_adjacent_list(second);

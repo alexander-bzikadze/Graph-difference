@@ -1,6 +1,7 @@
 """
 Parameters defined in module
 """
+from collections import defaultdict
 
 # Defines if cpp source will be recompiled
 # each time algorithm (AlgorithmRunner.construct_diff) is run.
@@ -19,7 +20,14 @@ EXE_FILENAME = 'main'
 # of the class name of the algorithm to be used.
 # For example: compile_baseline_algorithm and baseline_algorithm_construct_diff.
 SUPPORTED_ALGORITHMS = {'BaselineAlgorithm',
-                        'BaselineWithChopAlgorithm'}
+                        'BaselineWithChopAlgorithm',
+                        'BaselineAlgorithmOmp',
+                        'BaselineWithChopAlgorithmOmp',
+                        'AntAlgorithm'}
+
+ALGORITHMS_FLAGS = defaultdict(list)
+ALGORITHMS_FLAGS['BaselineAlgorithmOmp'] = ['-Xpreprocessor', '-fopenmp', '-lomp']
+ALGORITHMS_FLAGS['BaselineWithChopAlgorithmOmp'] = ['-Xpreprocessor', '-fopenmp', '-lomp']
 
 # Compiler to be used for pure cpp realizations of algorithms
 CPP_COMPILER = 'g++'

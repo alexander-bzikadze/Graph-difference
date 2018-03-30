@@ -2,12 +2,10 @@ import unittest
 
 from parameterized import parameterized
 
-from graph_diff.ant_algorithm import AntAlgorithm
-from graph_diff.baseline_algorithm import BaselineAlgorithm
+from graph_diff.cpp_algorithms.cpp_algorithms import Cpp
 from graph_diff.graph import StandardGraphGenerator, GraphWithRepetitiveNodesWithRoot
 from graph_diff.graph_diff_algorithm import GraphDiffAlgorithm
 from graph_diff.graph_diff_algorithm.graph_map_comparator import GraphMapComparatorByEdgeNum, GraphMapComparator
-from graph_diff.new_ant_algorithm import NewAntAlgorithm
 
 
 def generate_parameters(algo, comparator, number_of_tests, *args):
@@ -28,8 +26,14 @@ class RandomGraphTest(unittest.TestCase):
     parameters = sum([generate_parameters(algo,
                                           GraphMapComparatorByEdgeNum(),
                                           100,
-                                          StandardGraphGenerator(0, 10))
-                      for algo in [BaselineAlgorithm(), AntAlgorithm(), NewAntAlgorithm()]], [])
+                                          StandardGraphGenerator(0, 1000))
+                      for algo in [
+                          # BaselineAlgorithm(),
+                          # AntAlgorithm(),
+                          # NewAntAlgorithm(),
+                          # Cpp.BaselineAlgorithm(),
+                          # Cpp.BaselineWithChopAlgorithm(),
+                          Cpp.AntAlgorithm()]], [])
 
     @parameterized.expand(parameters)
     def test_random(self,

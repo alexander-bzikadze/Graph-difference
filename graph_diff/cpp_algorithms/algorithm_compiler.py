@@ -12,6 +12,7 @@ class AlgorithmCompiler:
     FILENAME = parameters.FILENAME
     EXE_FILENAME = parameters.EXE_FILENAME
     SUPPORTED_ALGORITHMS = parameters.SUPPORTED_ALGORITHMS
+    ALGORITHMS_FLAGS = parameters.ALGORITHMS_FLAGS
     CPP_COMPILER = parameters.CPP_COMPILER
     CPP_OPTIMIZATION = parameters.CPP_OPTIMIZATION
     CPP_STANDARD = parameters.CPP_STANDARD
@@ -40,6 +41,7 @@ class AlgorithmCompiler:
                self.CPP_OPTIMIZATION,
                self.CPP_STANDARD,
                filename,
+               *self.ALGORITHMS_FLAGS[algorithm],
                '-o', exe_filename,
                '-D', 'Algorithm={}'.format(algorithm)]
         p = subprocess.Popen(cmd)
