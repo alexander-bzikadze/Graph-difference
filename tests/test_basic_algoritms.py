@@ -2,7 +2,7 @@ import unittest
 
 from parameterized import parameterized
 
-from graph_diff.cpp_algorithms.cpp_algorithms import Cpp
+from graph_diff.cpp_algorithms.algorithms import CppRun
 from graph_diff.graph import rnr_graph, lr_node
 from graph_diff.graph_diff_algorithm import GraphDiffAlgorithm
 from graph_diff.graph_diff_algorithm.graph_map_comparator import GraphMapComparatorByEdgeNum
@@ -17,7 +17,7 @@ class BasicAlgorithmTest(unittest.TestCase):
         # ('BaselineWithChopAlgorithmCPP', Cpp.BaselineWithChopAlgorithm()),
         # ('BaselineAlgorithmOmp', Cpp.BaselineAlgorithmOmp()),
         # ('BaselineWithChopAlgorithmOmp', Cpp.BaselineWithChopAlgorithmOmp())
-        ('AntAlgorithmCpp', Cpp.AntAlgorithm())
+        ('AntAlgorithmCpp', CppRun.AntAlgorithm())
     ]
 
     def template_test(self, graph1, graph2, score, algorithm):

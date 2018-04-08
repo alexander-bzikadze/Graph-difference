@@ -34,8 +34,8 @@ class Pipeline:
         graph1 = self._to_abstract_converter.convert(workflow=workflow1)
         graph2 = self._to_abstract_converter.convert(workflow=workflow2)
 
-        # print('len 1', sum([len(graph1.get_list_of_adjacent_nodes(node)) for node in graph1]))
-        # print('len 2', sum([len(graph2.get_list_of_adjacent_nodes(node)) for node in graph2]))
+        print('len 1', sum([len(graph1.get_list_of_adjacent_nodes(node)) for node in graph1]))
+        print('len 2', sum([len(graph2.get_list_of_adjacent_nodes(node)) for node in graph2]))
 
         # Constructing difference 'twixt abstract graphs.
         graph_map = self._algo.construct_diff(graph1=graph1, graph2=graph2)
@@ -47,9 +47,9 @@ class Pipeline:
         # print(graph_map.get_edge_overlap_from_first())
         # print(graph_map.get_edges_in_1_not_in_2())
         # print(graph_map.get_edges_in_2_not_in_1())
-        # print(len(graph_map.get_edge_overlap_from_first()))
-        # print(len(graph_map.get_edges_in_1_not_in_2()))
-        # print(len(graph_map.get_edges_in_2_not_in_1()))
+        print(len(graph_map.get_edge_overlap_from_first()))
+        print(len(graph_map.get_edges_in_1_not_in_2()))
+        print(len(graph_map.get_edges_in_2_not_in_1()))
 
         # Converting graph difference back to normal workflow with function of colors
         return self._to_abstract_converter.convert_graph_map(graph_map=graph_map)

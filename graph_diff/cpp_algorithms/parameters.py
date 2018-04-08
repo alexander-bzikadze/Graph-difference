@@ -22,8 +22,9 @@ EXE_FILENAME = 'main'
 SUPPORTED_ALGORITHMS = {'BaselineAlgorithm',
                         'BaselineWithChopAlgorithm',
                         'BaselineAlgorithmOmp',
-                        'BaselineWithChopAlgorithmOmp',
-                        'AntAlgorithm'}
+                        # 'BaselineWithChopAlgorithmOmp',
+                        'AntAlgorithm'
+                        }
 
 ALGORITHMS_FLAGS = defaultdict(list)
 ALGORITHMS_FLAGS['BaselineAlgorithmOmp'] = ['-Xpreprocessor', '-fopenmp', '-lomp']

@@ -1,8 +1,8 @@
-from graph_diff.cpp_algorithms.decorators import add_algorithms
+from graph_diff.cpp_algorithms.decorators import add_imported_algorithms, add_run_algorithms
 
 
-@add_algorithms
-class Cpp:
+@add_run_algorithms
+class CppRun:
     """
     Class for running cpp realizations of algorithms.
     Logical part of the class initialization is contained in the decorator.
@@ -14,4 +14,9 @@ class Cpp:
     graph1, graph2
     diff = Cpp.BaselineAlgorithm().construct_diff(graph1, graph2)
     """
+    pass
+
+
+@add_imported_algorithms
+class CppImport:
     pass

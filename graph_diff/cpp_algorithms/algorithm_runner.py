@@ -38,11 +38,10 @@ class AlgorithmRunner:
         if len(graph1) > len(graph2):
             graph1, graph2 = graph2, graph1
 
-        graph1_printer = GraphPrinter(graph1)
-        graph2_printer = GraphPrinter(graph2)
+        graph_printer = GraphPrinter(graph1, graph2)
 
-        graph1_str_representation = graph1_printer.print_graph()
-        graph2_str_representation = graph2_printer.print_graph()
+        graph1_str_representation = graph_printer.print_graph1()
+        graph2_str_representation = graph_printer.print_graph2()
 
         program_input = graph1_str_representation + graph2_str_representation
         program_input = '\n'.join(program_input)
@@ -58,9 +57,5 @@ class AlgorithmRunner:
 
         process = subprocess.Popen(cpp_algorithm, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
         output = process.communicate(program_input.encode())[0].decode()
-        output = [tuple(x.split()) for x in output.split('\n')]
-        output = filter(lambda x: len(x) == 2, output)
-        output = {int(a): int(b) for a, b in output}
-        output = {graph1_printer.nodes[a]: graph2_printer.nodes[b] for a, b in output.items()}
 
-        return GraphMap.construct_graph_map(output, graph1, graph2)
+        return graph_printer.back_printer(output)
