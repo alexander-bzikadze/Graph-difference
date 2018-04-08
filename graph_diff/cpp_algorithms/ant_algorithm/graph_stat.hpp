@@ -34,6 +34,10 @@ public:
 
 		for (size_t i = 0; i < graph1.size() * graph2.size(); ++i) {
 			auto [first, second] = to_2d_address(i, graph2.size());
+			if (graph1.get_nodes()[first].first != graph2.get_nodes()[second].first) {
+				statistic_factor[i] = 0;
+				continue;
+			}
 			statistic_factor[i] += std::abs((long long)(in1[first] - in2[second])) + abs((long long)(out1[first] - out2[second]));
 			statistic_factor[i] = 1 / statistic_factor[i];
 		}

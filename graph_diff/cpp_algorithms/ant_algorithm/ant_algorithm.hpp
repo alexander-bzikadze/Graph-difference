@@ -15,6 +15,8 @@ namespace graph_diff::algorithm {
 
 class AntAlgorithm {
 public:
+    AntAlgorithm() = default;
+
     template <typename T>
     auto construct_diff(graph_diff::graph::Graph<T> const& graph1, 
                         graph_diff::graph::Graph<T> const& graph2) {
@@ -27,34 +29,32 @@ public:
         GraphStat<T> graph_stat(graph1, graph2);
         best_choice.resize(graph_minimal.size(), 0);
 
-
         std::vector<Pathfinder<T>> pathfinders = std::vector<Pathfinder<T>>();
         pathfinders.reserve(ant_parameters::NUMBER_OF_AGENTS);
         for (size_t i = 0; i < ant_parameters::NUMBER_OF_AGENTS; ++i) {
             pathfinders.emplace_back(graph_minimal, graph_maximal, pheromon, graph_stat);
         }
 
-        for (size_t i = 0, same_score = 0; i < ant_parameters::NUMBER_OF_ITERATIONS; ++i, same_score++) {
-            // std::cerr << i << ' ' << best_score << std::endl;
-            std::vector<long long> choice;
+        for (size_t i = 0, same_score = 0; i < ant_parameters::NUMBER_OF_ITERATIONS; ++i, ++same_score) {
+            auto choice = std::vector<long long>();
             long long chosen_score = -1;
             for (size_t j = 0; j < ant_parameters::NUMBER_OF_AGENTS; ++j) {
                 auto current_choice = pathfinders[j].find_path();
                 auto current_score = score(graph_minimal, graph_maximal, current_choice);
                 if (current_score > chosen_score) {
-                    choice = std::move(current_choice);
+                    choice = current_choice;
                     chosen_score = current_score;
+                }
+            }
+            for (size_t j = 0; j < choice.size(); ++j) {
+                for (size_t k = 0; k < choice.size(); ++k) {
+                    pheromon.add_update(j, choice.at(j), k, choice.at(k), 1 / (1 + best_score - chosen_score));
                 }
             }
             if (chosen_score > best_score) {
                 best_score = chosen_score;
-                std::copy(choice.cbegin(), choice.cend(), best_choice.begin());  
+                best_choice = choice;
                 same_score = 0;
-            }
-            for (size_t j = 0; j < choice.size(); ++j) {
-                for (size_t k = 0; k < choice.size(); ++k) {
-                    pheromon.add_update(j, choice[j], k, choice[k], 1 / (1 + best_score - chosen_score));
-                }
             }
             pheromon.next_interation();
 
@@ -94,7 +94,7 @@ public:
 
 private:
     long long best_score = -1;
-    std::vector<int> best_choice;
+    std::vector<long long> best_choice;
 };
 
 } // end graph_diff::algorithm

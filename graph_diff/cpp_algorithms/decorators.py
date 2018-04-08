@@ -15,17 +15,16 @@ def add_run_algorithms(cls: type):
     :return:    modified class
     """
     from graph_diff.cpp_algorithms.algorithm_runner import AlgorithmRunner
+    runner = AlgorithmRunner()
     for algo in SUPPORTED_ALGORITHMS:
         class CppAlgorithm(GraphDiffAlgorithm):
-            def __init__(self):
-                self._runner = AlgorithmRunner()
-
             def construct_diff(self,
                                graph1: GraphWithRepetitiveNodesWithRoot,
                                graph2: GraphWithRepetitiveNodesWithRoot) -> GraphMap:
-                return self._runner.construct_diff(algo,
-                                                   graph1,
-                                                   graph2)
+                __name__ = type(self).__name__
+                return runner.construct_diff(__name__,
+                                             graph1,
+                                             graph2)
 
         CppAlgorithm.__name__ = algo
         CppAlgorithm.__doc__ = """Realization of algorithm {} on cpp""".format(algo)
@@ -45,7 +44,9 @@ def add_imported_algorithms(cls: type):
                 repr_first = graph_printer.graph_transformer_first()
                 repr_second = graph_printer.graph_transformer_second()
 
-                output = getattr(algorithm_importer.module, stringcase.snakecase(algo))(*repr_first, *repr_second)
+                __name__ = type(self).__name__
+                output = getattr(algorithm_importer.module, stringcase.snakecase(__name__)) \
+                    (*repr_first, *repr_second)
                 return graph_printer.back_transformer(output)
 
         CppAlgorithm.__name__ = algo

@@ -2,8 +2,6 @@
 
 #include "../graph.hpp"
 
-#include <iostream>
-
 
 namespace graph_diff::algorithm {
 
@@ -42,7 +40,7 @@ private:
         current_choice.resize(graph2.size() + graph1.size(), -1);
 
         best_choice.clear();
-        best_choice.resize(graph1.size());
+        best_choice.resize(graph1.size(), -1);
     }
 
     template <typename T>
@@ -51,9 +49,8 @@ private:
                            size_t current_position,
                            size_t last_position,
                            size_t choice_size) {
-      std::cout << current_position << std::endl;
         if (current_position == choice_size) {
-            auto current_score = score(graph1, graph2);
+            long long current_score = score(graph1, graph2);
             if (current_score > max_score) {
                 copy(current_choice.cbegin(), current_choice.cbegin() + graph1.size(), best_choice.begin());
                 max_score = current_score;
@@ -112,7 +109,7 @@ private:
 
     std::vector<long long> current_choice;
     std::vector<long long> best_choice;
-    size_t max_score = 0;
+    long long max_score = -1;
 };
 
 } // end namespace graph_diff::algorithm
