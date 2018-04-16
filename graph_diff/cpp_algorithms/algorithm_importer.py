@@ -39,6 +39,19 @@ setup_pybind11(cfg)
 cfg['compiler_args'] = ['-std=c++1z', '-stdlib=libc++']
 cfg['compiler_args'] += ['-Xpreprocessor', '-fopenmp']
 cfg['linker_args'] = ['-lomp']
+cfg['include_dirs'] = ['ant_algorithm', 'baseline_algorithm']
+cfg['dependencies'] = ['baseline_algorithms_using.hpp', 
+                       'baseline_algorithms.hpp', 
+                       'baseline_algorithms/baseline_algorithm.hpp',
+                       'baseline_algorithms/baseline_algorithm_omp.hpp',
+                       'baseline_algorithms/baseline_with_chop_algorithm.hpp',
+                       'baseline_algorithms/baseline_with_chop_algorithm_omp.hpp']
+cfg['dependencies'] += ['ant_algorithm/ant_parameters.hpp', 
+                        'ant_algorithm/ant_algorithm.hpp',
+                        'ant_algorithm/graph_stat.hpp',
+                        'ant_algorithm/pathfinder.hpp',
+                        'ant_algorithm/pheromon_table.hpp',
+                        'ant_algorithm/utils.hpp']
 %>
 */
 #include <pybind11/pybind11.h>
@@ -64,11 +77,6 @@ auto algorithm(std::vector<node<size_t>> nodes1,
     auto best_choice = Algorithm().construct_diff(graph1, graph2);
 
     return best_choice;
-}}
-
-PYBIND11_MODULE(cpp_algorithms, m) {{
-    m.doc() = "Cpp graph diff algorithms imported into python";
-    {algorithms}
 }}
 """
 

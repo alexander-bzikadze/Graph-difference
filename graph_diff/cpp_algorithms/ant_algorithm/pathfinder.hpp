@@ -14,7 +14,7 @@ public:
     Pathfinder(graph::Graph<T> const& graph1, 
                graph::Graph<T> const& graph2,
                PheromonTable<size_t> const& pheromon,
-               GraphStat<T> graph_stat) :
+               GraphStat<T> const& graph_stat) :
                graph1(graph1),
                graph2(graph2),
                sizes(graph1.size(), graph2.size()),
@@ -26,7 +26,7 @@ public:
                best_choice(std::min(graph1.size(), graph2.size()), 0),
                probabilities(graph1.size() * graph2.size(), 0),
                phero_factors(graph1.size() * graph2.size(), 0),
-               score_factors(graph1.size() * graph2.size(), 1),
+               score_factors(graph1.size() * graph2.size(), 0),
                generator(std::random_device()()),
                acc_sum(0),
                dis(0, 1) {
@@ -48,31 +48,34 @@ public:
         phero_factors.resize(graph1.size() * graph2.size(), 0);
         score_factors.clear();
         score_factors.resize(graph1.size() * graph2.size(), 0);
-        generator = std::mt19937(std::random_device()());
+        // generator = std::mt19937(std::random_device()());
 
         for (size_t i = 0; i < score_factors.size(); ++i) {
             auto [first, second] = to_2d_address(i);
-            score_factors[i] = graph1.get_nodes()[first].first == graph2.get_nodes()[second].first;
-            std::cout << score_factors[i] << " ";
+            score_factors[i] += graph1.get_nodes()[first].first == graph2.get_nodes()[second].first;
         }
-        std::cout << std::endl;
         std::vector<long long> choice(graph1.size(), -1);
 
-        std::uniform_int_distribution<> dis(0, graph_size<0>() * graph_size<1>() - 1);
-        auto first_choice = dis(generator);
-        auto [choice_from_first, choice_from_second] = to_2d_address(first_choice);
+        auto upper_size = probabilities.size();
+        double acc = 0;
+        #pragma clang loop vectorize(enable)
+        for (size_t i = 0; i < upper_size; ++i) {
+            auto [from_first, from_second] = to_2d_address(i);
+            if (score_factors[i] > 0) {
+                acc += 1
+                    // * graph_stat.get_statistic(i);
+                    ;
+            }
+            probabilities[i] = acc;
+        }
+        acc_sum = probabilities.back();
 
-        choice[choice_from_first] = choice_from_second;
-
-        update_probs(choice_from_first, choice_from_second);
+        auto value = dis(generator) * acc_sum;
+        auto chosen = std::upper_bound(probabilities.cbegin(), probabilities.cend(), value);
 
         // prob - array of partial sums;
-        for (size_t i = 1; i < graph_size<0>(); ++i) {
+        for (size_t i = 0; i < graph_size<0>() && acc_sum > 0; ++i) {
             find_pair(choice);
-            for (int i = 0; i < score_factors.size(); ++i) {
-                std::cout << score_factors[i] << " ";
-            }
-            std::cout << std::endl;
         }
 
         return choice;
@@ -94,12 +97,12 @@ public:
         // #pragma clang loop vectorize(enable)
         for (size_t i = 0; i < upper_size; ++i) {
             auto [from_first, from_second] = to_2d_address(i);
-            score_factors[i] += !!(contains_edge<0>(from_first, chosen_first) 
-                && contains_edge<1>(from_second, chosen_second)
-                && score_factors[i] > 0);
-            score_factors[i] += !!(contains_edge<0>(chosen_first, from_first) 
-                && contains_edge<1>(chosen_second, from_second)
-                && score_factors[i] > 0);
+            if (score_factors[i] > 0) {
+                score_factors[i] += !!(contains_edge<0>(from_first, chosen_first) 
+                    && contains_edge<1>(from_second, chosen_second));
+                score_factors[i] += !!(contains_edge<0>(chosen_first, from_first) 
+                    && contains_edge<1>(chosen_second, from_second));
+            }
         }
 
         #pragma clang loop vectorize(enable)
@@ -110,10 +113,11 @@ public:
                                              chosen_first, 
                                              chosen_second);
             phero_factors[i] += pher;
-            acc += pow(phero_factors[i], ant_parameters::ALPHA) 
-                * pow(score_factors[i], ant_parameters::BETA)
-                // * graph_stat.get_statistic(i);
-                ;
+            if (score_factors[i] > 0) {
+                acc += pow(phero_factors[i], ant_parameters::ALPHA) 
+                    * pow(score_factors[i], ant_parameters::BETA)
+                    * graph_stat.get_statistic(i);
+            }
             probabilities[i] = acc;
         }
         acc_sum = probabilities.back();
@@ -122,9 +126,6 @@ public:
     void find_pair(std::vector<long long>& choice) {
         auto value = dis(generator) * acc_sum;
         auto chosen = std::upper_bound(probabilities.cbegin(), probabilities.cend(), value);
-        if (chosen == probabilities.cend()) {
-            return;
-        }
 
         auto chosen_position = chosen - probabilities.cbegin();
 

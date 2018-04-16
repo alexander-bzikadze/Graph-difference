@@ -43,8 +43,9 @@ public:
 		}
 	}
 
-	inline size_t get_statistic(size_t i) const {
-		return statistic_factor[i];
+	inline auto get_statistic(size_t i) const {
+		// return statistic_factor[i];
+		return 1;
 	}
 
 private:
@@ -55,8 +56,8 @@ private:
 
 	std::vector<double> statistic_factor;
 
-    inline auto to_1d_address(size_t i, size_t j, size_t step) { return i * step + j; }
-    inline auto to_2d_address(size_t i, size_t step) { 
+    inline auto to_1d_address(size_t i, size_t j, size_t step) const { return i * step + j; }
+    inline auto to_2d_address(size_t i, size_t step) const { 
         return std::make_tuple(i / step, i % step); 
     }
 };

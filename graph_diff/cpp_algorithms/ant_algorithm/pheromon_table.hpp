@@ -40,7 +40,7 @@ public:
         assert(table.find(choice) != table.cend());
         assert(last_update.find(choice) != last_update.cend());
         table.at(choice) *= pows[current_iteration - last_update.at(choice)];
-        table.at(choice) += value;
+        table[choice] += value;
         last_update.at(choice) = current_iteration;
     }
 

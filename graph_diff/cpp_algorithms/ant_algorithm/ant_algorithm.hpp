@@ -20,13 +20,14 @@ public:
     template <typename T>
     auto construct_diff(graph_diff::graph::Graph<T> const& graph1, 
                         graph_diff::graph::Graph<T> const& graph2) {
+
         auto const& graph_minimal = graph1.size() <= graph2.size() ?
             graph1 : graph2;
         auto const& graph_maximal = graph1.size() <= graph2.size() ?
             graph2 : graph1;
 
         PheromonTable<size_t> pheromon;
-        GraphStat<T> graph_stat(graph1, graph2);
+        GraphStat<T> graph_stat(graph_minimal, graph_maximal);
         best_choice.resize(graph_minimal.size(), 0);
 
         std::vector<Pathfinder<T>> pathfinders = std::vector<Pathfinder<T>>();
@@ -46,15 +47,19 @@ public:
                     chosen_score = current_score;
                 }
             }
-            for (size_t j = 0; j < choice.size(); ++j) {
-                for (size_t k = 0; k < choice.size(); ++k) {
-                    pheromon.add_update(j, choice.at(j), k, choice.at(k), 1 / (1 + best_score - chosen_score));
-                }
-            }
+
             if (chosen_score > best_score) {
                 best_score = chosen_score;
                 best_choice = choice;
                 same_score = 0;
+            }
+
+            double addition = 1;
+            addition /= (1 + best_score - chosen_score);
+            for (size_t j = 0; j < choice.size(); ++j) {
+                for (size_t k = 0; k < choice.size(); ++k) {
+                    pheromon.add_update(j, choice.at(j), k, choice.at(k), addition);
+                }
             }
             pheromon.next_interation();
 

@@ -2,8 +2,9 @@ import unittest
 
 from parameterized import parameterized
 
-from graph_diff.cpp_algorithms.algorithms import CppRun
+from graph_diff.cpp_algorithms.algorithms import CppImport
 from graph_diff.graph import rnr_graph, lr_node
+from graph_diff.graph.graph_printer import GraphPrinter
 from graph_diff.graph_diff_algorithm import GraphDiffAlgorithm
 from graph_diff.graph_diff_algorithm.graph_map_comparator import GraphMapComparatorByEdgeNum
 
@@ -17,20 +18,18 @@ class BasicAlgorithmTest(unittest.TestCase):
         # ('BaselineWithChopAlgorithmCppRun', Cpp.BaselineWithChopAlgorithm()),
         # ('BaselineAlgorithmOmpCppRun', Cpp.BaselineAlgorithmOmp()),
         # ('BaselineWithChopAlgorithmOmpRun', Cpp.BaselineWithChopAlgorithmOmp())
-        ('AntAlgorithmCppRun', CppRun.AntAlgorithm()),
+        # ('AntAlgorithmCppRun', CppRun.AntAlgorithm()),
         # ('BaselineCppImport', CppImport.BaselineAlgorithm()),
         # ('BaselineWithChopCppImport', CppImport.BaselineWithChopAlgorithm()),
-        # ('AntAlgorithmCppImport', CppImport.AntAlgorithm())
+        ('AntAlgorithmCppImport', CppImport.AntAlgorithm())
     ]
 
     def template_test(self, graph1, graph2, score, algorithm):
         diff = algorithm.construct_diff(graph1, graph2)
         if GraphMapComparatorByEdgeNum().comparable_representation(diff) != score:
-            # print('\n'.join(GraphPrinter(graph1, graph2).print_graph1()))
-            # print(GraphPrinter(graph1, graph2).graph_transformer_first())
-            # print('\n'.join(GraphPrinter(graph1, graph2).print_graph2()))
-            # print(GraphPrinter(graph1, graph2).graph_transformer_second())
-            # print(diff._graph_map_1_to_2)
+            print('\n'.join(GraphPrinter(graph1, graph2).print_graph1()))
+            print('\n'.join(GraphPrinter(graph1, graph2).print_graph2()))
+            print(diff._graph_map_1_to_2)
             pass
         self.assertEqual(first=GraphMapComparatorByEdgeNum()
                          .comparable_representation(diff),

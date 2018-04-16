@@ -47,6 +47,8 @@ def add_imported_algorithms(cls: type):
                 __name__ = type(self).__name__
                 output = getattr(algorithm_importer.module, stringcase.snakecase(__name__)) \
                     (*repr_first, *repr_second)
+                # print(*repr_first, *repr_second)
+                # print(output)
                 return graph_printer.back_transformer(output)
 
         CppAlgorithm.__name__ = algo
