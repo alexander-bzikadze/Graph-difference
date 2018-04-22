@@ -1,6 +1,6 @@
 # from graph_diff.cpp_algorithms.algorithm_compiler import AlgorithmCompiler
 # from graph_diff.cpp_algorithms.algorithm_runner import AlgorithmRunner
-
+from graph_diff.cpp_algorithms.algorithms import CppImport
 from graph_diff.graph import rnr_graph, lr_node
 
 # from graph_diff.nirvana_object_model.workflow.block import Block
@@ -60,6 +60,8 @@ from graph_diff.graph import rnr_graph, lr_node
 
 # print_together(w_dot, w2_dot, w1_dot, names=['w_dot', 'w2_dot', 'w1_dot']).write("./w2.png", format='png')
 from graph_diff.graph.graph_printer import GraphPrinter
+from graph_diff.graph_diff_algorithm.compose_graph_diff_algorithm import ComposedGraphDiffAlgorithm
+from graph_diff.simulated_annealing_algorithm.algorithm import Algorithm as SimAnnealAlgorithm
 
 NUM = 30
 
@@ -68,9 +70,15 @@ graph2 = rnr_graph()
 for i in range(1, NUM + 1):
     for j in range(i + 1, NUM + 1):
         graph1.add_edge(lr_node(1, i), lr_node(1, j))
+        graph2.add_edge(lr_node(1, i), lr_node(1, j))
 
-with open('big_graph.txt', mode='w') as file:
-    print('\n'.join(GraphPrinter(graph1, graph2).print_graph1()), file=file)
+algo = ComposedGraphDiffAlgorithm(CppImport.AntAlgorithm(), SimAnnealAlgorithm())
+algo.construct_diff(graph1, graph2)
+
+# with open('big_graph.txt', mode='w') as file:
+#     print('\n'.join(GraphPrinter(graph1, graph2).print_graph1()), file=file)
+
+
 
 # for i in range(1, NUM + 1):
 #     graph2.add_node(lr_node(1, i))

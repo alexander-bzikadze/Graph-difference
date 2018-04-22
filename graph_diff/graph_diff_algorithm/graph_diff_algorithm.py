@@ -20,4 +20,4 @@ class GraphDiffAlgorithmWithInit(GraphDiffAlgorithm):
     """
 
     @abstractmethod
-    def set_init(self, new_init: GraphMap): pass
+    def set_init(self, new_init: GraphMap) -> GraphDiffAlgorithm: pass

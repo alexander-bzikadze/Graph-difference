@@ -13,6 +13,10 @@ from graph_diff.graph_diff_algorithm.graph_map import GraphMap
 
 # TODO: the algorithm
 class Algorithm(GraphDiffAlgorithmWithInit):
+    T0 = 100
+    NUMBER_OF_ITERATIONS = 10000
+    NUMBER_OF_ITERATIONS_WITH
+
     def __init__(self):
         self.graph1 = None
         self.graph2 = None
@@ -57,12 +61,14 @@ class Algorithm(GraphDiffAlgorithmWithInit):
         self.init_solution = None
         return self.printer.back_transformer(global_solution)
 
-    def time_law(self, k: int):
+    @staticmethod
+    def time_law(k: int):
         t0 = 100
         return t0 / k
 
     def set_init(self, new_init: GraphMap):
         self.init_solution = copy(new_init)
+        return self
 
     def _initial_solution(self):
         initial = [-1] * len(self.graph1)
