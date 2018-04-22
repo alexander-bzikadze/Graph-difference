@@ -6,6 +6,8 @@
 namespace graph_diff::algorithm {
 
 class BaselineWithChopAlgorithmOmp {
+    // Baseline algorithm that uses bruteforce search with chops
+    // Uses Omp parallelization
 public:
     template <typename T>
     auto construct_diff(graph_diff::graph::Graph<T> const& graph1, 

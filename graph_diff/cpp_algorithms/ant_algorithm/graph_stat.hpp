@@ -44,8 +44,8 @@ public:
 	}
 
 	inline auto get_statistic(size_t i) const {
-		// return statistic_factor[i];
-		return 1;
+		return statistic_factor[i];
+		// return 1;
 	}
 
 private:

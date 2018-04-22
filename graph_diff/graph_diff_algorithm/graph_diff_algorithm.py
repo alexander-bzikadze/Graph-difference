@@ -11,3 +11,13 @@ class GraphDiffAlgorithm(ABC):
     def construct_diff(self,
                        graph1: GraphWithRepetitiveNodesWithRoot,
                        graph2: GraphWithRepetitiveNodesWithRoot) -> GraphMap: pass
+
+
+class GraphDiffAlgorithmWithInit(GraphDiffAlgorithm):
+    """
+    Graph difference algorithm interface,
+    that requires initial solution
+    """
+
+    @abstractmethod
+    def set_init(self, new_init: GraphMap): pass

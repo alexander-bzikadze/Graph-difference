@@ -1,19 +1,23 @@
-#include "ant_parameters.hpp"
-#include "graph_stat.hpp"
+#pragma once
+
+#include "../ant_parameters.hpp"
+#include "../graph_stat.hpp"
+#include "pheromon_table.hpp"
 
 #include <cassert>
 
-namespace graph_diff::algorithm {
+namespace graph_diff::algorithm::cubed_pathfinder {
 
 template<typename T>
 class Pathfinder {
 public:
     using edge = std::tuple<size_t, size_t>;
     using match = std::tuple<size_t, size_t>;
+    using UsedPheromonTable = PheromonTable<size_t>;
 
     Pathfinder(graph::Graph<T> const& graph1, 
                graph::Graph<T> const& graph2,
-               PheromonTable<size_t> const& pheromon,
+               UsedPheromonTable const& pheromon,
                GraphStat<T> const& graph_stat) :
                graph1(graph1),
                graph2(graph2),
@@ -70,9 +74,6 @@ public:
         }
         acc_sum = probabilities.back();
 
-        auto value = dis(generator) * acc_sum;
-        auto chosen = std::upper_bound(probabilities.cbegin(), probabilities.cend(), value);
-
         // prob - array of partial sums;
         for (size_t i = 0; i < graph_size<0>() && acc_sum > 0; ++i) {
             find_pair(choice);
@@ -81,6 +82,7 @@ public:
         return choice;
     }
 
+private:
     void update_probs(size_t chosen_first, 
                       size_t chosen_second) {
         #pragma clang loop vectorize(enable)
@@ -115,8 +117,8 @@ public:
             phero_factors[i] += pher;
             if (score_factors[i] > 0) {
                 acc += pow(phero_factors[i], ant_parameters::ALPHA) 
-                    * pow(score_factors[i], ant_parameters::BETA)
-                    * graph_stat.get_statistic(i);
+                     * pow(score_factors[i], ant_parameters::BETA)
+                     * graph_stat.get_statistic(i);
             }
             probabilities[i] = acc;
         }
@@ -125,9 +127,7 @@ public:
 
     void find_pair(std::vector<long long>& choice) {
         auto value = dis(generator) * acc_sum;
-        auto chosen = std::upper_bound(probabilities.cbegin(), probabilities.cend(), value);
-
-        auto chosen_position = chosen - probabilities.cbegin();
+        auto chosen_position = std::upper_bound(probabilities.cbegin(), probabilities.cend(), value) - probabilities.cbegin();
 
         auto [chosen_first, chosen_second] = to_2d_address(chosen_position);
 
@@ -137,7 +137,6 @@ public:
 
     }
 
-private:
     graph::Graph<T> const& graph1;
     graph::Graph<T> const& graph2;
 

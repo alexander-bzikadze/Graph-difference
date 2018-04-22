@@ -6,6 +6,7 @@
 namespace graph_diff::algorithm {
 
 class BaselineWithChopAlgorithm {
+    // Baseline algorithm that uses bruteforce search with chops
 public:
     template <typename T>
     auto construct_diff(graph_diff::graph::Graph<T> const& graph1, 

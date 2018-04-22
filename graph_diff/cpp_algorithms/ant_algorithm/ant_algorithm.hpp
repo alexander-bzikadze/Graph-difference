@@ -6,15 +6,17 @@
 #include <random>
 
 #include "ant_parameters.hpp"
-#include "pheromon_table.hpp"
-#include "pathfinder.hpp"
 #include "graph_stat.hpp"
 
 
 namespace graph_diff::algorithm {
 
+template <template <typename T> typename Pathfinder>
 class AntAlgorithm {
 public:
+    template <typename T>
+    using UsedPheromonTable = typename Pathfinder<T>::UsedPheromonTable;
+
     AntAlgorithm() = default;
 
     template <typename T>
@@ -25,8 +27,7 @@ public:
             graph1 : graph2;
         auto const& graph_maximal = graph1.size() <= graph2.size() ?
             graph2 : graph1;
-
-        PheromonTable<size_t> pheromon;
+        UsedPheromonTable<T> pheromon;
         GraphStat<T> graph_stat(graph_minimal, graph_maximal);
         best_choice.resize(graph_minimal.size(), 0);
 
@@ -54,18 +55,14 @@ public:
                 same_score = 0;
             }
 
-            double addition = 1;
-            addition /= (1 + best_score - chosen_score);
-            for (size_t j = 0; j < choice.size(); ++j) {
-                for (size_t k = 0; k < choice.size(); ++k) {
-                    pheromon.add_update(j, choice.at(j), k, choice.at(k), addition);
-                }
-            }
-            pheromon.next_interation();
+            double addition = 1. / (1 + best_score - chosen_score);
+            pheromon.update(choice, addition);
 
             if (same_score == ant_parameters::MAX_NUMBER_OF_ITERATIONS_WITH_THE_SAME_SCORE) {
                 break;
             }
+
+            // std::cout << i << " " << best_score << std::endl;
         }
 
         return best_choice;

@@ -3,6 +3,7 @@ import subprocess
 
 from graph_diff.cpp_algorithms import parameters
 from graph_diff.cpp_algorithms.decorators import clone_method
+from graph_diff.cpp_algorithms.parameters import ALGORITHMS_INCLUDE
 
 
 @clone_method('compile', *parameters.SUPPORTED_ALGORITHMS)
@@ -43,7 +44,7 @@ class AlgorithmCompiler:
                filename,
                *self.ALGORITHMS_FLAGS[algorithm],
                '-o', exe_filename,
-               '-D', 'Algorithm={}'.format(algorithm)]
+               '-D', f'Algorithm={ALGORITHMS_INCLUDE.get(algorithm, algorithm)}']
         p = subprocess.Popen(cmd)
         p.wait()
 

@@ -73,7 +73,12 @@ class GraphPrinter:
 
         return GraphMap.construct_graph_map(output, self.graph1, self.graph2)
 
-    def back_transformer(self, output: [tuple]) -> GraphMap:
+    def graph_map_to_list(self, graph_map: GraphMap) -> [int]:
+        return list(map(lambda x: self.node2_to_index[x] if x.Number != 0 else -1,
+                        [graph_map.map_from_1(self.nodes1[i])
+                         for i in range(len(self.graph1))]))
+
+    def back_transformer(self, output: [int]) -> GraphMap:
         if len(self.graph1) > len(self.graph2):
             output = {self.nodes1[b]: self.nodes2[a]
                       for a, b in enumerate(output) if b != -1}

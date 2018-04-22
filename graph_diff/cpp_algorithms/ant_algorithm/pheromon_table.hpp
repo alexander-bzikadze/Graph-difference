@@ -1,3 +1,5 @@
+#pragma once
+
 #include "utils.hpp" // std::hash for tuples
 #include <cassert>
 #include <map>
@@ -6,10 +8,10 @@
 
 namespace graph_diff::algorithm {
 
-template <typename T>
+template <typename ...Args>
 class PheromonTable {
 public:
-    using contained_choice = std::tuple<T, T, T, T>;
+    using contained_choice = std::tuple<Args...>;
 
     PheromonTable() :
         table(),
@@ -19,20 +21,21 @@ public:
     {
         // table.reserve(ant_parameters::NUMBER_OF_ITERATIONS * 10000);
         // last_update.reserve(ant_parameters::NUMBER_OF_ITERATIONS * 10000);
-        pows.reserve(ant_parameters::NUMBER_OF_ITERATIONS);
+        pows.reserve(graph_diff::algorithm::ant_parameters::NUMBER_OF_ITERATIONS);
         pows.push_back(1);
     }
 
-    double get_element(T u, T u1, T v, T v1) const {
-        contained_choice choice = {u, u1, v, v1};
+    double get_element(Args... args) const {
+        auto choice = std::forward_as_tuple(args...);
         if (!table.count(choice)) {
             return pows[current_iteration];
         }
         return table.at(choice) * pows[current_iteration - last_update.at(choice)];
     }
 
-    void add_update(T u, T u1, T v, T v1, double value) {
-        contained_choice choice = {u, u1, v, v1};
+protected:
+    void add_update(Args... args, double value) {
+        auto choice = std::forward_as_tuple(args...);
         if (table.find(choice) == table.cend() || last_update.find(choice) == last_update.cend()) {
             table.emplace(choice, 1);
             last_update.emplace(choice, 0);
@@ -46,7 +49,7 @@ public:
 
     void next_interation() {
         current_iteration++;
-        pows.push_back(pows.back() * (1 - ant_parameters::P));
+        pows.push_back(pows.back() * (1 - graph_diff::algorithm::ant_parameters::P));
     }
 
 private:

@@ -2,10 +2,10 @@ import unittest
 
 from parameterized import parameterized
 
-from graph_diff.cpp_algorithms.algorithms import CppImport
 from graph_diff.graph import StandardGraphGenerator, GraphWithRepetitiveNodesWithRoot
 from graph_diff.graph_diff_algorithm import GraphDiffAlgorithm
 from graph_diff.graph_diff_algorithm.graph_map_comparator import GraphMapComparatorByEdgeNum, GraphMapComparator
+from graph_diff.simulated_annealing_algorithm.algorithm import Algorithm as SimAnnealAlgorithm
 
 
 def generate_parameters(algo, comparator, number_of_tests, *args):
@@ -34,8 +34,10 @@ class RandomGraphTest(unittest.TestCase):
                           # Cpp.BaselineAlgorithm(),
                           # Cpp.BaselineWithChopAlgorithm(),
                           # CppRun.AntAlgorithm(),
-                          CppImport.AntAlgorithm(),
-                          #   CppImport.BaselineWithChopAlgorithm()
+                          # CppImport.AntAlgorithm(),
+                          # CppImport.BaselineWithChopAlgorithm(),
+                          # CppImport.LinAntAlgorithm(),
+                          SimAnnealAlgorithm()
                       ]], [])
 
     @parameterized.expand(parameters)
@@ -46,6 +48,10 @@ class RandomGraphTest(unittest.TestCase):
                     comparator: GraphMapComparator):
         algo2_result = algo.construct_diff(graph, graph)
         l = sum([len(graph.get_list_of_adjacent_nodes(v)) for v in graph])
+        # print(l)
+        if l != comparator.comparable_representation(algo2_result):
+            RandomGraphTest.ERROR += l - comparator.comparable_representation(algo2_result)
+            RandomGraphTest.FAILED_NUMBER += 1
         self.assertEqual(l,
                          second=comparator.comparable_representation(algo2_result))
 

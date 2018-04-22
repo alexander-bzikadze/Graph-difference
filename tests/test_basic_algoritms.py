@@ -2,11 +2,10 @@ import unittest
 
 from parameterized import parameterized
 
-from graph_diff.cpp_algorithms.algorithms import CppImport
 from graph_diff.graph import rnr_graph, lr_node
-from graph_diff.graph.graph_printer import GraphPrinter
 from graph_diff.graph_diff_algorithm import GraphDiffAlgorithm
 from graph_diff.graph_diff_algorithm.graph_map_comparator import GraphMapComparatorByEdgeNum
+from graph_diff.simulated_annealing_algorithm.algorithm import Algorithm as SimAnnealAlgorithm
 
 
 class BasicAlgorithmTest(unittest.TestCase):
@@ -19,18 +18,16 @@ class BasicAlgorithmTest(unittest.TestCase):
         # ('BaselineAlgorithmOmpCppRun', Cpp.BaselineAlgorithmOmp()),
         # ('BaselineWithChopAlgorithmOmpRun', Cpp.BaselineWithChopAlgorithmOmp())
         # ('AntAlgorithmCppRun', CppRun.AntAlgorithm()),
+        # ('LinAntAlgorithmCppRun', CppRun.LinAntAlgorithm()),
         # ('BaselineCppImport', CppImport.BaselineAlgorithm()),
         # ('BaselineWithChopCppImport', CppImport.BaselineWithChopAlgorithm()),
-        ('AntAlgorithmCppImport', CppImport.AntAlgorithm())
+        # ('AntAlgorithmCppImport', CppImport.AntAlgorithm()),
+        # ('LinAntAlgorithmCppImport', CppImport.LinAntAlgorithm()),
+        ('SimAnneal', SimAnnealAlgorithm())
     ]
 
     def template_test(self, graph1, graph2, score, algorithm):
         diff = algorithm.construct_diff(graph1, graph2)
-        if GraphMapComparatorByEdgeNum().comparable_representation(diff) != score:
-            print('\n'.join(GraphPrinter(graph1, graph2).print_graph1()))
-            print('\n'.join(GraphPrinter(graph1, graph2).print_graph2()))
-            print(diff._graph_map_1_to_2)
-            pass
         self.assertEqual(first=GraphMapComparatorByEdgeNum()
                          .comparable_representation(diff),
                          second=score)
