@@ -6,6 +6,9 @@
 
 namespace std {
 
+/**
+ * Hash for tuples
+ */
 template <typename ...Args>
 struct hash<std::tuple<Args...>> {
     size_t operator()(std::tuple<Args...> const& tup) const {

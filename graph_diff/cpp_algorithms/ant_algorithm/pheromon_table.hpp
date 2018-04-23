@@ -6,8 +6,13 @@
 
 #include "ant_parameters.hpp"
 
+
 namespace graph_diff::algorithm {
 
+/**
+ * Interface class for PhermonTable used in AntAlgorithm
+ * Update method is crutial to be implemented by the successors
+ */
 template <typename ...Args>
 class PheromonTable {
 public:
@@ -17,14 +22,15 @@ public:
         table(),
         last_update(),
         pows(),
-        current_iteration(0)
-    {
-        // table.reserve(ant_parameters::NUMBER_OF_ITERATIONS * 10000);
-        // last_update.reserve(ant_parameters::NUMBER_OF_ITERATIONS * 10000);
+        current_iteration(0) {
         pows.reserve(graph_diff::algorithm::ant_parameters::NUMBER_OF_ITERATIONS);
         pows.push_back(1);
     }
 
+    /**
+     * @param   coordinates in the table
+     * @return  return contained there value as lazy as possible
+     */
     double get_element(Args... args) const {
         auto choice = std::forward_as_tuple(args...);
         if (!table.count(choice)) {
@@ -34,6 +40,11 @@ public:
     }
 
 protected:
+    /**
+     * Add given value to given coordinates lazy as possible
+     * @param   coordinates
+     * @param   value to add
+     */
     void add_update(Args... args, double value) {
         auto choice = std::forward_as_tuple(args...);
         if (table.find(choice) == table.cend() || last_update.find(choice) == last_update.cend()) {
@@ -47,6 +58,9 @@ protected:
         last_update.at(choice) = current_iteration;
     }
 
+    /**
+     * Lazy travel to next iteration
+     */
     void next_interation() {
         current_iteration++;
         pows.push_back(pows.back() * (1 - graph_diff::algorithm::ant_parameters::P));

@@ -1,5 +1,6 @@
 #pragma once
 
+
 namespace graph_diff::algorithm::ant_parameters {
 
 constexpr static int ALPHA = 1;

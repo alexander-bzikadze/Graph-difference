@@ -1,6 +1,7 @@
+#include <random>
+
 #include "baseline_algorithms_using.hpp"
 #include "ant_algorithm_using.hpp"
-#include <random>
 
 using graph_diff::algorithm::AntAlgorithm;
 using std::cout;

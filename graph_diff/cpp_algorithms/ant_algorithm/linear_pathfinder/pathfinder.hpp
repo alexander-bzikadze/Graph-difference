@@ -8,6 +8,10 @@
 
 namespace graph_diff::algorithm::linear_pathfinder {
 
+/**
+ * Pathfinder class for ant_algorithm
+ * Complexity is squar, order of choice is increasing
+ */
 template <typename T>
 class Pathfinder {
 public:
@@ -34,6 +38,13 @@ public:
         }
     }
 
+
+    /**
+     * Make a probabilistic choice of match of given graphs
+     * Is crutial method of Pathfinder interface
+     * @return  choice represented as vector of long long
+     *  -1 states for no match for the node
+     */
     auto find_path() {
         init();
 

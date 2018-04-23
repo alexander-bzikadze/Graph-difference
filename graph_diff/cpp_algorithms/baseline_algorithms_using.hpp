@@ -1,4 +1,7 @@
 #pragma once
+/**
+ * header for including usings of baseline algorithms
+ */
 
 #include "baseline_algorithms.hpp"
 using graph_diff::algorithm::BaselineAlgorithm;

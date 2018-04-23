@@ -4,10 +4,14 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include <fstream>
+
 
 namespace graph_diff::graph {
 
+/**
+ * Class container for labeld graph represented
+ * as vector of pairs and vector of adjacency lists
+ */
 template <typename T>
 class Graph {
 public:
@@ -17,24 +21,45 @@ public:
     Graph(std::vector<node> nodes,
           std::vector<std::vector<size_t>> adjacent_list) :
         _nodes(nodes),
-        _adjacent_list(adjacent_list)
-    {}
+        _adjacent_list(adjacent_list) {
+            for (auto& vec : _adjacent_list) {
+                std::sort(vec.begin(), vec.end());
+            }
+        }
 
     Graph(Graph&&) = default;
     Graph& operator=(Graph&&) = default;
 
+    /**
+     * @return  vector of contained nodes,
+     *  represented as pairs {Label, Number}
+     */
     auto const& get_nodes() const {
         return _nodes;
     }
 
+    /**
+     * @param   number of node
+     * @return  vector of numbers of nodes,
+     *  adjacent to given
+     */
     auto const& get_adjacent_list(size_t i) const {
         return _adjacent_list[i];
     }
 
-    auto adjacent_to(size_t i, size_t j) const {
-        return _adjacent_list[i][j];
+    /**
+     * @param   i   number of the first node
+     * @param   j   number of the second node
+     * @return  if i is adjacent to j
+     */
+    auto is_adjacent(size_t i, size_t j) const {
+        return std::binary_search(_adjacent_list[i].cbegin(),
+                                  _adjacent_list[i].cend(),
+                                  j);
     }
-
+    /**
+     * @return  number of nodes contained
+     */
     size_t size() const {
         return _nodes.size();
     }
@@ -45,11 +70,24 @@ private:
 };
 
 
-template <typename T>
-auto read_graph() {
-    // std::ifstream file;
-    // file.open ("main.in");
-
+/**
+ * Reads graph from console. Graph must be represented as follows:
+ *      {number_of_nodes:n}
+ *      {Label_1, Node_1}
+ *      ...
+ *      {Label_n, Node_n}
+ *      {Number_of_adjacent_to_1_nodes}
+ *      {Number_of_adjacent_node}
+ *      ...
+ *      {Number_of_adjacent_node}
+ *      ...
+ *      {Number_of_adjacent_to_n_nodes}
+ *      {Number_of_adjacent_node}
+ *      ...
+ *      {Number_of_adjacent_node}
+ * @return  graph object constracted from cin imput
+ */
+template <typename T> auto read_graph() {
     size_t node_number;
     std::cin >> node_number;
 
@@ -78,8 +116,7 @@ auto read_graph() {
             std::sort(adjacent_list[i].begin(), adjacent_list[i].end());
         }
     }
-    auto graph = Graph<size_t>(std::move(nodes), std::move(adjacent_list));
-    return graph;
+    return Graph<size_t>(std::move(nodes), std::move(adjacent_list));
 }
 
-} // end namespace graph
+} // end namespace graph_diff::graph

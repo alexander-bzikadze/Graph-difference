@@ -2,8 +2,10 @@ import unittest
 
 from parameterized import parameterized
 
+from graph_diff.cpp_algorithms.algorithms import CppImport
 from graph_diff.graph import rnr_graph, lr_node
 from graph_diff.graph_diff_algorithm import GraphDiffAlgorithm
+from graph_diff.graph_diff_algorithm.compose_graph_diff_algorithm import ComposedGraphDiffAlgorithm
 from graph_diff.graph_diff_algorithm.graph_map_comparator import GraphMapComparatorByEdgeNum
 from graph_diff.simulated_annealing_algorithm.algorithm import Algorithm as SimAnnealAlgorithm
 
@@ -23,7 +25,8 @@ class BasicAlgorithmTest(unittest.TestCase):
         # ('BaselineWithChopCppImport', CppImport.BaselineWithChopAlgorithm()),
         # ('AntAlgorithmCppImport', CppImport.AntAlgorithm()),
         # ('LinAntAlgorithmCppImport', CppImport.LinAntAlgorithm()),
-        ('SimAnneal', SimAnnealAlgorithm())
+        # ('SimAnneal', SimAnnealAlgorithm()),
+        ('Composition', ComposedGraphDiffAlgorithm(CppImport.LinAntAlgorithm(), SimAnnealAlgorithm()))
     ]
 
     def template_test(self, graph1, graph2, score, algorithm):

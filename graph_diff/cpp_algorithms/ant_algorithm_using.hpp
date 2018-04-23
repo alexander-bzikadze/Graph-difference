@@ -1,4 +1,8 @@
 #pragma once
+/**
+ * header for including usings of ant_algorithm
+ */
+
 
 #include "ant_algorithm/ant_algorithm.hpp"
 using graph_diff::algorithm::AntAlgorithm;

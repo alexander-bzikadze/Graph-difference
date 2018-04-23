@@ -15,7 +15,7 @@ from graph_diff.graph_diff_algorithm.graph_map import GraphMap
 class Algorithm(GraphDiffAlgorithmWithInit):
     T0 = 100
     NUMBER_OF_ITERATIONS = 10000
-    NUMBER_OF_ITERATIONS_WITH
+    NUMBER_OF_ITERATIONS_WITH_THE_SAME_SCORE = 200
 
     def __init__(self):
         self.graph1 = None
@@ -32,25 +32,34 @@ class Algorithm(GraphDiffAlgorithmWithInit):
         self.graph1 = graph1
         self.graph2 = graph2
 
-        self.printer = GraphPrinter(graph1, graph2)
+        if len(self.graph1) > len(self.graph2):
+            self.graph1, self.graph2 = self.graph2, self.graph1
+
+        self.printer = GraphPrinter(self.graph1, self.graph2)
         self.nodes1, self.edges1 = self.printer.graph_transformer_first()
         self.nodes2, self.edges2 = self.printer.graph_transformer_second()
         self.edges1, self.edges2 = list(map(set, self.edges1)), list(map(set, self.edges2))
 
         if self.init_solution is None:
             self.init_solution = self._initial_solution()
-        else:
+        elif type(self.init_solution) == GraphMap:
             self.init_solution = self.printer.graph_map_to_list(self.init_solution)
+
         self.current_solution = copy(self.init_solution)
 
         energy = self._score(self.current_solution)
         global_energy = energy
         global_solution = copy(self.current_solution)
 
-        for _ in range(1, 10000):
+        same_score = 0
+        for _ in range(1, self.NUMBER_OF_ITERATIONS):
+            same_score += 1
             if global_energy < energy:
                 global_solution = copy(self.current_solution)
                 global_energy = energy
+                same_score = 0
+            if same_score == self.NUMBER_OF_ITERATIONS_WITH_THE_SAME_SCORE:
+                break
             x = self._take_step()
             x_energy = self._score(x)
             alpha = scipy.random.uniform(0, 1)

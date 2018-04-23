@@ -11,6 +11,10 @@
 
 namespace graph_diff::algorithm {
 
+/**
+ * Ant algorithm that uses probabilistic choice
+ * Template Pathfinder defines which way will be chosen the matches
+ */
 template <template <typename T> typename Pathfinder>
 class AntAlgorithm {
 public:
@@ -19,8 +23,19 @@ public:
 
     AntAlgorithm() = default;
 
+    /**
+     * Constructs difference between two given graphs
+     * Is crutial method of the graph_diff::algorithm::*Algorithm interface
+     * @param   graph1  first graph
+     * @param   graph2  second graph
+     * graph1 and graph2 may be swapped incide if graph2
+     *  is bigger graph1 by nodes
+     * @return  heuristic match of first graph to second
+     *  represented as vector of long long. -1 states
+     *  that node should be matched with nothing
+     */
     template <typename T>
-    auto construct_diff(graph_diff::graph::Graph<T> const& graph1, 
+    auto construct_diff(graph_diff::graph::Graph<T> const& graph1,
                         graph_diff::graph::Graph<T> const& graph2) {
 
         auto const& graph_minimal = graph1.size() <= graph2.size() ?
@@ -61,13 +76,12 @@ public:
             if (same_score == ant_parameters::MAX_NUMBER_OF_ITERATIONS_WITH_THE_SAME_SCORE) {
                 break;
             }
-
-            // std::cout << i << " " << best_score << std::endl;
         }
 
         return best_choice;
     }
 
+private:
     template <typename T>
     auto score(graph_diff::graph::Graph<T> const& graph1, 
                graph_diff::graph::Graph<T> const& graph2,
@@ -80,13 +94,11 @@ public:
                 continue;
             }
             for (size_t j = 0; j < graph1.get_adjacent_list(first).size(); ++j) {
-                auto mapped = choice[graph1.adjacent_to(first, j)];
+                auto mapped = choice[graph1.get_adjacent_list(first)[j]];
                 graph2.get_adjacent_list(second);
                 if (mapped != -1
                     && !graph2.get_adjacent_list(second).empty()
-                    && std::binary_search(graph2.get_adjacent_list(second).cbegin(), 
-                                          graph2.get_adjacent_list(second).cend(), 
-                                          mapped)) {
+                    && graph2.is_adjacent(second, mapped)) {
                     score++;
                 }
             }
@@ -94,7 +106,6 @@ public:
         return score;
     }
 
-private:
     long long best_score = -1;
     std::vector<long long> best_choice;
 };

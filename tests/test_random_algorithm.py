@@ -2,8 +2,10 @@ import unittest
 
 from parameterized import parameterized
 
+from graph_diff.cpp_algorithms.algorithms import CppImport
 from graph_diff.graph import StandardGraphGenerator, GraphWithRepetitiveNodesWithRoot
 from graph_diff.graph_diff_algorithm import GraphDiffAlgorithm
+from graph_diff.graph_diff_algorithm.compose_graph_diff_algorithm import ComposedGraphDiffAlgorithm
 from graph_diff.graph_diff_algorithm.graph_map_comparator import GraphMapComparatorByEdgeNum, GraphMapComparator
 from graph_diff.simulated_annealing_algorithm.algorithm import Algorithm as SimAnnealAlgorithm
 
@@ -37,7 +39,8 @@ class RandomGraphTest(unittest.TestCase):
                           # CppImport.AntAlgorithm(),
                           # CppImport.BaselineWithChopAlgorithm(),
                           # CppImport.LinAntAlgorithm(),
-                          SimAnnealAlgorithm()
+                          # SimAnnealAlgorithm(),
+                          ComposedGraphDiffAlgorithm(CppImport.LinAntAlgorithm(), SimAnnealAlgorithm())
                       ]], [])
 
     @parameterized.expand(parameters)

@@ -16,6 +16,7 @@ class ComposedGraphDiffAlgorithm(GraphDiffAlgorithm):
     def construct_diff(self,
                        graph1: GraphWithRepetitiveNodesWithRoot,
                        graph2: GraphWithRepetitiveNodesWithRoot) -> GraphMap:
+        # return self.others[0].construct_diff(graph1, graph2)
         return reduce(lambda diff, algo: algo.set_init(diff).construct_diff(graph1, graph2),
                       self.others,
                       self.first.construct_diff(graph1, graph2))

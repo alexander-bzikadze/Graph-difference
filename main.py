@@ -72,7 +72,7 @@ for i in range(1, NUM + 1):
         graph1.add_edge(lr_node(1, i), lr_node(1, j))
         graph2.add_edge(lr_node(1, i), lr_node(1, j))
 
-algo = ComposedGraphDiffAlgorithm(CppImport.AntAlgorithm(), SimAnnealAlgorithm())
+algo = ComposedGraphDiffAlgorithm(CppImport.LinAntAlgorithm(), SimAnnealAlgorithm())
 algo.construct_diff(graph1, graph2)
 
 # with open('big_graph.txt', mode='w') as file:

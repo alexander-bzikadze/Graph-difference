@@ -5,12 +5,25 @@
 
 namespace graph_diff::algorithm {
 
+/**
+ * Baseline algorithm that uses bruteforce search with chops
+ */
 class BaselineWithChopAlgorithm {
-    // Baseline algorithm that uses bruteforce search with chops
 public:
+    /**
+     * Constructs difference between two given graphs
+     * Is crutial method of the graph_diff::algorithm::*Algorithm interface
+     * @param   graph1  first graph
+     * @param   graph2  second graph
+     * graph1 and graph2 may be swapped incide if graph2
+     *  is bigger graph1 by nodes
+     * @return  exact match of first graph to second
+     *  represented as vector of long long. -1 states
+     *  that node should be matched with nothing
+     */
     template <typename T>
-    auto construct_diff(graph_diff::graph::Graph<T> const& graph1, 
-                                    graph_diff::graph::Graph<T> const& graph2) {
+    auto construct_diff(graph_diff::graph::Graph<T> const& graph1,
+                        graph_diff::graph::Graph<T> const& graph2) {
         auto const& graph_minimal = graph1.size() <= graph2.size() ?
             graph1 : graph2;
         auto const& graph_maximal = graph1.size() <= graph2.size() ?
@@ -18,8 +31,8 @@ public:
 
         initialization(graph_minimal, graph_maximal);
 
-        bruteforce_search(graph_minimal, 
-                          graph_maximal, 
+        bruteforce_search(graph_minimal,
+                          graph_maximal,
                           0,
                           graph_maximal.size(),
                           graph_minimal.size());
@@ -35,7 +48,7 @@ public:
 
 private:
     template <typename T>
-    void initialization(graph_diff::graph::Graph<T> const& graph1, 
+    void initialization(graph_diff::graph::Graph<T> const& graph1,
                         graph_diff::graph::Graph<T> const& graph2) {
         current_choice.clear();
         current_choice.resize(graph2.size());
@@ -135,13 +148,11 @@ private:
               size_t second) {
         size_t score = 0;
         for (size_t j = 0; j < graph1.get_adjacent_list(first).size(); ++j) {
-            auto mapped = current_choice[graph1.adjacent_to(first, j)];
+            auto mapped = current_choice[graph1.get_adjacent_list(first)[j]];
             graph2.get_adjacent_list(second);
             if (mapped != -1
                 && !graph2.get_adjacent_list(second).empty()
-                && std::binary_search(graph2.get_adjacent_list(second).cbegin(), 
-                                      graph2.get_adjacent_list(second).cend(), 
-                                      mapped)) {
+                    && graph2.is_adjacent(second, mapped)) {
                 score++;
             }
         }
