@@ -11,8 +11,14 @@ from graph_diff.graph_diff_algorithm.graph_diff_algorithm import GraphDiffAlgori
 from graph_diff.graph_diff_algorithm.graph_map import GraphMap
 
 
-# TODO: the algorithm
 class Algorithm(GraphDiffAlgorithmWithInit):
+    """
+    Realization of heuristic simulated annealing algorithm for graph difference problem.
+    It is not an exact algorithm, so the mistakes may be made.
+    Best when init solution is given
+    Complexity is O(NI * V_1)
+    TODO: add references.
+    """
     T0 = 100
     NUMBER_OF_ITERATIONS = 10000
     NUMBER_OF_ITERATIONS_WITH_THE_SAME_SCORE = 200

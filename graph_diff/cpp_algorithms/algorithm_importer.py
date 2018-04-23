@@ -7,10 +7,11 @@ from graph_diff.cpp_algorithms.parameters import SUPPORTED_ALGORITHMS
 
 
 class AlgorithmImporter:
+    """Class for importing cpp algorithms as python module"""
     def __init__(self):
-        sys.path.append(self.current_dir())
+        sys.path.append(self.__current_dir())
 
-        if not os.path.isfile(os.path.join(self.current_dir(), 'cpp_algorithms.cpp')):
+        if not os.path.isfile(os.path.join(self.__current_dir(), 'cpp_algorithms.cpp')):
             self.__print_importer()
 
         # noinspection PyUnresolvedReferences
@@ -25,7 +26,7 @@ class AlgorithmImporter:
 
         sys.path.pop()
 
-    def current_dir(self):
+    def __current_dir(self):
         return os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
     def __print_importer(self):
@@ -80,5 +81,5 @@ auto algorithm(std::vector<node<size_t>> nodes1,
 }}
 """
 
-        file = open(os.path.join(self.current_dir(), 'cpp_algorithms.cpp'), 'w')
+        file = open(os.path.join(self.__current_dir(), 'cpp_algorithms.cpp'), 'w')
         print(printed, file=file)

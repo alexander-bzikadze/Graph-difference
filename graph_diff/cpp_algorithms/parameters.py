@@ -26,8 +26,8 @@ SUPPORTED_ALGORITHMS = {'BaselineAlgorithm',
                         'AntAlgorithm',
                         'LinAntAlgorithm'}
 
-ALGORITHMS_INCLUDE = {'AntAlgorithm': 'graph_diff::algorithm::AntAlgorithm<CubedPathfinder>'}
-ALGORITHMS_INCLUDE['LinAntAlgorithm'] = 'graph_diff::algorithm::AntAlgorithm<LinearPathfinder>'
+ALGORITHMS_INCLUDE = {'AntAlgorithm': 'graph_diff::algorithm::AntAlgorithm<CubedPathfinder>',
+                      'LinAntAlgorithm': 'graph_diff::algorithm::AntAlgorithm<LinearPathfinder>'}
 
 ALGORITHMS_FLAGS = defaultdict(list)
 ALGORITHMS_FLAGS['BaselineAlgorithmOmp'] = ['-Xpreprocessor', '-fopenmp', '-lomp']

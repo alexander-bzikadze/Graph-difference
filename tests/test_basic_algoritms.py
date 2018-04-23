@@ -2,6 +2,7 @@ import unittest
 
 from parameterized import parameterized
 
+from graph_diff.baseline_algorithm import BaselineAlgorithm
 from graph_diff.cpp_algorithms.algorithms import CppImport
 from graph_diff.graph import rnr_graph, lr_node
 from graph_diff.graph_diff_algorithm import GraphDiffAlgorithm
@@ -12,7 +13,7 @@ from graph_diff.simulated_annealing_algorithm.algorithm import Algorithm as SimA
 
 class BasicAlgorithmTest(unittest.TestCase):
     parameters = [
-        # ('Baseline', BaselineAlgorithm()),
+        ('Baseline', BaselineAlgorithm()),
         # ('Ant', AntAlgorithm()),
         # ('NewAnt', NewAntAlgorithm()),
         # ('BaselineCpp', CppRun.BaselineAlgorithm()),
@@ -21,11 +22,11 @@ class BasicAlgorithmTest(unittest.TestCase):
         # ('BaselineWithChopAlgorithmOmpRun', Cpp.BaselineWithChopAlgorithmOmp())
         # ('AntAlgorithmCppRun', CppRun.AntAlgorithm()),
         # ('LinAntAlgorithmCppRun', CppRun.LinAntAlgorithm()),
-        # ('BaselineCppImport', CppImport.BaselineAlgorithm()),
-        # ('BaselineWithChopCppImport', CppImport.BaselineWithChopAlgorithm()),
-        # ('AntAlgorithmCppImport', CppImport.AntAlgorithm()),
-        # ('LinAntAlgorithmCppImport', CppImport.LinAntAlgorithm()),
-        # ('SimAnneal', SimAnnealAlgorithm()),
+        ('BaselineCppImport', CppImport.BaselineAlgorithm()),
+        ('BaselineWithChopCppImport', CppImport.BaselineWithChopAlgorithm()),
+        ('AntAlgorithmCppImport', CppImport.AntAlgorithm()),
+        ('LinAntAlgorithmCppImport', CppImport.LinAntAlgorithm()),
+        ('SimAnneal', SimAnnealAlgorithm()),
         ('Composition', ComposedGraphDiffAlgorithm(CppImport.LinAntAlgorithm(), SimAnnealAlgorithm()))
     ]
 

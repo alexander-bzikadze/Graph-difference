@@ -1,6 +1,5 @@
 import stringcase
 
-from graph_diff.cpp_algorithms.algorithm_importer import AlgorithmImporter
 from graph_diff.cpp_algorithms.parameters import SUPPORTED_ALGORITHMS
 from graph_diff.graph import GraphWithRepetitiveNodesWithRoot
 from graph_diff.graph.graph_printer import GraphPrinter
@@ -34,6 +33,13 @@ def add_run_algorithms(cls: type):
 
 
 def add_imported_algorithms(cls: type):
+    """
+    Adds supported algorithms-classes to class-container.
+
+    :param cls: class-container to modify
+    :return:    modified class
+    """
+    from graph_diff.cpp_algorithms.algorithm_importer import AlgorithmImporter
     algorithm_importer = AlgorithmImporter()
     for algo in SUPPORTED_ALGORITHMS:
         class CppAlgorithm(GraphDiffAlgorithm):
@@ -47,8 +53,6 @@ def add_imported_algorithms(cls: type):
                 __name__ = type(self).__name__
                 output = getattr(algorithm_importer.module, stringcase.snakecase(__name__)) \
                     (*repr_first, *repr_second)
-                # print(*repr_first, *repr_second)
-                # print(output)
                 return graph_printer.back_transformer(output)
 
         CppAlgorithm.__name__ = algo
