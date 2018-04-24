@@ -1,7 +1,7 @@
 import logging
 
-from graph_diff.ant_algorithm.algorithm import Algorithm as AntAlgorithm
 from graph_diff.graph_comparison import generate_n_algo_tests
+from graph_diff.ordered_ant_algorithm.ordered_ant_algorithm import OrderedAntAlgorithm as AntAlgorithm
 
 NUMBER_OF_TESTS = 100
 DIRECTORY = "../algo_png/"

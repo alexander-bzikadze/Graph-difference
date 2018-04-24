@@ -9,4 +9,4 @@ TODO: add references
 TODO: add accuracy evaluation
 """
 
-from .algorithm import Algorithm as NewAntAlgorithm
+from .unordered_ant_algorithm import UnorderedAntAlgorithm

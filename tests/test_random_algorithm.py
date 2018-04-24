@@ -7,7 +7,7 @@ from graph_diff.graph import StandardGraphGenerator, GraphWithRepetitiveNodesWit
 from graph_diff.graph_diff_algorithm import GraphDiffAlgorithm
 from graph_diff.graph_diff_algorithm.compose_graph_diff_algorithm import ComposedGraphDiffAlgorithm
 from graph_diff.graph_diff_algorithm.graph_map_comparator import GraphMapComparatorByEdgeNum, GraphMapComparator
-from graph_diff.simulated_annealing_algorithm.algorithm import Algorithm as SimAnnealAlgorithm
+from graph_diff.simulated_annealing_algorithm.sim_anneal_algorithm import SimAnnealAlgorithm as SimAnnealAlgorithm
 
 
 def generate_parameters(algo, comparator, number_of_tests, *args):
@@ -31,12 +31,12 @@ class RandomGraphTest(unittest.TestCase):
                                           StandardGraphGenerator(0, 60))
                       for algo in [
                           # BaselineAlgorithm(),
-                          # AntAlgorithm(),
-                          # NewAntAlgorithm(),
+                          # OrderedAntAlgorithm(),
+                          # UnorderedAntAlgorithm(),
                           # Cpp.BaselineAlgorithm(),
                           # Cpp.BaselineWithChopAlgorithm(),
-                          # CppRun.AntAlgorithm(),
-                          # CppImport.AntAlgorithm(),
+                          # CppRun.OrderedAntAlgorithm(),
+                          # CppImport.OrderedAntAlgorithm(),
                           # CppImport.BaselineWithChopAlgorithm(),
                           # CppImport.LinAntAlgorithm(),
                           # SimAnnealAlgorithm(),

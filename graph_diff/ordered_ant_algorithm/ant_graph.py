@@ -4,7 +4,7 @@ from graph_diff.graph import GraphWithRepetitiveNodesWithRoot, lr_node
 
 
 class AntGraph:
-    """Graph representation for AntAlgorithm"""
+    """Graph representation for OrderedAntAlgorithm"""
 
     def __init__(self,
                  graph: GraphWithRepetitiveNodesWithRoot):

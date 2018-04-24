@@ -2,10 +2,8 @@ import unittest
 
 from parameterized import parameterized
 
-from graph_diff.ant_algorithm.algorithm import Algorithm as AntAlgorithm
 from graph_diff.graph_diff_algorithm import GraphDiffAlgorithm
 from graph_diff.graph_diff_algorithm.graph_map_comparator import GraphMapComparatorByEdgeNum
-from graph_diff.new_ant_algorithm import NewAntAlgorithm
 from graph_diff.nirvana_object_model.pipeline import Pipeline
 from graph_diff.nirvana_object_model.worflow_generator.standard_workflow_generator import StandardWorkflowGenerator
 from graph_diff.nirvana_object_model.workflow import Workflow
@@ -14,6 +12,8 @@ from graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workfl
     CompleteWorkflowToGraphConverter
 from graph_diff.nirvana_object_model.workflow_to_graph_converter.simple_workflow_to_graph_converter import \
     SimpleWorkflowToGraphConverter
+from graph_diff.ordered_ant_algorithm.ordered_ant_algorithm import OrderedAntAlgorithm as AntAlgorithm
+from graph_diff.unordered_ant_algorithm import UnorderedAntAlgorithm
 
 
 def generate_parameters(algo, number_of_tests, *args):
@@ -34,7 +34,7 @@ class GraphWithRepetitiveNodesWithRootTest(unittest.TestCase):
                                            CompleteWorkflowToGraphConverter()),
                                           (StandardWorkflowGenerator().generate_blocks(20, 200),
                                            SimpleWorkflowToGraphConverter()))
-                      for algo in (AntAlgorithm(), NewAntAlgorithm())], [])
+                      for algo in (AntAlgorithm(), UnorderedAntAlgorithm())], [])
 
     @parameterized.expand(parameters)
     def test_random(self,

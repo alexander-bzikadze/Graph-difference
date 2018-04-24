@@ -35,6 +35,6 @@ algorithm to be used, etc.
 # import graph_diff.baseline_with_chop_algorithm
 # import graph_diff.graph
 # import graph_diff.graph_diff_algorithm
-# import graph_diff.new_ant_algorithm
+# import graph_diff.unordered_ant_algorithm
 # import graph_diff.nirvana_object_model
 # import graph_diff.simulated_annealing_algorithm

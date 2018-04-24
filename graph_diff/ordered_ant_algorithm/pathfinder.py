@@ -3,8 +3,8 @@ from collections import defaultdict
 
 import numpy
 
-from graph_diff.ant_algorithm import parameters
-from graph_diff.ant_algorithm.ant_graph import AntGraph
+from graph_diff.ordered_ant_algorithm import parameters
+from graph_diff.ordered_ant_algorithm.ant_graph import AntGraph
 
 
 class Pathfinder:

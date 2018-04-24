@@ -59,9 +59,8 @@ from graph_diff.graph import rnr_graph, lr_node
 # w2_dot = Pipeline(BaselineAlgorithm(GraphMapComparatorByEdgeNum()), CompleteWorkflowToGraphConverter()).get_diff(w, w1)
 
 # print_together(w_dot, w2_dot, w1_dot, names=['w_dot', 'w2_dot', 'w1_dot']).write("./w2.png", format='png')
-from graph_diff.graph.graph_printer import GraphPrinter
 from graph_diff.graph_diff_algorithm.compose_graph_diff_algorithm import ComposedGraphDiffAlgorithm
-from graph_diff.simulated_annealing_algorithm.algorithm import Algorithm as SimAnnealAlgorithm
+from graph_diff.simulated_annealing_algorithm.sim_anneal_algorithm import SimAnnealAlgorithm as SimAnnealAlgorithm
 
 NUM = 30
 

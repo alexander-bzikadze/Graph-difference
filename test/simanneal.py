@@ -1,7 +1,5 @@
-from graph_diff.cpp_algorithms.algorithms import CppImport
 from graph_diff.graph import rnr_graph, lr_node
-from graph_diff.graph_diff_algorithm import GraphMap
-from graph_diff.simulated_annealing_algorithm.algorithm import Algorithm as SimAnnealAlgorithm
+from graph_diff.simulated_annealing_algorithm.sim_anneal_algorithm import SimAnnealAlgorithm as SimAnnealAlgorithm
 
 alg = SimAnnealAlgorithm()
 

@@ -10,4 +10,4 @@ TODO: add references
 TODO: add accuracy evaluation
 """
 
-from .algorithm import Algorithm as SimAnnealAlgorithm
+from .sim_anneal_algorithm import SimAnnealAlgorithm

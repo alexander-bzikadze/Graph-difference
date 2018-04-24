@@ -5,7 +5,7 @@
 #include "pheromon_table.hpp"
 
 
-namespace graph_diff::algorithm::cubed_pathfinder {
+namespace graph_diff::algorithm::unordered_pathfinder {
 
 /**
  * Pathfinder class for ant_algorithm
@@ -36,12 +36,14 @@ public:
                acc_sum(0),
                generator(std::random_device()()),
                dis(0, 1) {
+        #pragma clang loop vectorize(enable)
         for (size_t i = 0; i < graph1.size(); ++i) {
             for (size_t j = 0; j < graph1.get_adjacent_list(i).size(); ++j) {
                 std::get<0>(edges)[i * graph1.size() + j] = true;
             }
         }
 
+        #pragma clang loop vectorize(enable)
         for (size_t i = 0; i < graph2.size(); ++i) {
             for (size_t j = 0; j < graph2.get_adjacent_list(i).size(); ++j) {
                 std::get<1>(edges)[i * graph2.size() + j] = true;
@@ -60,7 +62,6 @@ public:
         phero_factors.resize(graph1.size() * graph2.size(), 0);
         score_factors.clear();
         score_factors.resize(graph1.size() * graph2.size(), 0);
-        // generator = std::mt19937(std::random_device()());
 
         for (size_t i = 0; i < score_factors.size(); ++i) {
             auto [first, second] = to_2d_address(i);
@@ -70,13 +71,9 @@ public:
 
         auto upper_size = probabilities.size();
         double acc = 0;
-        #pragma clang loop vectorize(enable)
         for (size_t i = 0; i < upper_size; ++i) {
-            auto [from_first, from_second] = to_2d_address(i);
             if (score_factors[i] > 0) {
-                acc += 1
-                    // * graph_stat.get_statistic(i);
-                    ;
+                acc += graph_stat.get_statistic(i);
             }
             probabilities[i] = acc;
         }
@@ -93,18 +90,17 @@ public:
 private:
     void update_probs(size_t chosen_first,
                       size_t chosen_second) {
-        #pragma clang loop vectorize(enable)
         for (size_t i = 0; i < graph1.size(); ++i) {
             score_factors[to_1d_address(i, chosen_second)] = 0;
         }
 
         for (size_t i = 0; i < graph2.size(); ++i) {
-            score_factors[to_1d_address(chosen_first, i)] = 0;
+            score_factors[chosen_first * graph2.size() + i] = 0;
         }
 
         auto upper_size = probabilities.size();
         double acc = 0;
-        // #pragma clang loop vectorize(enable)
+        #pragma clang loop vectorize(enable)
         for (size_t i = 0; i < upper_size; ++i) {
             auto [from_first, from_second] = to_2d_address(i);
             if (score_factors[i] > 0) {
@@ -115,7 +111,6 @@ private:
             }
         }
 
-        #pragma clang loop vectorize(enable)
         for (size_t i = 0; i < upper_size; ++i) {
             auto [from_first, from_second] = to_2d_address(i);
             auto pher = pheromon.get_element(from_first,
@@ -178,4 +173,4 @@ private:
     std::uniform_real_distribution<> dis;
 };
 
-}
+} // end of graph_diff::algorithm::unordered_pathfinder

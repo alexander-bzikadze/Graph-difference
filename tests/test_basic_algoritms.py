@@ -8,26 +8,26 @@ from graph_diff.graph import rnr_graph, lr_node
 from graph_diff.graph_diff_algorithm import GraphDiffAlgorithm
 from graph_diff.graph_diff_algorithm.compose_graph_diff_algorithm import ComposedGraphDiffAlgorithm
 from graph_diff.graph_diff_algorithm.graph_map_comparator import GraphMapComparatorByEdgeNum
-from graph_diff.simulated_annealing_algorithm.algorithm import Algorithm as SimAnnealAlgorithm
+from graph_diff.simulated_annealing_algorithm import SimAnnealAlgorithm
 
 
 class BasicAlgorithmTest(unittest.TestCase):
     parameters = [
         ('Baseline', BaselineAlgorithm()),
-        # ('Ant', AntAlgorithm()),
-        # ('NewAnt', NewAntAlgorithm()),
+        # ('Ant', OrderedAntAlgorithm()),
+        # ('NewAnt', UnorderedAntAlgorithm()),
         # ('BaselineCpp', CppRun.BaselineAlgorithm()),
         # ('BaselineWithChopAlgorithmCppRun', Cpp.BaselineWithChopAlgorithm()),
         # ('BaselineAlgorithmOmpCppRun', Cpp.BaselineAlgorithmOmp()),
         # ('BaselineWithChopAlgorithmOmpRun', Cpp.BaselineWithChopAlgorithmOmp())
-        # ('AntAlgorithmCppRun', CppRun.AntAlgorithm()),
+        # ('AntAlgorithmCppRun', CppRun.OrderedAntAlgorithm()),
         # ('LinAntAlgorithmCppRun', CppRun.LinAntAlgorithm()),
         ('BaselineCppImport', CppImport.BaselineAlgorithm()),
         ('BaselineWithChopCppImport', CppImport.BaselineWithChopAlgorithm()),
-        ('AntAlgorithmCppImport', CppImport.AntAlgorithm()),
-        ('LinAntAlgorithmCppImport', CppImport.LinAntAlgorithm()),
+        ('UnorderedAntAlgorithmCppImport', CppImport.UnorderedAntAlgorithm()),
+        ('OrderedAntAlgorithmCppImport', CppImport.OrderedAntAlgorithm()),
         ('SimAnneal', SimAnnealAlgorithm()),
-        ('Composition', ComposedGraphDiffAlgorithm(CppImport.LinAntAlgorithm(), SimAnnealAlgorithm()))
+        ('Composition', ComposedGraphDiffAlgorithm(CppImport.OrderedAntAlgorithm(), SimAnnealAlgorithm()))
     ]
 
     def template_test(self, graph1, graph2, score, algorithm):

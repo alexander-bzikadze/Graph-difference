@@ -6,7 +6,7 @@
 #include "../graph_stat.hpp"
 #include "pheromon_table.hpp"
 
-namespace graph_diff::algorithm::linear_pathfinder {
+namespace graph_diff::algorithm::ordered_pathfinder {
 
 /**
  * Pathfinder class for ant_algorithm
@@ -19,7 +19,7 @@ public:
     using match = std::tuple<size_t, size_t>;
     using UsedPheromonTable = PheromonTable<size_t>;
 
-    Pathfinder(graph::Graph<T> const& graph1, 
+    Pathfinder(graph::Graph<T> const& graph1,
                graph::Graph<T> const& graph2,
                UsedPheromonTable const& pheromon,
                GraphStat<T> const& graph_stat) :
@@ -71,12 +71,12 @@ private:
 
     long long choose(size_t i) {
         auto label = graph1.get_nodes()[i].first;
-        auto const& label_set = second_graph_label[label]; 
+        auto const& label_set = second_graph_label[label];
         auto probabilities = std::vector<double>(label_set.size(), 0);
         auto acc = 0.;
         for (size_t j = 0; j < label_set.size(); ++j) {
             if (score_factors[to_1d_address(i, label_set[j])] > 0) {
-                acc += pow(pheromon.get_element(i, label_set[j]), ant_parameters::ALPHA) 
+                acc += pow(pheromon.get_element(i, label_set[j]), ant_parameters::ALPHA)
                      * pow(score_factors[to_1d_address(i, label_set[j])], ant_parameters::BETA)
                      * graph_stat.get_statistic(to_1d_address(i, label_set[j]));
             }
@@ -92,7 +92,6 @@ private:
     }
 
     void update_probs(size_t chosen_first, long long chosen_second) {
-        #pragma clang loop vectorize(enable)
         for (size_t i = 0; i < graph2.size(); ++i) {
             score_factors[to_1d_address(chosen_first, i)] = 0;
         }
@@ -101,11 +100,11 @@ private:
             return;
         }
 
-        #pragma clang loop vectorize(enable)
         for (size_t i = 0; i < graph1.size(); ++i) {
             score_factors[to_1d_address(i, chosen_second)] = 0;
         }
 
+        #pragma clang loop vectorize(enable)
         for (auto u : graph1.get_adjacent_list(chosen_first)) {
             for (auto v : graph2.get_adjacent_list(chosen_second)) {
                 if (score_factors[to_1d_address(u, v)]) {
@@ -114,6 +113,7 @@ private:
             }
         }
 
+        #pragma clang loop vectorize(enable)
         for (auto u : inverse1[chosen_first]) {
             for (auto v : inverse2[chosen_second]) {
                 if (score_factors[to_1d_address(u, v)]) {
@@ -150,8 +150,8 @@ private:
     std::uniform_real_distribution<> dis;
 
     inline auto to_1d_address(size_t i, size_t j) { return i * graph2.size() + j; }
-    inline auto to_2d_address(size_t i) { 
-        return std::make_tuple(i / graph2.size(), i % graph2.size()); 
+    inline auto to_2d_address(size_t i) {
+        return std::make_tuple(i / graph2.size(), i % graph2.size());
     }
 };
 

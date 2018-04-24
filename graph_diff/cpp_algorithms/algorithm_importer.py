@@ -40,19 +40,19 @@ setup_pybind11(cfg)
 cfg['compiler_args'] = ['-std=c++1z', '-stdlib=libc++']
 cfg['compiler_args'] += ['-Xpreprocessor', '-fopenmp']
 cfg['linker_args'] = ['-lomp']
-cfg['include_dirs'] = ['ant_algorithm', 'baseline_algorithm']
+cfg['include_dirs'] = ['ordered_ant_algorithm', 'baseline_algorithm']
 cfg['dependencies'] = ['baseline_algorithms_using.hpp', 
                        'baseline_algorithms.hpp', 
                        'baseline_algorithms/baseline_algorithm.hpp',
                        'baseline_algorithms/baseline_algorithm_omp.hpp',
                        'baseline_algorithms/baseline_with_chop_algorithm.hpp',
                        'baseline_algorithms/baseline_with_chop_algorithm_omp.hpp']
-cfg['dependencies'] += ['ant_algorithm/ant_parameters.hpp', 
-                        'ant_algorithm/ant_algorithm.hpp',
-                        'ant_algorithm/graph_stat.hpp',
-                        'ant_algorithm/pathfinder.hpp',
-                        'ant_algorithm/pheromon_table.hpp',
-                        'ant_algorithm/utils.hpp']
+cfg['dependencies'] += ['ordered_ant_algorithm/ant_parameters.hpp', 
+                        'ordered_ant_algorithm/ordered_ant_algorithm.hpp',
+                        'ordered_ant_algorithm/graph_stat.hpp',
+                        'ordered_ant_algorithm/pathfinder.hpp',
+                        'ordered_ant_algorithm/pheromon_table.hpp',
+                        'ordered_ant_algorithm/utils.hpp']
 %>
 */
 #include <pybind11/pybind11.h>
@@ -62,8 +62,8 @@ cfg['dependencies'] += ['ant_algorithm/ant_parameters.hpp',
 
 #include "graph.hpp"
 #include "baseline_algorithms_using.hpp"
-#include "ant_algorithm/ant_algorithm.hpp"
-using graph_diff::algorithm::AntAlgorithm;
+#include "ordered_ant_algorithm/ordered_ant_algorithm.hpp"
+using graph_diff::algorithm::OrderedAntAlgorithm;
 
 template <typename T> using node = std::pair<T, size_t>;
 

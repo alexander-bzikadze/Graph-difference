@@ -1,11 +1,11 @@
 from graph_diff.graph import GraphWithRepetitiveNodesWithRoot
 from graph_diff.graph_diff_algorithm import GraphDiffAlgorithm, GraphMap
-from graph_diff.new_ant_algorithm import parameters
-from graph_diff.new_ant_algorithm.pathfinder import Pathfinder
-from graph_diff.new_ant_algorithm.pheromon_table import PheromonTable
+from graph_diff.unordered_ant_algorithm import parameters
+from graph_diff.unordered_ant_algorithm.pathfinder import Pathfinder
+from graph_diff.unordered_ant_algorithm.pheromon_table import PheromonTable
 
 
-class Algorithm(GraphDiffAlgorithm):
+class UnorderedAntAlgorithm(GraphDiffAlgorithm):
     """
     Realization of heuristic ant algorithm for graph difference problem.
     It is not an exact algorithm, so the mistakes may be made.

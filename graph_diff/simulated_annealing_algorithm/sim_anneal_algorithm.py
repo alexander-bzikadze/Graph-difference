@@ -11,7 +11,7 @@ from graph_diff.graph_diff_algorithm.graph_diff_algorithm import GraphDiffAlgori
 from graph_diff.graph_diff_algorithm.graph_map import GraphMap
 
 
-class Algorithm(GraphDiffAlgorithmWithInit):
+class SimAnnealAlgorithm(GraphDiffAlgorithmWithInit):
     """
     Realization of heuristic simulated annealing algorithm for graph difference problem.
     It is not an exact algorithm, so the mistakes may be made.

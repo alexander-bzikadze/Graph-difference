@@ -1,4 +1,4 @@
-from graph_diff.new_ant_algorithm import parameters
+from graph_diff.unordered_ant_algorithm import parameters
 
 
 class PheromonTable:

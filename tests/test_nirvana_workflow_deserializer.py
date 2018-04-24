@@ -1,13 +1,12 @@
 import json
 import unittest
 
-from graph_diff.ant_algorithm import AntAlgorithm
 from graph_diff.cpp_algorithms.algorithms import CppImport
 from graph_diff.graph_diff_algorithm.compose_graph_diff_algorithm import ComposedGraphDiffAlgorithm
 from graph_diff.nirvana_object_model import Pipeline
 from graph_diff.nirvana_object_model import workflow_deserializer
 from graph_diff.nirvana_object_model.workflow_to_graph_converter import CompleteWorkflowToGraphConverter
-from graph_diff.simulated_annealing_algorithm.algorithm import Algorithm as SimAnnealAlgorithm
+from graph_diff.simulated_annealing_algorithm.sim_anneal_algorithm import SimAnnealAlgorithm as SimAnnealAlgorithm
 
 
 class NirvanaWorkflowDeserializerTest(unittest.TestCase):
@@ -34,13 +33,13 @@ class NirvanaWorkflowDeserializerTest(unittest.TestCase):
         with open('process_instance_upgraded.json') as f:
             workflow2 = workflow_deserializer.deserialize(json.loads(f.read()))
 
-        # Pipeline(AntAlgorithm(), CompleteWorkflowToGraphConverter()).get_diff(workflow1, workflow1)
+        # Pipeline(OrderedAntAlgorithm(), CompleteWorkflowToGraphConverter()).get_diff(workflow1, workflow1)
         # Pipeline(CppImport.LinAntAlgorithm(), CompleteWorkflowToGraphConverter()).get_diff(workflow1, workflow1)
         # Pipeline(SimAnnealAlgorithm(), CompleteWorkflowToGraphConverter()).get_diff(workflow1, workflow1)
         Pipeline(ComposedGraphDiffAlgorithm(CppImport.LinAntAlgorithm(), SimAnnealAlgorithm()),
                  CompleteWorkflowToGraphConverter()).get_diff(workflow1, workflow1)
-        # Pipeline(NewAntAlgorithm(), CompleteWorkflowToGraphConverter()).get_diff(workflow1, workflow2)
-        # Pipeline(CppRun.AntAlgorithm(), CompleteWorkflowToGraphConverter()).get_diff(workflow1, workflow2)
+        # Pipeline(UnorderedAntAlgorithm(), CompleteWorkflowToGraphConverter()).get_diff(workflow1, workflow2)
+        # Pipeline(CppRun.OrderedAntAlgorithm(), CompleteWorkflowToGraphConverter()).get_diff(workflow1, workflow2)
 
 
 if __name__ == '__main__':

@@ -14,8 +14,8 @@ cfg['dependencies'] = ['baseline_algorithms_using.hpp',
 cfg['dependencies'] += ['ant_algorithm/ant_parameters.hpp',
                         'ant_algorithm/ant_algorithm.hpp',
                         'ant_algorithm/graph_stat.hpp',
-                        'ant_algorithm/cubed_pathfinder/pathfinder.hpp',
-                        'ant_algorithm/cubed_pathfinder/pheromon_table.hpp',
+                        #'ant_algorithm/cubed_pathfinder/pathfinder.hpp',
+                        #'ant_algorithm/cubed_pathfinder/pheromon_table.hpp',
                         'ant_algorithm/utils.hpp']
 %>
 */
@@ -61,8 +61,8 @@ auto algorithm(std::vector<node<size_t>> nodes1,
  *  - baseline_with_chop_algorithm
  *  - baseline_algorithm_omp
  *  - baseline_with_chop_algorithm_omp
- *  - lin_ant_algorithm
- *  - ant_algorithm
+ *  - ordered_ant_algorithm
+ *  - unordered_ant_algorithm
  */
 PYBIND11_MODULE(cpp_algorithms, m) {
     m.doc() = "Cpp graph diff algorithms imported into python";
@@ -70,7 +70,7 @@ PYBIND11_MODULE(cpp_algorithms, m) {
     m.def("baseline_with_chop_algorithm",       &algorithm<BaselineWithChopAlgorithm>);
     m.def("baseline_algorithm_omp",             &algorithm<BaselineAlgorithmOmp>);
     m.def("baseline_with_chop_algorithm_omp",   &algorithm<BaselineWithChopAlgorithmOmp>);
-    m.def("lin_ant_algorithm",                  &algorithm<AntAlgorithm<LinearPathfinder>>);
-    m.def("ant_algorithm",                      &algorithm<AntAlgorithm<CubedPathfinder>>);
+    m.def("ordered_ant_algorithm",              &algorithm<AntAlgorithm<OrderedPathfinder>>);
+    m.def("unordered_ant_algorithm",            &algorithm<AntAlgorithm<UnorderedPathfinder>>);
 }
 
