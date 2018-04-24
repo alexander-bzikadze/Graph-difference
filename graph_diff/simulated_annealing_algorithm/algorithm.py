@@ -1,9 +1,9 @@
 from collections import defaultdict
 from copy import copy
+from random import randint
 
 import math
-import scipy
-from scipy.stats import randint
+import numpy
 
 from graph_diff.graph import GraphWithRepetitiveNodesWithRoot
 from graph_diff.graph.graph_printer import GraphPrinter
@@ -63,15 +63,17 @@ class Algorithm(GraphDiffAlgorithmWithInit):
             if global_energy < energy:
                 global_solution = copy(self.current_solution)
                 global_energy = energy
-                same_score = 0
+
             if same_score == self.NUMBER_OF_ITERATIONS_WITH_THE_SAME_SCORE:
                 break
+
             x = self._take_step()
             x_energy = self._score(x)
-            alpha = scipy.random.uniform(0, 1)
+            alpha = numpy.random.uniform(0, 1)
             if alpha < math.exp(-(energy - x_energy) / self.time_law(_)):
                 self.current_solution = x
                 energy = x_energy
+                same_score = 0
 
         self.init_solution = None
         return self.printer.back_transformer(global_solution)
@@ -113,7 +115,7 @@ class Algorithm(GraphDiffAlgorithmWithInit):
 
         solution = copy(self.current_solution)
 
-        change = randint.rvs(0, len(solution))
+        change = randint(0, len(solution) - 1)
 
         label, _ = self.nodes1[change]
         choice = [i for i, (l, _) in enumerate(self.nodes2) if l == label]
@@ -121,7 +123,7 @@ class Algorithm(GraphDiffAlgorithmWithInit):
         if len(choice) < 2:
             return self._take_step(num_try + 1)
 
-        change_with = randint.rvs(0, len(choice))
+        change_with = randint(0, len(choice) - 1)
         change_with = choice[change_with]
 
         i = [i for i, x in enumerate(solution) if x == change_with]
