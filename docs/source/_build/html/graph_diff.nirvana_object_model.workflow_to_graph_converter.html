@@ -1,0 +1,527 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>graph_diff.nirvana_object_model.workflow_to_graph_converter package &#8212; graph_diff alpha 0.1.2 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="graph_diff.ordered_ant_algorithm package" href="graph_diff.ordered_ant_algorithm.html" />
+    <link rel="prev" title="graph_diff.nirvana_object_model.workflow_to_dot_converter package" href="graph_diff.nirvana_object_model.workflow_to_dot_converter.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="graph_diff.ordered_ant_algorithm.html" title="graph_diff.ordered_ant_algorithm package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="graph_diff.nirvana_object_model.workflow_to_dot_converter.html" title="graph_diff.nirvana_object_model.workflow_to_dot_converter package"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">graph_diff alpha 0.1.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="graph_diff.html" >graph_diff package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="graph_diff.nirvana_object_model.html" accesskey="U">graph_diff.nirvana_object_model package</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="graph-diff-nirvana-object-model-workflow-to-graph-converter-package">
+<h1>graph_diff.nirvana_object_model.workflow_to_graph_converter package<a class="headerlink" href="#graph-diff-nirvana-object-model-workflow-to-graph-converter-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter">
+<span id="graph-diff-nirvana-object-model-workflow-to-graph-converter-complete-workflow-to-graph-converter-module"></span><h2>graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter module<a class="headerlink" href="#module-graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter">
+<em class="property">class </em><code class="descclassname">graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.</code><code class="descname">CompleteWorkflowToGraphConverter</code><span class="sig-paren">(</span><em>matched_color='black'</em>, <em>added_color='green3'</em>, <em>deleted_color='red'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph_diff/nirvana_object_model/workflow_to_graph_converter/complete_workflow_to_graph_converter.html#CompleteWorkflowToGraphConverter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#graph_diff.nirvana_object_model.workflow_to_graph_converter.workflow_to_graph_converter.WorkflowToGraphConverter" title="graph_diff.nirvana_object_model.workflow_to_graph_converter.workflow_to_graph_converter.WorkflowToGraphConverter"><code class="xref py py-class docutils literal notranslate"><span class="pre">graph_diff.nirvana_object_model.workflow_to_graph_converter.workflow_to_graph_converter.WorkflowToGraphConverter</span></code></a></p>
+<dl class="attribute">
+<dt id="graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.INPUT_DIVIDER">
+<code class="descname">INPUT_DIVIDER</code><em class="property"> = '&lt;i&gt;'</em><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.INPUT_DIVIDER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.KEY_VALUE_BLOCK_DIVIDER">
+<code class="descname">KEY_VALUE_BLOCK_DIVIDER</code><em class="property"> = '&lt;;&gt;'</em><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.KEY_VALUE_BLOCK_DIVIDER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.KEY_VALUE_DIVIDER">
+<code class="descname">KEY_VALUE_DIVIDER</code><em class="property"> = '&lt;:&gt;'</em><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.KEY_VALUE_DIVIDER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.NEST_DIVIDER">
+<code class="descname">NEST_DIVIDER</code><em class="property"> = '&lt;n&gt;'</em><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.NEST_DIVIDER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.OUTPUT_DIVIDER">
+<code class="descname">OUTPUT_DIVIDER</code><em class="property"> = '&lt;o&gt;'</em><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.OUTPUT_DIVIDER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.block_id">
+<code class="descname">block_id</code><span class="sig-paren">(</span><em>block: graph_diff.nirvana_object_model.workflow.block.Block</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/graph_diff/nirvana_object_model/workflow_to_graph_converter/complete_workflow_to_graph_converter.html#CompleteWorkflowToGraphConverter.block_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.block_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates unique identifier by block.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>block</strong> – block to identify</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">string representation</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.convert">
+<code class="descname">convert</code><span class="sig-paren">(</span><em>workflow: graph_diff.nirvana_object_model.workflow.workflow.Workflow</em><span class="sig-paren">)</span> &#x2192; graph_diff.graph.graph_with_repetitive_nodes_with_root.GraphWithRepetitiveNodesWithRoot<a class="reference internal" href="_modules/graph_diff/nirvana_object_model/workflow_to_graph_converter/complete_workflow_to_graph_converter.html#CompleteWorkflowToGraphConverter.convert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.convert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts workflow to simple graph
+by expanding all its blocks in series of nodes
+so that every input/output nest has its node representation.
+Is reversible transformation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>workflow</strong> – workflow to transform</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">graph representation</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.convert_graph_map">
+<code class="descname">convert_graph_map</code><span class="sig-paren">(</span><em>graph_map: graph_diff.graph_diff_algorithm.graph_map.GraphMap) -&gt; (&lt;class 'graph_diff.nirvana_object_model.workflow.workflow.Workflow'&gt;</em>, <em>&lt;class 'graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer.GraphDotColorer'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph_diff/nirvana_object_model/workflow_to_graph_converter/complete_workflow_to_graph_converter.html#CompleteWorkflowToGraphConverter.convert_graph_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.convert_graph_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts graph map to workflow and colorer object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>graph_map</strong> – graph map to transform</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">workflow and colorer</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.get_block_id">
+<code class="descname">get_block_id</code><span class="sig-paren">(</span><em>node: graph_diff.graph.graph_with_repetitive_nodes_with_root.GraphWithRepetitiveNodesWithRoot.LabeledRepetitiveNode</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph_diff/nirvana_object_model/workflow_to_graph_converter/complete_workflow_to_graph_converter.html#CompleteWorkflowToGraphConverter.get_block_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.get_block_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transformation from block node back to parameters
+that can specify origin block.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node</strong> – node to transform</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">tuple of operation id, options of the origin block</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.get_input_nest">
+<code class="descname">get_input_nest</code><span class="sig-paren">(</span><em>node: graph_diff.graph.graph_with_repetitive_nodes_with_root.GraphWithRepetitiveNodesWithRoot.LabeledRepetitiveNode</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph_diff/nirvana_object_model/workflow_to_graph_converter/complete_workflow_to_graph_converter.html#CompleteWorkflowToGraphConverter.get_input_nest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.get_input_nest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transformation from input node back to parameters
+that can specify origin block.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node</strong> – node to transform</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">tuple of operation id, options</td>
+</tr>
+</tbody>
+</table>
+<p>and input nest of the origin block</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.get_output_nest">
+<code class="descname">get_output_nest</code><span class="sig-paren">(</span><em>node: graph_diff.graph.graph_with_repetitive_nodes_with_root.GraphWithRepetitiveNodesWithRoot.LabeledRepetitiveNode</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph_diff/nirvana_object_model/workflow_to_graph_converter/complete_workflow_to_graph_converter.html#CompleteWorkflowToGraphConverter.get_output_nest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.get_output_nest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transformation from output node back to parameters
+that can specify origin block.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node</strong> – node to transform</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">tuple of operation id, options</td>
+</tr>
+</tbody>
+</table>
+<p>and output nest of the origin block</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.input_nest_id">
+<code class="descname">input_nest_id</code><span class="sig-paren">(</span><em>block: graph_diff.nirvana_object_model.workflow.block.Block</em>, <em>nest_id: str</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/graph_diff/nirvana_object_model/workflow_to_graph_converter/complete_workflow_to_graph_converter.html#CompleteWorkflowToGraphConverter.input_nest_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.input_nest_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates unique identifier by block for block’s input nest.
+It is supposed to be guaranteed from outside that block contains nest_id.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>block</strong> – block to identify</li>
+<li><strong>nest_id</strong> – nest of the block</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">string representation</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.is_block">
+<code class="descname">is_block</code><span class="sig-paren">(</span><em>node: graph_diff.graph.graph_with_repetitive_nodes_with_root.GraphWithRepetitiveNodesWithRoot.LabeledRepetitiveNode</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/graph_diff/nirvana_object_model/workflow_to_graph_converter/complete_workflow_to_graph_converter.html#CompleteWorkflowToGraphConverter.is_block"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.is_block" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if given node is not neither input nor output nor Root node.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node</strong> – node to specify</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">boolean answer</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.is_input_nest">
+<code class="descname">is_input_nest</code><span class="sig-paren">(</span><em>node: graph_diff.graph.graph_with_repetitive_nodes_with_root.GraphWithRepetitiveNodesWithRoot.LabeledRepetitiveNode</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/graph_diff/nirvana_object_model/workflow_to_graph_converter/complete_workflow_to_graph_converter.html#CompleteWorkflowToGraphConverter.is_input_nest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.is_input_nest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if given node has identifier of an input nest.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node</strong> – node to specify</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">boolean answer</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.is_output_nest">
+<code class="descname">is_output_nest</code><span class="sig-paren">(</span><em>node: graph_diff.graph.graph_with_repetitive_nodes_with_root.GraphWithRepetitiveNodesWithRoot.LabeledRepetitiveNode</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/graph_diff/nirvana_object_model/workflow_to_graph_converter/complete_workflow_to_graph_converter.html#CompleteWorkflowToGraphConverter.is_output_nest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.is_output_nest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if given node has identifier of an output nest.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node</strong> – node to specify</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">boolean answer</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.output_nest_id">
+<code class="descname">output_nest_id</code><span class="sig-paren">(</span><em>block: graph_diff.nirvana_object_model.workflow.block.Block</em>, <em>nest_id: str</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/graph_diff/nirvana_object_model/workflow_to_graph_converter/complete_workflow_to_graph_converter.html#CompleteWorkflowToGraphConverter.output_nest_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.output_nest_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates unique identifier by block for block’s output nest.
+It is supposed to be guaranteed from outside that block contains nest_id.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>block</strong> – block to identify</li>
+<li><strong>nest_id</strong> – nest of the block</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">string representation</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.reverse_graph">
+<code class="descname">reverse_graph</code><span class="sig-paren">(</span><em>graph: graph_diff.graph.graph_with_repetitive_nodes_with_root.GraphWithRepetitiveNodesWithRoot</em><span class="sig-paren">)</span> &#x2192; graph_diff.nirvana_object_model.workflow.workflow.Workflow<a class="reference internal" href="_modules/graph_diff/nirvana_object_model/workflow_to_graph_converter/complete_workflow_to_graph_converter.html#CompleteWorkflowToGraphConverter.reverse_graph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.reverse_graph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reverse transformation from graph to workflow.
+Possibility of such transformation should be guaranteed from outside
+or UB will happen.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>graph</strong> – graph to transform</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">original workflow</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-graph_diff.nirvana_object_model.workflow_to_graph_converter.simple_workflow_to_graph_converter">
+<span id="graph-diff-nirvana-object-model-workflow-to-graph-converter-simple-workflow-to-graph-converter-module"></span><h2>graph_diff.nirvana_object_model.workflow_to_graph_converter.simple_workflow_to_graph_converter module<a class="headerlink" href="#module-graph_diff.nirvana_object_model.workflow_to_graph_converter.simple_workflow_to_graph_converter" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="graph_diff.nirvana_object_model.workflow_to_graph_converter.simple_workflow_to_graph_converter.SimpleWorkflowToGraphConverter">
+<em class="property">class </em><code class="descclassname">graph_diff.nirvana_object_model.workflow_to_graph_converter.simple_workflow_to_graph_converter.</code><code class="descname">SimpleWorkflowToGraphConverter</code><span class="sig-paren">(</span><em>matched_color='black'</em>, <em>added_color='green3'</em>, <em>deleted_color='red'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph_diff/nirvana_object_model/workflow_to_graph_converter/simple_workflow_to_graph_converter.html#SimpleWorkflowToGraphConverter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_graph_converter.simple_workflow_to_graph_converter.SimpleWorkflowToGraphConverter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#graph_diff.nirvana_object_model.workflow_to_graph_converter.workflow_to_graph_converter.WorkflowToGraphConverter" title="graph_diff.nirvana_object_model.workflow_to_graph_converter.workflow_to_graph_converter.WorkflowToGraphConverter"><code class="xref py py-class docutils literal notranslate"><span class="pre">graph_diff.nirvana_object_model.workflow_to_graph_converter.workflow_to_graph_converter.WorkflowToGraphConverter</span></code></a></p>
+<p>Simplest workflow to graph converter: every block is one node</p>
+<dl class="attribute">
+<dt id="graph_diff.nirvana_object_model.workflow_to_graph_converter.simple_workflow_to_graph_converter.SimpleWorkflowToGraphConverter.INPUT_DIVIDER">
+<code class="descname">INPUT_DIVIDER</code><em class="property"> = '&lt;i&gt;'</em><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_graph_converter.simple_workflow_to_graph_converter.SimpleWorkflowToGraphConverter.INPUT_DIVIDER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="graph_diff.nirvana_object_model.workflow_to_graph_converter.simple_workflow_to_graph_converter.SimpleWorkflowToGraphConverter.KEY_VALUE_BLOCK_DIVIDER">
+<code class="descname">KEY_VALUE_BLOCK_DIVIDER</code><em class="property"> = '&lt;;&gt;'</em><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_graph_converter.simple_workflow_to_graph_converter.SimpleWorkflowToGraphConverter.KEY_VALUE_BLOCK_DIVIDER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="graph_diff.nirvana_object_model.workflow_to_graph_converter.simple_workflow_to_graph_converter.SimpleWorkflowToGraphConverter.KEY_VALUE_DIVIDER">
+<code class="descname">KEY_VALUE_DIVIDER</code><em class="property"> = '&lt;:&gt;'</em><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_graph_converter.simple_workflow_to_graph_converter.SimpleWorkflowToGraphConverter.KEY_VALUE_DIVIDER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="graph_diff.nirvana_object_model.workflow_to_graph_converter.simple_workflow_to_graph_converter.SimpleWorkflowToGraphConverter.NEST_DIVIDER">
+<code class="descname">NEST_DIVIDER</code><em class="property"> = '&lt;n&gt;'</em><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_graph_converter.simple_workflow_to_graph_converter.SimpleWorkflowToGraphConverter.NEST_DIVIDER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="graph_diff.nirvana_object_model.workflow_to_graph_converter.simple_workflow_to_graph_converter.SimpleWorkflowToGraphConverter.OUTPUT_DIVIDER">
+<code class="descname">OUTPUT_DIVIDER</code><em class="property"> = '&lt;o&gt;'</em><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_graph_converter.simple_workflow_to_graph_converter.SimpleWorkflowToGraphConverter.OUTPUT_DIVIDER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="graph_diff.nirvana_object_model.workflow_to_graph_converter.simple_workflow_to_graph_converter.SimpleWorkflowToGraphConverter.block_id">
+<code class="descname">block_id</code><span class="sig-paren">(</span><em>block: graph_diff.nirvana_object_model.workflow.block.Block</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph_diff/nirvana_object_model/workflow_to_graph_converter/simple_workflow_to_graph_converter.html#SimpleWorkflowToGraphConverter.block_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_graph_converter.simple_workflow_to_graph_converter.SimpleWorkflowToGraphConverter.block_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates id for block.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>block</strong> – block to transform</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">string representation</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph_diff.nirvana_object_model.workflow_to_graph_converter.simple_workflow_to_graph_converter.SimpleWorkflowToGraphConverter.convert">
+<code class="descname">convert</code><span class="sig-paren">(</span><em>workflow: graph_diff.nirvana_object_model.workflow.workflow.Workflow</em><span class="sig-paren">)</span> &#x2192; graph_diff.graph.graph_with_repetitive_nodes_with_root.GraphWithRepetitiveNodesWithRoot<a class="reference internal" href="_modules/graph_diff/nirvana_object_model/workflow_to_graph_converter/simple_workflow_to_graph_converter.html#SimpleWorkflowToGraphConverter.convert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_graph_converter.simple_workflow_to_graph_converter.SimpleWorkflowToGraphConverter.convert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts workflow to graph.
+This transformation is not fully reversible.
+Kind of connection betwixt blocks will be lost.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>workflow</strong> – workflow to convert</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">converted graph</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph_diff.nirvana_object_model.workflow_to_graph_converter.simple_workflow_to_graph_converter.SimpleWorkflowToGraphConverter.convert_graph_map">
+<code class="descname">convert_graph_map</code><span class="sig-paren">(</span><em>graph_map: graph_diff.graph_diff_algorithm.graph_map.GraphMap) -&gt; (&lt;class 'graph_diff.nirvana_object_model.workflow.workflow.Workflow'&gt;</em>, <em>&lt;class 'graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer.GraphMapDotColorer'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph_diff/nirvana_object_model/workflow_to_graph_converter/simple_workflow_to_graph_converter.html#SimpleWorkflowToGraphConverter.convert_graph_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_graph_converter.simple_workflow_to_graph_converter.SimpleWorkflowToGraphConverter.convert_graph_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert graph map to workflow and colorer object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>graph_map</strong> – graph map to be transformed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">composed workflow and colorer for it</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph_diff.nirvana_object_model.workflow_to_graph_converter.simple_workflow_to_graph_converter.SimpleWorkflowToGraphConverter.get_block">
+<code class="descname">get_block</code><span class="sig-paren">(</span><em>node: graph_diff.graph.graph_with_repetitive_nodes_with_root.GraphWithRepetitiveNodesWithRoot.LabeledRepetitiveNode</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph_diff/nirvana_object_model/workflow_to_graph_converter/simple_workflow_to_graph_converter.html#SimpleWorkflowToGraphConverter.get_block"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_graph_converter.simple_workflow_to_graph_converter.SimpleWorkflowToGraphConverter.get_block" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reverses transformation from node to block.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node</strong> – node to transform</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">original block</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph_diff.nirvana_object_model.workflow_to_graph_converter.simple_workflow_to_graph_converter.SimpleWorkflowToGraphConverter.reverse_graph">
+<code class="descname">reverse_graph</code><span class="sig-paren">(</span><em>graph: graph_diff.graph.graph_with_repetitive_nodes_with_root.GraphWithRepetitiveNodesWithRoot</em><span class="sig-paren">)</span> &#x2192; graph_diff.nirvana_object_model.workflow.workflow.Workflow<a class="reference internal" href="_modules/graph_diff/nirvana_object_model/workflow_to_graph_converter/simple_workflow_to_graph_converter.html#SimpleWorkflowToGraphConverter.reverse_graph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_graph_converter.simple_workflow_to_graph_converter.SimpleWorkflowToGraphConverter.reverse_graph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reverse transformation from graph to worflow.
+Possibility of transformation must be guaranteed from outside.
+As this transformation is not fully reversible,
+if nodes (blocks) have edge between them this connection is considered
+connection by execution despite the origin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>graph</strong> – graph to reverse</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">original workflow</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-graph_diff.nirvana_object_model.workflow_to_graph_converter.workflow_to_graph_converter">
+<span id="graph-diff-nirvana-object-model-workflow-to-graph-converter-workflow-to-graph-converter-module"></span><h2>graph_diff.nirvana_object_model.workflow_to_graph_converter.workflow_to_graph_converter module<a class="headerlink" href="#module-graph_diff.nirvana_object_model.workflow_to_graph_converter.workflow_to_graph_converter" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="graph_diff.nirvana_object_model.workflow_to_graph_converter.workflow_to_graph_converter.WorkflowToGraphConverter">
+<em class="property">class </em><code class="descclassname">graph_diff.nirvana_object_model.workflow_to_graph_converter.workflow_to_graph_converter.</code><code class="descname">WorkflowToGraphConverter</code><a class="reference internal" href="_modules/graph_diff/nirvana_object_model/workflow_to_graph_converter/workflow_to_graph_converter.html#WorkflowToGraphConverter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_graph_converter.workflow_to_graph_converter.WorkflowToGraphConverter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>Interface for graph converter</p>
+<dl class="method">
+<dt id="graph_diff.nirvana_object_model.workflow_to_graph_converter.workflow_to_graph_converter.WorkflowToGraphConverter.convert">
+<code class="descname">convert</code><span class="sig-paren">(</span><em>workflow: graph_diff.nirvana_object_model.workflow.workflow.Workflow</em><span class="sig-paren">)</span> &#x2192; graph_diff.graph.graph_with_repetitive_nodes_with_root.GraphWithRepetitiveNodesWithRoot<a class="reference internal" href="_modules/graph_diff/nirvana_object_model/workflow_to_graph_converter/workflow_to_graph_converter.html#WorkflowToGraphConverter.convert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_graph_converter.workflow_to_graph_converter.WorkflowToGraphConverter.convert" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="graph_diff.nirvana_object_model.workflow_to_graph_converter.workflow_to_graph_converter.WorkflowToGraphConverter.convert_graph_map">
+<code class="descname">convert_graph_map</code><span class="sig-paren">(</span><em>graph_map: graph_diff.graph_diff_algorithm.graph_map.GraphMap) -&gt; (&lt;class 'graph_diff.nirvana_object_model.workflow.workflow.Workflow'&gt;</em>, <em>&lt;class 'graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer.GraphDotColorer'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph_diff/nirvana_object_model/workflow_to_graph_converter/workflow_to_graph_converter.html#WorkflowToGraphConverter.convert_graph_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_graph_converter.workflow_to_graph_converter.WorkflowToGraphConverter.convert_graph_map" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="graph_diff.nirvana_object_model.workflow_to_graph_converter.workflow_to_graph_converter.WorkflowToGraphConverter.reverse_graph">
+<code class="descname">reverse_graph</code><span class="sig-paren">(</span><em>graph: graph_diff.graph.graph_with_repetitive_nodes_with_root.GraphWithRepetitiveNodesWithRoot</em><span class="sig-paren">)</span> &#x2192; graph_diff.nirvana_object_model.workflow.workflow.Workflow<a class="reference internal" href="_modules/graph_diff/nirvana_object_model/workflow_to_graph_converter/workflow_to_graph_converter.html#WorkflowToGraphConverter.reverse_graph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_graph_converter.workflow_to_graph_converter.WorkflowToGraphConverter.reverse_graph" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-graph_diff.nirvana_object_model.workflow_to_graph_converter">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-graph_diff.nirvana_object_model.workflow_to_graph_converter" title="Permalink to this headline">¶</a></h2>
+<p>Module for converting workflows to simple graphs.
+All converters have one interface.
+Currently there are two converters: one is fully reversible, one not
+(but a lot way faster).</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">graph_diff.nirvana_object_model.workflow_to_graph_converter package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter">graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter module</a></li>
+<li><a class="reference internal" href="#module-graph_diff.nirvana_object_model.workflow_to_graph_converter.simple_workflow_to_graph_converter">graph_diff.nirvana_object_model.workflow_to_graph_converter.simple_workflow_to_graph_converter module</a></li>
+<li><a class="reference internal" href="#module-graph_diff.nirvana_object_model.workflow_to_graph_converter.workflow_to_graph_converter">graph_diff.nirvana_object_model.workflow_to_graph_converter.workflow_to_graph_converter module</a></li>
+<li><a class="reference internal" href="#module-graph_diff.nirvana_object_model.workflow_to_graph_converter">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="graph_diff.nirvana_object_model.workflow_to_dot_converter.html"
+                        title="previous chapter">graph_diff.nirvana_object_model.workflow_to_dot_converter package</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="graph_diff.ordered_ant_algorithm.html"
+                        title="next chapter">graph_diff.ordered_ant_algorithm package</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/graph_diff.nirvana_object_model.workflow_to_graph_converter.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="graph_diff.ordered_ant_algorithm.html" title="graph_diff.ordered_ant_algorithm package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="graph_diff.nirvana_object_model.workflow_to_dot_converter.html" title="graph_diff.nirvana_object_model.workflow_to_dot_converter package"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">graph_diff alpha 0.1.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="graph_diff.html" >graph_diff package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="graph_diff.nirvana_object_model.html" >graph_diff.nirvana_object_model package</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Aleksandr Bzikadze.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.3.
+    </div>
+  </body>
+</html>

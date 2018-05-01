@@ -23,7 +23,7 @@ def print_images(name: str, graph1: GraphWithRepetitiveNodesWithRoot, graph2: Gr
 
     dot_for_print = print_together(dot1, dot_diff, dot2, names=['Before_changes', 'Changes', 'After_changes'])
 
-    dot_for_print.write(path=name + '.png', format='png')
+    dot_for_print.write(path=f'for_presentation/{name}.png', format='png')
 
 
 def abstract_problem():

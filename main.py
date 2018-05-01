@@ -62,16 +62,19 @@ from graph_diff.graph import rnr_graph, lr_node
 from graph_diff.graph_diff_algorithm.compose_graph_diff_algorithm import ComposedGraphDiffAlgorithm
 from graph_diff.simulated_annealing_algorithm.sim_anneal_algorithm import SimAnnealAlgorithm as SimAnnealAlgorithm
 
-NUM = 30
+NUM = 5
 
-graph1 = rnr_graph()
-graph2 = rnr_graph()
-for i in range(1, NUM + 1):
-    for j in range(i + 1, NUM + 1):
-        graph1.add_edge(lr_node(1, i), lr_node(1, j))
-        graph2.add_edge(lr_node(1, i), lr_node(1, j))
+def full_graph(num: int):
+    graph = rnr_graph()
+    for i in range(1, num + 1):
+        for j in range(i + 1, num + 1):
+            graph.add_edge(lr_node(1, i), lr_node(1, j))
+    return graph
 
-algo = ComposedGraphDiffAlgorithm(CppImport.LinAntAlgorithm(), SimAnnealAlgorithm())
+graph1 = full_graph(NUM)
+graph2 = full_graph(NUM)
+
+algo = SimAnnealAlgorithm()
 algo.construct_diff(graph1, graph2)
 
 # with open('big_graph.txt', mode='w') as file:

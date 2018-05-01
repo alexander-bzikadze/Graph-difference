@@ -34,8 +34,7 @@ class WorkflowToDotConverter:
         :return:            string representation
         """
 
-        res = block.operation.operation_id + str(hash(block.options)) + '_' + addition + self._separator
-        return res
+        return f'{block.operation.operation_id}{str(hash(block.options))}_{addition}{self._separator}'.replace(' ', '_')
 
     @staticmethod
     def __block_body_printer(block: Block) -> str:
@@ -48,12 +47,12 @@ class WorkflowToDotConverter:
 
         outputs = block.operation.outputs
         outputs = zip(outputs, outputs)
-        outputs = '|'.join(['<o' + a + '>' + b for a, b in outputs])
+        outputs = '|'.join(['<o' + a + '> ' + b for a, b in outputs])
         inputs = block.operation.inputs
         inputs = zip(inputs, inputs)
-        inputs = '|'.join(['<i' + a + '>' + b for a, b in inputs])
+        inputs = '|'.join(['<i' + a + '> ' + b for a, b in inputs])
 
-        return '{ {' + inputs + '} | ' + '"' + block.operation.operation_id + '"' + ' | {' + outputs + '}}'
+        return f'{{{{{inputs}}}|"{block.operation.operation_id}"|{{{outputs}}}}}'
 
     def __edge_node_conversion(self, block: Block, num: int, nest: str, where: str = '') -> str:
         """
@@ -66,7 +65,7 @@ class WorkflowToDotConverter:
         :return:        string representation of connection in pydot format
         """
 
-        return '"' + self.__block_id_generator(block, str(num)) + '"' + ':' + where + nest
+        return f'{self.__block_id_generator(block, str(num))}:{where}{nest}'
 
     def convert_workflow(self,
                          workflow: Workflow,
@@ -105,6 +104,17 @@ class WorkflowToDotConverter:
                                   dst=self.__edge_node_conversion(to_block, to_num, input_nest, 'i'),
                                   color=colors.color_data_connection(from_block, from_num, output_nest,
                                                                      to_block, to_num, input_nest))
+
+                # Cause pydot is an imbecile
+                # They think they can wrap edge with "".
+                # In our case it totally kills record shape
+                fr, to = edge.obj_dict['points']
+                if fr[0] == '"' and fr[-1] == '"':
+                    fr = fr[1:len(fr)-1]
+                if to[0] == '"' and to[-1] == '"':
+                    to = to[1:len(to)-1]
+                edge.obj_dict['points'] = (fr, to)
+
                 dot.add_edge(edge)
 
         for (from_block, from_num), a2 in workflow.items_by_exc():
@@ -112,6 +122,14 @@ class WorkflowToDotConverter:
                 edge = pydot.Edge(src=self.__edge_node_conversion(from_block, from_num, self.BY_EXC),
                                   dst=self.__edge_node_conversion(to_block, to_num, self.BY_EXC),
                                   color=colors.color_exc_connection(from_block, from_num, to_block, to_num))
+
+                fr, to = edge.obj_dict['points']
+                if fr[0] == '"' and fr[-1] == '"':
+                    fr = fr[1:len(fr)-1]
+                if to[0] == '"' and to[-1] == '"':
+                    to = to[1:len(to)-1]
+                edge.obj_dict['points'] = (fr, to)
+
                 dot.add_edge(edge)
 
         return dot

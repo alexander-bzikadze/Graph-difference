@@ -1,0 +1,177 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>graph_diff.nirvana_object_model.pipeline &#8212; graph_diff alpha 0.1.2 documentation</title>
+    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">graph_diff alpha 0.1.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for graph_diff.nirvana_object_model.pipeline</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">graph_diff.graph_diff_algorithm</span> <span class="k">import</span> <span class="n">GraphDiffAlgorithm</span>
+<span class="kn">from</span> <span class="nn">graph_diff.nirvana_object_model.workflow</span> <span class="k">import</span> <span class="n">Workflow</span>
+<span class="kn">from</span> <span class="nn">graph_diff.nirvana_object_model.workflow_to_dot_converter</span> <span class="k">import</span> <span class="n">WorkflowToDotConverter</span><span class="p">,</span> <span class="n">print_together</span>
+<span class="kn">from</span> <span class="nn">graph_diff.nirvana_object_model.workflow_to_graph_converter</span> <span class="k">import</span> <span class="n">WorkflowToGraphConverter</span>
+
+
+<div class="viewcode-block" id="Pipeline"><a class="viewcode-back" href="../../../graph_diff.nirvana_object_model.html#graph_diff.nirvana_object_model.pipeline.Pipeline">[docs]</a><span class="k">class</span> <span class="nc">Pipeline</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Pipeline for comparison of nirvana workflows&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">algorithm</span><span class="p">:</span> <span class="n">GraphDiffAlgorithm</span><span class="p">,</span>
+                 <span class="n">workflow_converter</span><span class="p">:</span> <span class="n">WorkflowToGraphConverter</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param algorithm:           algorithm to be used</span>
+<span class="sd">        :param workflow_converter:  workflow converter to simple graph to be used</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_algo</span> <span class="o">=</span> <span class="n">algorithm</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_to_abstract_converter</span> <span class="o">=</span> <span class="n">workflow_converter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_to_dot_converter</span> <span class="o">=</span> <span class="n">WorkflowToDotConverter</span>
+
+<div class="viewcode-block" id="Pipeline.get_diff"><a class="viewcode-back" href="../../../graph_diff.nirvana_object_model.html#graph_diff.nirvana_object_model.pipeline.Pipeline.get_diff">[docs]</a>    <span class="k">def</span> <span class="nf">get_diff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">workflow1</span><span class="p">:</span> <span class="n">Workflow</span><span class="p">,</span>
+                 <span class="n">workflow2</span><span class="p">:</span> <span class="n">Workflow</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Evaluates difference between workflow1 and workflow 2.</span>
+
+<span class="sd">        :param workflow1:   original workflow</span>
+<span class="sd">        :param workflow2:   changed workflow</span>
+<span class="sd">        :return:            tuple of composed workflow and colorer object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Transforming given workflow to abstract graphs</span>
+        <span class="n">graph1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_abstract_converter</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">workflow</span><span class="o">=</span><span class="n">workflow1</span><span class="p">)</span>
+        <span class="n">graph2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_abstract_converter</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">workflow</span><span class="o">=</span><span class="n">workflow2</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;len 1&#39;</span><span class="p">,</span> <span class="nb">sum</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">graph1</span><span class="o">.</span><span class="n">get_list_of_adjacent_nodes</span><span class="p">(</span><span class="n">node</span><span class="p">))</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">graph1</span><span class="p">]))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;len 2&#39;</span><span class="p">,</span> <span class="nb">sum</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">graph2</span><span class="o">.</span><span class="n">get_list_of_adjacent_nodes</span><span class="p">(</span><span class="n">node</span><span class="p">))</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">graph2</span><span class="p">]))</span>
+
+        <span class="c1"># Constructing difference &#39;twixt abstract graphs.</span>
+        <span class="n">graph_map</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_algo</span><span class="o">.</span><span class="n">construct_diff</span><span class="p">(</span><span class="n">graph1</span><span class="o">=</span><span class="n">graph1</span><span class="p">,</span> <span class="n">graph2</span><span class="o">=</span><span class="n">graph2</span><span class="p">)</span>
+
+        <span class="c1"># Evaluation of complete difference between graphs.</span>
+        <span class="n">graph_map</span><span class="o">.</span><span class="n">eval_difference_complete</span><span class="p">()</span>
+
+        <span class="c1"># print(&#39;Score&#39;, GraphMapComparatorByEdgeNum().comparable_representation(graph_map))</span>
+        <span class="c1"># print(graph_map.get_edge_overlap_from_first())</span>
+        <span class="c1"># print(graph_map.get_edges_in_1_not_in_2())</span>
+        <span class="c1"># print(graph_map.get_edges_in_2_not_in_1())</span>
+        <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">graph_map</span><span class="o">.</span><span class="n">get_edge_overlap_from_first</span><span class="p">()))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">graph_map</span><span class="o">.</span><span class="n">get_edges_in_1_not_in_2</span><span class="p">()))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">graph_map</span><span class="o">.</span><span class="n">get_edges_in_2_not_in_1</span><span class="p">()))</span>
+
+        <span class="c1"># Converting graph difference back to normal workflow with function of colors</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_abstract_converter</span><span class="o">.</span><span class="n">convert_graph_map</span><span class="p">(</span><span class="n">graph_map</span><span class="o">=</span><span class="n">graph_map</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Pipeline.get_dot_diff"><a class="viewcode-back" href="../../../graph_diff.nirvana_object_model.html#graph_diff.nirvana_object_model.pipeline.Pipeline.get_dot_diff">[docs]</a>    <span class="k">def</span> <span class="nf">get_dot_diff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                     <span class="n">workflow1</span><span class="p">:</span> <span class="n">Workflow</span><span class="p">,</span>
+                     <span class="n">workflow2</span><span class="p">:</span> <span class="n">Workflow</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Evaluated difference between workflows and</span>
+<span class="sd">        returns a pydot.Dot representation of that.</span>
+
+<span class="sd">        :param workflow1:   original workflow</span>
+<span class="sd">        :param workflow2:   changed workflow</span>
+<span class="sd">        :return:            pydot.Dot representation of difference</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">workflow_diff</span><span class="p">,</span> <span class="n">block_colors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_diff</span><span class="p">(</span><span class="n">workflow1</span><span class="p">,</span> <span class="n">workflow2</span><span class="p">)</span>
+
+        <span class="c1"># Conversion of workflow with colors to dot.</span>
+        <span class="n">dot_diff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_dot_converter</span><span class="p">()</span><span class="o">.</span><span class="n">convert_workflow</span><span class="p">(</span><span class="n">workflow</span><span class="o">=</span><span class="n">workflow_diff</span><span class="p">,</span>
+                                                             <span class="n">colors</span><span class="o">=</span><span class="n">block_colors</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dot_diff</span></div>
+
+<div class="viewcode-block" id="Pipeline.print_diff"><a class="viewcode-back" href="../../../graph_diff.nirvana_object_model.html#graph_diff.nirvana_object_model.pipeline.Pipeline.print_diff">[docs]</a>    <span class="k">def</span> <span class="nf">print_diff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                   <span class="n">workflow1</span><span class="p">:</span> <span class="n">Workflow</span><span class="p">,</span>
+                   <span class="n">workflow2</span><span class="p">:</span> <span class="n">Workflow</span><span class="p">,</span>
+                   <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Evaluates difference between worflows and prints</span>
+<span class="sd">        these difference by specified path.</span>
+
+<span class="sd">        :param workflow1:</span>
+<span class="sd">        :param workflow2:</span>
+<span class="sd">        :param path:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dot_workflow1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_dot_converter</span><span class="p">(</span><span class="s2">&quot;1&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">convert_workflow</span><span class="p">(</span><span class="n">workflow</span><span class="o">=</span><span class="n">workflow1</span><span class="p">)</span>
+        <span class="n">dot_workflow2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_dot_converter</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">convert_workflow</span><span class="p">(</span><span class="n">workflow</span><span class="o">=</span><span class="n">workflow2</span><span class="p">)</span>
+
+        <span class="n">dot_diff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_dot_diff</span><span class="p">(</span><span class="n">workflow1</span><span class="p">,</span> <span class="n">workflow2</span><span class="p">)</span>
+
+        <span class="n">print_together</span><span class="p">(</span><span class="n">dot_workflow1</span><span class="p">,</span>
+                       <span class="n">dot_diff</span><span class="p">,</span>
+                       <span class="n">dot_workflow2</span><span class="p">,</span>
+                       <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;from_workflow&#39;</span><span class="p">,</span> <span class="s1">&#39;diff_workflow&#39;</span><span class="p">,</span> <span class="s1">&#39;to_workflow&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">graph_diff alpha 0.1.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Aleksandr Bzikadze.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.3.
+    </div>
+  </body>
+</html>

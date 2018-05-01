@@ -1,0 +1,262 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>graph_diff.nirvana_object_model.workflow_to_dot_converter package &#8212; graph_diff alpha 0.1.2 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="graph_diff.nirvana_object_model.workflow_to_graph_converter package" href="graph_diff.nirvana_object_model.workflow_to_graph_converter.html" />
+    <link rel="prev" title="graph_diff.nirvana_object_model.workflow package" href="graph_diff.nirvana_object_model.workflow.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="graph_diff.nirvana_object_model.workflow_to_graph_converter.html" title="graph_diff.nirvana_object_model.workflow_to_graph_converter package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="graph_diff.nirvana_object_model.workflow.html" title="graph_diff.nirvana_object_model.workflow package"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">graph_diff alpha 0.1.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="graph_diff.html" >graph_diff package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="graph_diff.nirvana_object_model.html" accesskey="U">graph_diff.nirvana_object_model package</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="graph-diff-nirvana-object-model-workflow-to-dot-converter-package">
+<h1>graph_diff.nirvana_object_model.workflow_to_dot_converter package<a class="headerlink" href="#graph-diff-nirvana-object-model-workflow-to-dot-converter-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer">
+<span id="graph-diff-nirvana-object-model-workflow-to-dot-converter-graph-map-dot-colorer-module"></span><h2>graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer module<a class="headerlink" href="#module-graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer.GraphDotColorer">
+<em class="property">class </em><code class="descclassname">graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer.</code><code class="descname">GraphDotColorer</code><a class="reference internal" href="_modules/graph_diff/nirvana_object_model/workflow_to_dot_converter/graph_map_dot_colorer.html#GraphDotColorer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer.GraphDotColorer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>Interface for graph workflow colorer</p>
+<dl class="method">
+<dt id="graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer.GraphDotColorer.color_data_connection">
+<code class="descname">color_data_connection</code><span class="sig-paren">(</span><em>from_block: graph_diff.nirvana_object_model.workflow.block.Block</em>, <em>from_number: int</em>, <em>output_nest: str</em>, <em>to_block: graph_diff.nirvana_object_model.workflow.block.Block</em>, <em>to_number: int</em>, <em>input_nest: str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph_diff/nirvana_object_model/workflow_to_dot_converter/graph_map_dot_colorer.html#GraphDotColorer.color_data_connection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer.GraphDotColorer.color_data_connection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer.GraphDotColorer.color_exc_connection">
+<code class="descname">color_exc_connection</code><span class="sig-paren">(</span><em>from_block: graph_diff.nirvana_object_model.workflow.block.Block</em>, <em>from_number: int</em>, <em>to_block: graph_diff.nirvana_object_model.workflow.block.Block</em>, <em>to_number: int</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph_diff/nirvana_object_model/workflow_to_dot_converter/graph_map_dot_colorer.html#GraphDotColorer.color_exc_connection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer.GraphDotColorer.color_exc_connection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer.GraphDotColorer.color_of_block">
+<code class="descname">color_of_block</code><span class="sig-paren">(</span><em>block: graph_diff.nirvana_object_model.workflow.block.Block</em>, <em>number: int</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph_diff/nirvana_object_model/workflow_to_dot_converter/graph_map_dot_colorer.html#GraphDotColorer.color_of_block"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer.GraphDotColorer.color_of_block" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer.GraphMapDotColorer">
+<em class="property">class </em><code class="descclassname">graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer.</code><code class="descname">GraphMapDotColorer</code><span class="sig-paren">(</span><em>block_colors</em>, <em>data_connection_colors</em>, <em>exc_connection_colors</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph_diff/nirvana_object_model/workflow_to_dot_converter/graph_map_dot_colorer.html#GraphMapDotColorer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer.GraphMapDotColorer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer.GraphDotColorer" title="graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer.GraphDotColorer"><code class="xref py py-class docutils literal notranslate"><span class="pre">graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer.GraphDotColorer</span></code></a></p>
+<p>Realization of GraphDotColorer that is interface over three dictionaries</p>
+<dl class="method">
+<dt id="graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer.GraphMapDotColorer.color_data_connection">
+<code class="descname">color_data_connection</code><span class="sig-paren">(</span><em>from_block: graph_diff.nirvana_object_model.workflow.block.Block</em>, <em>from_number: int</em>, <em>output_nest: str</em>, <em>to_block: graph_diff.nirvana_object_model.workflow.block.Block</em>, <em>to_number: int</em>, <em>input_nest: str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph_diff/nirvana_object_model/workflow_to_dot_converter/graph_map_dot_colorer.html#GraphMapDotColorer.color_data_connection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer.GraphMapDotColorer.color_data_connection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer.GraphMapDotColorer.color_exc_connection">
+<code class="descname">color_exc_connection</code><span class="sig-paren">(</span><em>from_block: graph_diff.nirvana_object_model.workflow.block.Block</em>, <em>from_number: int</em>, <em>to_block: graph_diff.nirvana_object_model.workflow.block.Block</em>, <em>to_number: int</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph_diff/nirvana_object_model/workflow_to_dot_converter/graph_map_dot_colorer.html#GraphMapDotColorer.color_exc_connection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer.GraphMapDotColorer.color_exc_connection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer.GraphMapDotColorer.color_of_block">
+<code class="descname">color_of_block</code><span class="sig-paren">(</span><em>block: graph_diff.nirvana_object_model.workflow.block.Block</em>, <em>number: int</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph_diff/nirvana_object_model/workflow_to_dot_converter/graph_map_dot_colorer.html#GraphMapDotColorer.color_of_block"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer.GraphMapDotColorer.color_of_block" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer.StandardGraphDotColorer">
+<em class="property">class </em><code class="descclassname">graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer.</code><code class="descname">StandardGraphDotColorer</code><a class="reference internal" href="_modules/graph_diff/nirvana_object_model/workflow_to_dot_converter/graph_map_dot_colorer.html#StandardGraphDotColorer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer.StandardGraphDotColorer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer.GraphDotColorer" title="graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer.GraphDotColorer"><code class="xref py py-class docutils literal notranslate"><span class="pre">graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer.GraphDotColorer</span></code></a></p>
+<p>Standard realization of GraphDotColorer: colors all elements in standard color</p>
+<dl class="attribute">
+<dt id="graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer.StandardGraphDotColorer.STANDARD_COLOR">
+<code class="descname">STANDARD_COLOR</code><em class="property"> = 'black'</em><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer.StandardGraphDotColorer.STANDARD_COLOR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer.StandardGraphDotColorer.color_data_connection">
+<code class="descname">color_data_connection</code><span class="sig-paren">(</span><em>from_block: graph_diff.nirvana_object_model.workflow.block.Block</em>, <em>from_number: int</em>, <em>output_nest: str</em>, <em>to_block: graph_diff.nirvana_object_model.workflow.block.Block</em>, <em>to_number: int</em>, <em>input_nest: str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph_diff/nirvana_object_model/workflow_to_dot_converter/graph_map_dot_colorer.html#StandardGraphDotColorer.color_data_connection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer.StandardGraphDotColorer.color_data_connection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer.StandardGraphDotColorer.color_exc_connection">
+<code class="descname">color_exc_connection</code><span class="sig-paren">(</span><em>from_block: graph_diff.nirvana_object_model.workflow.block.Block</em>, <em>from_number: int</em>, <em>to_block: graph_diff.nirvana_object_model.workflow.block.Block</em>, <em>to_number: int</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph_diff/nirvana_object_model/workflow_to_dot_converter/graph_map_dot_colorer.html#StandardGraphDotColorer.color_exc_connection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer.StandardGraphDotColorer.color_exc_connection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer.StandardGraphDotColorer.color_of_block">
+<code class="descname">color_of_block</code><span class="sig-paren">(</span><em>block: graph_diff.nirvana_object_model.workflow.block.Block</em>, <em>number: int</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph_diff/nirvana_object_model/workflow_to_dot_converter/graph_map_dot_colorer.html#StandardGraphDotColorer.color_of_block"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer.StandardGraphDotColorer.color_of_block" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-graph_diff.nirvana_object_model.workflow_to_dot_converter.workflow_to_dot_converter">
+<span id="graph-diff-nirvana-object-model-workflow-to-dot-converter-workflow-to-dot-converter-module"></span><h2>graph_diff.nirvana_object_model.workflow_to_dot_converter.workflow_to_dot_converter module<a class="headerlink" href="#module-graph_diff.nirvana_object_model.workflow_to_dot_converter.workflow_to_dot_converter" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="graph_diff.nirvana_object_model.workflow_to_dot_converter.workflow_to_dot_converter.WorkflowToDotConverter">
+<em class="property">class </em><code class="descclassname">graph_diff.nirvana_object_model.workflow_to_dot_converter.workflow_to_dot_converter.</code><code class="descname">WorkflowToDotConverter</code><span class="sig-paren">(</span><em>separator=''</em>, <em>graph_type='digraph'</em>, <em>node_shape='record'</em>, <em>general_color='black'</em>, <em>general_style='&quot;rounded</em>, <em>filled&quot;'</em>, <em>changed_style='&quot;rounded</em>, <em>filled</em>, <em>bold&quot;'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph_diff/nirvana_object_model/workflow_to_dot_converter/workflow_to_dot_converter.html#WorkflowToDotConverter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_dot_converter.workflow_to_dot_converter.WorkflowToDotConverter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="graph_diff.nirvana_object_model.workflow_to_dot_converter.workflow_to_dot_converter.WorkflowToDotConverter.BY_EXC">
+<code class="descname">BY_EXC</code><em class="property"> = 'by_exc'</em><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_dot_converter.workflow_to_dot_converter.WorkflowToDotConverter.BY_EXC" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="graph_diff.nirvana_object_model.workflow_to_dot_converter.workflow_to_dot_converter.WorkflowToDotConverter.convert_workflow">
+<code class="descname">convert_workflow</code><span class="sig-paren">(</span><em>workflow: graph_diff.nirvana_object_model.workflow.workflow.Workflow</em>, <em>colors: graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer.GraphDotColorer = &lt;graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer.StandardGraphDotColorer object&gt;</em><span class="sig-paren">)</span> &#x2192; pydot.Dot<a class="reference internal" href="_modules/graph_diff/nirvana_object_model/workflow_to_dot_converter/workflow_to_dot_converter.html#WorkflowToDotConverter.convert_workflow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_dot_converter.workflow_to_dot_converter.WorkflowToDotConverter.convert_workflow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert workflow to pydot.Dot.
+Elements of workflow will be colored with colors defined in colors object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>workflow</strong> – workflow to transform</li>
+<li><strong>colors</strong> – colors for workflow elements</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">pydot representation of workflow</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="graph_diff.nirvana_object_model.workflow_to_dot_converter.workflow_to_dot_converter.print_together">
+<code class="descclassname">graph_diff.nirvana_object_model.workflow_to_dot_converter.workflow_to_dot_converter.</code><code class="descname">print_together</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; pydot.Dot<a class="reference internal" href="_modules/graph_diff/nirvana_object_model/workflow_to_dot_converter/workflow_to_dot_converter.html#print_together"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graph_diff.nirvana_object_model.workflow_to_dot_converter.workflow_to_dot_converter.print_together" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints all workflow as one pydot.Dot object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>args</strong> – workflows to print</li>
+<li><strong>names</strong> – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-graph_diff.nirvana_object_model.workflow_to_dot_converter">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-graph_diff.nirvana_object_model.workflow_to_dot_converter" title="Permalink to this headline">¶</a></h2>
+<p>Module for converting workflow to pydot format.
+Contains box-class for coloring elements of workflow
+and the converter.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">graph_diff.nirvana_object_model.workflow_to_dot_converter package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer">graph_diff.nirvana_object_model.workflow_to_dot_converter.graph_map_dot_colorer module</a></li>
+<li><a class="reference internal" href="#module-graph_diff.nirvana_object_model.workflow_to_dot_converter.workflow_to_dot_converter">graph_diff.nirvana_object_model.workflow_to_dot_converter.workflow_to_dot_converter module</a></li>
+<li><a class="reference internal" href="#module-graph_diff.nirvana_object_model.workflow_to_dot_converter">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="graph_diff.nirvana_object_model.workflow.html"
+                        title="previous chapter">graph_diff.nirvana_object_model.workflow package</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="graph_diff.nirvana_object_model.workflow_to_graph_converter.html"
+                        title="next chapter">graph_diff.nirvana_object_model.workflow_to_graph_converter package</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/graph_diff.nirvana_object_model.workflow_to_dot_converter.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="graph_diff.nirvana_object_model.workflow_to_graph_converter.html" title="graph_diff.nirvana_object_model.workflow_to_graph_converter package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="graph_diff.nirvana_object_model.workflow.html" title="graph_diff.nirvana_object_model.workflow package"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">graph_diff alpha 0.1.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="graph_diff.html" >graph_diff package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="graph_diff.nirvana_object_model.html" >graph_diff.nirvana_object_model package</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Aleksandr Bzikadze.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.3.
+    </div>
+  </body>
+</html>

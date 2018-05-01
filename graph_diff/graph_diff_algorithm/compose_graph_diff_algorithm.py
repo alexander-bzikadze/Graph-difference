@@ -13,6 +13,7 @@ class ComposedGraphDiffAlgorithm(GraphDiffAlgorithm):
                  *other_algorithms: GraphDiffAlgorithmWithInit):
         self.first = first_algorithm
         self.others = list(other_algorithms)
+        self.__name__ = ' >> '.join(map(lambda alg: type(alg).__name__, [self.first] + self.others))
 
     def construct_diff(self,
                        graph1: GraphWithRepetitiveNodesWithRoot,

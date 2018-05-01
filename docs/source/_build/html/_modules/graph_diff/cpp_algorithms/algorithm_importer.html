@@ -1,0 +1,165 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>graph_diff.cpp_algorithms.algorithm_importer &#8212; graph_diff alpha 0.1.2 documentation</title>
+    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">graph_diff alpha 0.1.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for graph_diff.cpp_algorithms.algorithm_importer</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">import</span> <span class="nn">stringcase</span>
+
+<span class="kn">from</span> <span class="nn">graph_diff.cpp_algorithms.parameters</span> <span class="k">import</span> <span class="n">SUPPORTED_ALGORITHMS</span>
+
+
+<div class="viewcode-block" id="AlgorithmImporter"><a class="viewcode-back" href="../../../graph_diff.cpp_algorithms.html#graph_diff.cpp_algorithms.algorithm_importer.AlgorithmImporter">[docs]</a><span class="k">class</span> <span class="nc">AlgorithmImporter</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Class for importing cpp algorithms as python module&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__current_dir</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__current_dir</span><span class="p">(),</span> <span class="s1">&#39;cpp_algorithms.cpp&#39;</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__print_importer</span><span class="p">()</span>
+
+        <span class="c1"># noinspection PyUnresolvedReferences</span>
+        <span class="kn">import</span> <span class="nn">cppimport.import_hook</span>
+
+        <span class="c1"># noinspection PyUnresolvedReferences</span>
+        <span class="kn">import</span> <span class="nn">cpp_algorithms</span>
+        <span class="c1"># due to cppimport.import_hook and __location__</span>
+        <span class="c1"># we import cpp_algorithms.cpp and are able to use it</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">module</span> <span class="o">=</span> <span class="n">cpp_algorithms</span>
+
+        <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__current_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)))</span>
+
+    <span class="k">def</span> <span class="nf">__print_importer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">algorithms</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="s1">&#39;m.def(&quot;{stringcase.snakecase(alg_name)}&quot;, &amp;algorithm&lt;size_t, </span><span class="si">{alg_name}</span><span class="s1">&gt;);&#39;</span>
+                      <span class="k">for</span> <span class="n">alg_name</span> <span class="ow">in</span> <span class="n">SUPPORTED_ALGORITHMS</span><span class="p">]</span>
+        <span class="n">algorithms</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">    &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">algorithms</span><span class="p">)</span>
+
+        <span class="n">printed</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;&quot;&quot;/*cppimport</span>
+<span class="s2">&lt;%</span>
+<span class="s2">setup_pybind11(cfg)</span>
+<span class="s2">cfg[&#39;compiler_args&#39;] = [&#39;-std=c++1z&#39;, &#39;-stdlib=libc++&#39;]</span>
+<span class="s2">cfg[&#39;compiler_args&#39;] += [&#39;-Xpreprocessor&#39;, &#39;-fopenmp&#39;]</span>
+<span class="s2">cfg[&#39;linker_args&#39;] = [&#39;-lomp&#39;]</span>
+<span class="s2">cfg[&#39;include_dirs&#39;] = [&#39;ordered_ant_algorithm&#39;, &#39;baseline_algorithm&#39;]</span>
+<span class="s2">cfg[&#39;dependencies&#39;] = [&#39;baseline_algorithms_using.hpp&#39;, </span>
+<span class="s2">                       &#39;baseline_algorithms.hpp&#39;, </span>
+<span class="s2">                       &#39;baseline_algorithms/baseline_algorithm.hpp&#39;,</span>
+<span class="s2">                       &#39;baseline_algorithms/baseline_algorithm_omp.hpp&#39;,</span>
+<span class="s2">                       &#39;baseline_algorithms/baseline_with_chop_algorithm.hpp&#39;,</span>
+<span class="s2">                       &#39;baseline_algorithms/baseline_with_chop_algorithm_omp.hpp&#39;]</span>
+<span class="s2">cfg[&#39;dependencies&#39;] += [&#39;ordered_ant_algorithm/ant_parameters.hpp&#39;, </span>
+<span class="s2">                        &#39;ordered_ant_algorithm/ordered_ant_algorithm.hpp&#39;,</span>
+<span class="s2">                        &#39;ordered_ant_algorithm/graph_stat.hpp&#39;,</span>
+<span class="s2">                        &#39;ordered_ant_algorithm/pathfinder.hpp&#39;,</span>
+<span class="s2">                        &#39;ordered_ant_algorithm/pheromon_table.hpp&#39;,</span>
+<span class="s2">                        &#39;ordered_ant_algorithm/utils.hpp&#39;]</span>
+<span class="s2">%&gt;</span>
+<span class="s2">*/</span>
+<span class="s2">#include &lt;pybind11/pybind11.h&gt;</span>
+<span class="s2">#include &lt;pybind11/stl.h&gt;</span>
+<span class="s2">#include &lt;vector&gt;</span>
+<span class="s2">#include &lt;iostream&gt;</span>
+
+<span class="s2">#include &quot;graph.hpp&quot;</span>
+<span class="s2">#include &quot;baseline_algorithms_using.hpp&quot;</span>
+<span class="s2">#include &quot;ordered_ant_algorithm/ordered_ant_algorithm.hpp&quot;</span>
+<span class="s2">using graph_diff::algorithm::OrderedAntAlgorithm;</span>
+
+<span class="s2">template &lt;typename T&gt; using node = std::pair&lt;T, size_t&gt;;</span>
+
+<span class="s2">template &lt;typename T, typename Algorithm&gt;</span>
+<span class="s2">auto algorithm(std::vector&lt;node&lt;size_t&gt;&gt; nodes1,</span>
+<span class="s2">               std::vector&lt;std::vector&lt;size_t&gt;&gt; adjacent_list1,</span>
+<span class="s2">               std::vector&lt;node&lt;size_t&gt;&gt; nodes2,</span>
+<span class="s2">               std::vector&lt;std::vector&lt;size_t&gt;&gt; adjacent_list2) {{</span>
+<span class="s2">    auto graph1 = graph_diff::graph::Graph&lt;T&gt;(nodes1, adjacent_list1);</span>
+<span class="s2">    auto graph2 = graph_diff::graph::Graph&lt;T&gt;(nodes2, adjacent_list2);</span>
+
+<span class="s2">    auto best_choice = Algorithm().construct_diff(graph1, graph2);</span>
+
+<span class="s2">    return best_choice;</span>
+<span class="s2">}}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+        <span class="n">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__current_dir</span><span class="p">(),</span> <span class="s1">&#39;cpp_algorithms.cpp&#39;</span><span class="p">),</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">printed</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">file</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">graph_diff alpha 0.1.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Aleksandr Bzikadze.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.3.
+    </div>
+  </body>
+</html>

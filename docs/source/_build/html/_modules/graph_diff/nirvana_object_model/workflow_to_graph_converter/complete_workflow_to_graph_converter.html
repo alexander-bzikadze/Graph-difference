@@ -1,0 +1,615 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter &#8212; graph_diff alpha 0.1.2 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">graph_diff alpha 0.1.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">graph_diff.graph</span> <span class="k">import</span> <span class="n">rnr_graph</span><span class="p">,</span> <span class="n">lr_node</span><span class="p">,</span> <span class="n">GraphWithRepetitiveNodesWithRoot</span>
+<span class="kn">from</span> <span class="nn">graph_diff.graph_diff_algorithm</span> <span class="k">import</span> <span class="n">GraphMap</span>
+<span class="kn">from</span> <span class="nn">graph_diff.nirvana_object_model.workflow</span> <span class="k">import</span> <span class="n">Block</span><span class="p">,</span> <span class="n">Operation</span><span class="p">,</span> <span class="n">Workflow</span>
+<span class="kn">from</span> <span class="nn">graph_diff.nirvana_object_model.workflow_to_dot_converter</span> <span class="k">import</span> <span class="n">GraphMapDotColorer</span><span class="p">,</span> <span class="n">GraphDotColorer</span>
+<span class="kn">from</span> <span class="nn">.workflow_to_graph_converter</span> <span class="k">import</span> <span class="n">WorkflowToGraphConverter</span>
+
+
+<div class="viewcode-block" id="CompleteWorkflowToGraphConverter"><a class="viewcode-back" href="../../../../graph_diff.nirvana_object_model.workflow_to_graph_converter.html#graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter">[docs]</a><span class="k">class</span> <span class="nc">CompleteWorkflowToGraphConverter</span><span class="p">(</span><span class="n">WorkflowToGraphConverter</span><span class="p">):</span>
+    <span class="n">NEST_DIVIDER</span> <span class="o">=</span> <span class="s2">&quot;&lt;n&gt;&quot;</span>
+    <span class="n">KEY_VALUE_DIVIDER</span> <span class="o">=</span> <span class="s2">&quot;&lt;:&gt;&quot;</span>
+    <span class="n">KEY_VALUE_BLOCK_DIVIDER</span> <span class="o">=</span> <span class="s2">&quot;&lt;;&gt;&quot;</span>
+    <span class="n">INPUT_DIVIDER</span> <span class="o">=</span> <span class="s2">&quot;&lt;i&gt;&quot;</span>
+    <span class="n">OUTPUT_DIVIDER</span> <span class="o">=</span> <span class="s2">&quot;&lt;o&gt;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">matched_color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span>
+                 <span class="n">added_color</span><span class="o">=</span><span class="s1">&#39;green3&#39;</span><span class="p">,</span>
+                 <span class="n">deleted_color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param matched_color:   color for matched elements</span>
+<span class="sd">        :param added_color:     color for added elements</span>
+<span class="sd">        :param deleted_color:   color for deleted elements</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">matched_color</span> <span class="o">=</span> <span class="n">matched_color</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">added_color</span> <span class="o">=</span> <span class="n">added_color</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">deleted_color</span> <span class="o">=</span> <span class="n">deleted_color</span>
+
+<div class="viewcode-block" id="CompleteWorkflowToGraphConverter.block_id"><a class="viewcode-back" href="../../../../graph_diff.nirvana_object_model.workflow_to_graph_converter.html#graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.block_id">[docs]</a>    <span class="k">def</span> <span class="nf">block_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block</span><span class="p">:</span> <span class="n">Block</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates unique identifier by block.</span>
+
+<span class="sd">        :param block:   block to identify</span>
+<span class="sd">        :return:        string representation</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">return_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">block</span><span class="o">.</span><span class="n">operation</span><span class="o">.</span><span class="n">operation_id</span><span class="p">,</span>
+                       <span class="bp">self</span><span class="o">.</span><span class="n">KEY_VALUE_BLOCK_DIVIDER</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">([</span><span class="n">key</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">KEY_VALUE_DIVIDER</span> <span class="o">+</span> <span class="n">value</span>
+                                                                 <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">block</span><span class="o">.</span><span class="n">options</span><span class="p">]))]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">NEST_DIVIDER</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">return_list</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CompleteWorkflowToGraphConverter.input_nest_id"><a class="viewcode-back" href="../../../../graph_diff.nirvana_object_model.workflow_to_graph_converter.html#graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.input_nest_id">[docs]</a>    <span class="k">def</span> <span class="nf">input_nest_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block</span><span class="p">:</span> <span class="n">Block</span><span class="p">,</span> <span class="n">nest_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates unique identifier by block for block&#39;s input nest.</span>
+<span class="sd">        It is supposed to be guaranteed from outside that block contains nest_id.</span>
+
+<span class="sd">        :param block:   block to identify</span>
+<span class="sd">        :param nest_id: nest of the block</span>
+<span class="sd">        :return:        string representation</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">return_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">block</span><span class="o">.</span><span class="n">operation</span><span class="o">.</span><span class="n">operation_id</span><span class="p">,</span>
+                       <span class="bp">self</span><span class="o">.</span><span class="n">KEY_VALUE_BLOCK_DIVIDER</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">([</span><span class="n">key</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">KEY_VALUE_DIVIDER</span> <span class="o">+</span> <span class="n">value</span>
+                                                                 <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">block</span><span class="o">.</span><span class="n">options</span><span class="p">])),</span>
+                       <span class="n">nest_id</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">INPUT_DIVIDER</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">NEST_DIVIDER</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">return_list</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CompleteWorkflowToGraphConverter.output_nest_id"><a class="viewcode-back" href="../../../../graph_diff.nirvana_object_model.workflow_to_graph_converter.html#graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.output_nest_id">[docs]</a>    <span class="k">def</span> <span class="nf">output_nest_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block</span><span class="p">:</span> <span class="n">Block</span><span class="p">,</span> <span class="n">nest_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates unique identifier by block for block&#39;s output nest.</span>
+<span class="sd">        It is supposed to be guaranteed from outside that block contains nest_id.</span>
+
+<span class="sd">        :param block:   block to identify</span>
+<span class="sd">        :param nest_id: nest of the block</span>
+<span class="sd">        :return:        string representation</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">return_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">block</span><span class="o">.</span><span class="n">operation</span><span class="o">.</span><span class="n">operation_id</span><span class="p">,</span>
+                       <span class="bp">self</span><span class="o">.</span><span class="n">KEY_VALUE_BLOCK_DIVIDER</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">([</span><span class="n">key</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">KEY_VALUE_DIVIDER</span> <span class="o">+</span> <span class="n">value</span>
+                                                                 <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">block</span><span class="o">.</span><span class="n">options</span><span class="p">])),</span>
+                       <span class="n">nest_id</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">OUTPUT_DIVIDER</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">NEST_DIVIDER</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">return_list</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CompleteWorkflowToGraphConverter.is_input_nest"><a class="viewcode-back" href="../../../../graph_diff.nirvana_object_model.workflow_to_graph_converter.html#graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.is_input_nest">[docs]</a>    <span class="k">def</span> <span class="nf">is_input_nest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">GraphWithRepetitiveNodesWithRoot</span><span class="o">.</span><span class="n">LabeledRepetitiveNode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks if given node has identifier of an input nest.</span>
+
+<span class="sd">        :param node:    node to specify</span>
+<span class="sd">        :return:        boolean answer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">INPUT_DIVIDER</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">Label</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CompleteWorkflowToGraphConverter.is_output_nest"><a class="viewcode-back" href="../../../../graph_diff.nirvana_object_model.workflow_to_graph_converter.html#graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.is_output_nest">[docs]</a>    <span class="k">def</span> <span class="nf">is_output_nest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">GraphWithRepetitiveNodesWithRoot</span><span class="o">.</span><span class="n">LabeledRepetitiveNode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks if given node has identifier of an output nest.</span>
+
+<span class="sd">        :param node:    node to specify</span>
+<span class="sd">        :return:        boolean answer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">OUTPUT_DIVIDER</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">Label</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CompleteWorkflowToGraphConverter.is_block"><a class="viewcode-back" href="../../../../graph_diff.nirvana_object_model.workflow_to_graph_converter.html#graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.is_block">[docs]</a>    <span class="k">def</span> <span class="nf">is_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">GraphWithRepetitiveNodesWithRoot</span><span class="o">.</span><span class="n">LabeledRepetitiveNode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks if given node is not neither input nor output nor Root node.</span>
+
+<span class="sd">        :param node:    node to specify</span>
+<span class="sd">        :return:        boolean answer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_input_nest</span><span class="p">(</span><span class="n">node</span><span class="p">)</span> \
+               <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_output_nest</span><span class="p">(</span><span class="n">node</span><span class="p">)</span> \
+               <span class="ow">and</span> <span class="ow">not</span> <span class="n">node</span> <span class="o">==</span> <span class="n">GraphWithRepetitiveNodesWithRoot</span><span class="o">.</span><span class="n">ROOT</span></div>
+
+<div class="viewcode-block" id="CompleteWorkflowToGraphConverter.get_input_nest"><a class="viewcode-back" href="../../../../graph_diff.nirvana_object_model.workflow_to_graph_converter.html#graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.get_input_nest">[docs]</a>    <span class="k">def</span> <span class="nf">get_input_nest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">GraphWithRepetitiveNodesWithRoot</span><span class="o">.</span><span class="n">LabeledRepetitiveNode</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Transformation from input node back to parameters</span>
+<span class="sd">        that can specify origin block.</span>
+
+<span class="sd">        :param node:    node to transform</span>
+<span class="sd">        :return:        tuple of operation id, options</span>
+<span class="sd">        and input nest of the origin block</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">splitted</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">Label</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NEST_DIVIDER</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">splitted</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span>
+        <span class="n">operation_id</span><span class="p">,</span> <span class="n">key_values</span><span class="p">,</span> <span class="n">input_nest</span> <span class="o">=</span> <span class="n">splitted</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">splitted</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">splitted</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">key_values</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">([</span><span class="nb">tuple</span><span class="p">(</span><span class="n">key_value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">KEY_VALUE_DIVIDER</span><span class="p">))</span>
+                           <span class="k">for</span> <span class="n">key_value</span> <span class="ow">in</span> <span class="n">key_values</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">KEY_VALUE_BLOCK_DIVIDER</span><span class="p">)]</span>
+                          <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">key_values</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="p">[])</span>
+        <span class="k">return</span> <span class="n">operation_id</span><span class="p">,</span> <span class="n">key_values</span><span class="p">,</span> <span class="n">input_nest</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">INPUT_DIVIDER</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="CompleteWorkflowToGraphConverter.get_output_nest"><a class="viewcode-back" href="../../../../graph_diff.nirvana_object_model.workflow_to_graph_converter.html#graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.get_output_nest">[docs]</a>    <span class="k">def</span> <span class="nf">get_output_nest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">GraphWithRepetitiveNodesWithRoot</span><span class="o">.</span><span class="n">LabeledRepetitiveNode</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Transformation from output node back to parameters</span>
+<span class="sd">        that can specify origin block.</span>
+
+<span class="sd">        :param node:    node to transform</span>
+<span class="sd">        :return:        tuple of operation id, options</span>
+<span class="sd">        and output nest of the origin block</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">splitted</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">Label</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NEST_DIVIDER</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">splitted</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span>
+        <span class="n">operation_id</span><span class="p">,</span> <span class="n">key_values</span><span class="p">,</span> <span class="n">output_nest</span> <span class="o">=</span> <span class="n">splitted</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">splitted</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">splitted</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">key_values</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">([</span><span class="nb">tuple</span><span class="p">(</span><span class="n">key_value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">KEY_VALUE_DIVIDER</span><span class="p">))</span>
+                           <span class="k">for</span> <span class="n">key_value</span> <span class="ow">in</span> <span class="n">key_values</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">KEY_VALUE_BLOCK_DIVIDER</span><span class="p">)]</span>
+                          <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">key_values</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="p">[])</span>
+        <span class="k">return</span> <span class="n">operation_id</span><span class="p">,</span> <span class="n">key_values</span><span class="p">,</span> <span class="n">output_nest</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">OUTPUT_DIVIDER</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="CompleteWorkflowToGraphConverter.get_block_id"><a class="viewcode-back" href="../../../../graph_diff.nirvana_object_model.workflow_to_graph_converter.html#graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.get_block_id">[docs]</a>    <span class="k">def</span> <span class="nf">get_block_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">GraphWithRepetitiveNodesWithRoot</span><span class="o">.</span><span class="n">LabeledRepetitiveNode</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Transformation from block node back to parameters</span>
+<span class="sd">        that can specify origin block.</span>
+
+<span class="sd">        :param node:    node to transform</span>
+<span class="sd">        :return:        tuple of operation id, options of the origin block</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">splitted</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">Label</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NEST_DIVIDER</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">splitted</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+        <span class="n">operation_id</span><span class="p">,</span> <span class="n">key_values</span> <span class="o">=</span> <span class="n">splitted</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">splitted</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">key_values</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">([</span><span class="nb">tuple</span><span class="p">(</span><span class="n">key_value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">KEY_VALUE_DIVIDER</span><span class="p">))</span>
+                           <span class="k">for</span> <span class="n">key_value</span> <span class="ow">in</span> <span class="n">key_values</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">KEY_VALUE_BLOCK_DIVIDER</span><span class="p">)]</span>
+                          <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">key_values</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="p">[])</span>
+        <span class="k">return</span> <span class="n">operation_id</span><span class="p">,</span> <span class="n">key_values</span></div>
+
+<div class="viewcode-block" id="CompleteWorkflowToGraphConverter.convert"><a class="viewcode-back" href="../../../../graph_diff.nirvana_object_model.workflow_to_graph_converter.html#graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.convert">[docs]</a>    <span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">workflow</span><span class="p">:</span> <span class="n">Workflow</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GraphWithRepetitiveNodesWithRoot</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Converts workflow to simple graph</span>
+<span class="sd">        by expanding all its blocks in series of nodes</span>
+<span class="sd">        so that every input/output nest has its node representation.</span>
+<span class="sd">        Is reversible transformation.</span>
+
+<span class="sd">        :param workflow:    workflow to transform</span>
+<span class="sd">        :return:            graph representation</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">graph</span> <span class="o">=</span> <span class="n">rnr_graph</span><span class="p">()</span>
+
+        <span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">defaultdict</span>
+        <span class="n">number_of_blocks</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="n">workflow</span><span class="p">:</span>
+            <span class="n">number_of_blocks</span><span class="p">[</span><span class="n">block</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">block_node</span> <span class="o">=</span> <span class="n">lr_node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_id</span><span class="p">(</span><span class="n">block</span><span class="p">),</span>
+                                 <span class="n">number_of_blocks</span><span class="p">[</span><span class="n">block</span><span class="p">])</span>
+            <span class="n">graph</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">block_node</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">nest</span> <span class="ow">in</span> <span class="n">block</span><span class="o">.</span><span class="n">operation</span><span class="o">.</span><span class="n">inputs</span><span class="p">:</span>
+                <span class="n">nest_node</span> <span class="o">=</span> <span class="n">lr_node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input_nest_id</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="n">nest</span><span class="p">),</span>
+                                    <span class="n">number_of_blocks</span><span class="p">[</span><span class="n">block</span><span class="p">])</span>
+                <span class="n">graph</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">nest_node</span><span class="p">)</span>
+                <span class="n">graph</span><span class="o">.</span><span class="n">add_edge_exp</span><span class="p">(</span><span class="n">nest_node</span><span class="p">,</span>
+                                   <span class="n">block_node</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">nest</span> <span class="ow">in</span> <span class="n">block</span><span class="o">.</span><span class="n">operation</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
+                <span class="n">nest_node</span> <span class="o">=</span> <span class="n">lr_node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_nest_id</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="n">nest</span><span class="p">),</span>
+                                    <span class="n">number_of_blocks</span><span class="p">[</span><span class="n">block</span><span class="p">])</span>
+                <span class="n">graph</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">nest_node</span><span class="p">)</span>
+                <span class="n">graph</span><span class="o">.</span><span class="n">add_edge_exp</span><span class="p">(</span><span class="n">block_node</span><span class="p">,</span>
+                                   <span class="n">nest_node</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="n">from_block</span><span class="p">,</span> <span class="n">from_num</span><span class="p">,</span> <span class="n">output_nest</span><span class="p">),</span> <span class="n">a2</span> <span class="ow">in</span> <span class="n">workflow</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">to_block</span><span class="p">,</span> <span class="n">to_num</span><span class="p">,</span> <span class="n">input_nest</span> <span class="ow">in</span> <span class="n">a2</span><span class="p">:</span>
+                <span class="n">graph</span><span class="o">.</span><span class="n">add_edge_exp</span><span class="p">(</span><span class="n">lr_node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_nest_id</span><span class="p">(</span><span class="n">from_block</span><span class="p">,</span>
+                                                               <span class="n">output_nest</span><span class="p">),</span>
+                                           <span class="n">from_num</span><span class="p">),</span>
+                                   <span class="n">lr_node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input_nest_id</span><span class="p">(</span><span class="n">to_block</span><span class="p">,</span>
+                                                              <span class="n">input_nest</span><span class="p">),</span>
+                                           <span class="n">to_num</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="n">from_block</span><span class="p">,</span> <span class="n">from_num</span><span class="p">),</span> <span class="n">a2</span> <span class="ow">in</span> <span class="n">workflow</span><span class="o">.</span><span class="n">items_by_exc</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">to_block</span><span class="p">,</span> <span class="n">to_num</span> <span class="ow">in</span> <span class="n">a2</span><span class="p">:</span>
+                <span class="n">graph</span><span class="o">.</span><span class="n">add_edge_exp</span><span class="p">(</span><span class="n">lr_node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_id</span><span class="p">(</span><span class="n">from_block</span><span class="p">),</span>
+                                           <span class="n">from_num</span><span class="p">),</span>
+                                   <span class="n">lr_node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_id</span><span class="p">(</span><span class="n">to_block</span><span class="p">),</span>
+                                           <span class="n">to_num</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">graph</span></div>
+
+<div class="viewcode-block" id="CompleteWorkflowToGraphConverter.reverse_graph"><a class="viewcode-back" href="../../../../graph_diff.nirvana_object_model.workflow_to_graph_converter.html#graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.reverse_graph">[docs]</a>    <span class="k">def</span> <span class="nf">reverse_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="p">:</span> <span class="n">GraphWithRepetitiveNodesWithRoot</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Workflow</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reverse transformation from graph to workflow.</span>
+<span class="sd">        Possibility of such transformation should be guaranteed from outside</span>
+<span class="sd">        or UB will happen.</span>
+
+<span class="sd">        :param graph:   graph to transform</span>
+<span class="sd">        :return:        original workflow</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">workflow</span> <span class="o">=</span> <span class="n">Workflow</span><span class="p">()</span>
+
+        <span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">defaultdict</span>
+        <span class="n">inputs</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">set</span><span class="p">)</span>
+        <span class="n">outputs</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">set</span><span class="p">)</span>
+        <span class="n">block_blank</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">graph</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_input_nest</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+                <span class="n">operation_id</span><span class="p">,</span> <span class="n">key_values</span><span class="p">,</span> <span class="n">nest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_input_nest</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+                <span class="n">inputs</span><span class="p">[</span><span class="n">operation_id</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">key_values</span><span class="o">.</span><span class="n">items</span><span class="p">()),</span> <span class="n">node</span><span class="o">.</span><span class="n">Number</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">nest</span><span class="p">)</span>
+                <span class="n">block_blank</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">operation_id</span><span class="p">,</span>
+                                 <span class="nb">tuple</span><span class="p">(</span><span class="n">key_values</span><span class="o">.</span><span class="n">items</span><span class="p">()),</span>
+                                 <span class="n">node</span><span class="o">.</span><span class="n">Number</span><span class="p">))</span>
+
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_output_nest</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+                <span class="n">operation_id</span><span class="p">,</span> <span class="n">key_values</span><span class="p">,</span> <span class="n">nest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_output_nest</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+                <span class="n">outputs</span><span class="p">[</span><span class="n">operation_id</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">key_values</span><span class="o">.</span><span class="n">items</span><span class="p">()),</span> <span class="n">node</span><span class="o">.</span><span class="n">Number</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">nest</span><span class="p">)</span>
+                <span class="n">block_blank</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">operation_id</span><span class="p">,</span>
+                                 <span class="nb">tuple</span><span class="p">(</span><span class="n">key_values</span><span class="o">.</span><span class="n">items</span><span class="p">()),</span>
+                                 <span class="n">node</span><span class="o">.</span><span class="n">Number</span><span class="p">))</span>
+
+            <span class="k">elif</span> <span class="n">node</span> <span class="o">!=</span> <span class="n">GraphWithRepetitiveNodesWithRoot</span><span class="o">.</span><span class="n">ROOT</span><span class="p">:</span>
+                <span class="n">operation_id</span><span class="p">,</span> <span class="n">key_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_block_id</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+                <span class="n">block_blank</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">operation_id</span><span class="p">,</span>
+                                 <span class="nb">tuple</span><span class="p">(</span><span class="n">key_values</span><span class="o">.</span><span class="n">items</span><span class="p">()),</span>
+                                 <span class="n">node</span><span class="o">.</span><span class="n">Number</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">operation_id</span><span class="p">,</span> <span class="n">key_values</span><span class="p">,</span> <span class="n">number</span> <span class="ow">in</span> <span class="n">block_blank</span><span class="p">:</span>
+            <span class="n">block_input</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="n">operation_id</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">key_values</span><span class="o">.</span><span class="n">items</span><span class="p">()),</span> <span class="n">number</span><span class="p">]</span>
+            <span class="n">block_output</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[</span><span class="n">operation_id</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">key_values</span><span class="o">.</span><span class="n">items</span><span class="p">()),</span> <span class="n">number</span><span class="p">]</span>
+            <span class="n">workflow</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">new_block</span><span class="o">=</span><span class="n">Block</span><span class="p">(</span><span class="n">operation</span><span class="o">=</span><span class="n">Operation</span><span class="p">(</span><span class="n">operation_id</span><span class="o">=</span><span class="n">operation_id</span><span class="p">,</span>
+                                                                   <span class="n">inputs</span><span class="o">=</span><span class="n">block_input</span><span class="p">,</span>
+                                                                   <span class="n">outputs</span><span class="o">=</span><span class="n">block_output</span><span class="p">),</span>
+                                               <span class="n">options</span><span class="o">=</span><span class="n">key_values</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">from_node</span> <span class="ow">in</span> <span class="n">graph</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_output_nest</span><span class="p">(</span><span class="n">from_node</span><span class="p">):</span>
+                <span class="n">from_operation_id</span><span class="p">,</span> <span class="n">from_key_values</span><span class="p">,</span> <span class="n">from_nest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_output_nest</span><span class="p">(</span><span class="n">from_node</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">to_node</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_list_of_adjacent_nodes</span><span class="p">(</span><span class="n">from_node</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_input_nest</span><span class="p">(</span><span class="n">to_node</span><span class="p">):</span>
+                        <span class="k">continue</span>
+                    <span class="n">to_operation_id</span><span class="p">,</span> <span class="n">to_key_values</span><span class="p">,</span> <span class="n">to_nest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_input_nest</span><span class="p">(</span><span class="n">to_node</span><span class="p">)</span>
+                    <span class="n">from_input</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="n">from_operation_id</span><span class="p">,</span>
+                                        <span class="nb">tuple</span><span class="p">(</span><span class="n">from_key_values</span><span class="o">.</span><span class="n">items</span><span class="p">()),</span>
+                                        <span class="n">from_node</span><span class="o">.</span><span class="n">Number</span><span class="p">]</span>
+                    <span class="n">from_output</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[</span><span class="n">from_operation_id</span><span class="p">,</span>
+                                          <span class="nb">tuple</span><span class="p">(</span><span class="n">from_key_values</span><span class="o">.</span><span class="n">items</span><span class="p">()),</span>
+                                          <span class="n">from_node</span><span class="o">.</span><span class="n">Number</span><span class="p">]</span>
+                    <span class="n">to_input</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="n">to_operation_id</span><span class="p">,</span>
+                                      <span class="nb">tuple</span><span class="p">(</span><span class="n">to_key_values</span><span class="o">.</span><span class="n">items</span><span class="p">()),</span>
+                                      <span class="n">to_node</span><span class="o">.</span><span class="n">Number</span><span class="p">]</span>
+                    <span class="n">to_output</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[</span><span class="n">to_operation_id</span><span class="p">,</span>
+                                        <span class="nb">tuple</span><span class="p">(</span><span class="n">to_key_values</span><span class="o">.</span><span class="n">items</span><span class="p">()),</span>
+                                        <span class="n">to_node</span><span class="o">.</span><span class="n">Number</span><span class="p">]</span>
+                    <span class="n">workflow</span><span class="o">.</span><span class="n">add_connection_by_data</span><span class="p">(</span>
+                        <span class="n">from_block</span><span class="o">=</span><span class="n">Block</span><span class="p">(</span><span class="n">operation</span><span class="o">=</span><span class="n">Operation</span><span class="p">(</span><span class="n">operation_id</span><span class="o">=</span><span class="n">from_operation_id</span><span class="p">,</span>
+                                                             <span class="n">inputs</span><span class="o">=</span><span class="n">from_input</span><span class="p">,</span>
+                                                             <span class="n">outputs</span><span class="o">=</span><span class="n">from_output</span><span class="p">),</span>
+                                         <span class="n">options</span><span class="o">=</span><span class="n">from_key_values</span><span class="p">),</span>
+                        <span class="n">from_number</span><span class="o">=</span><span class="n">from_node</span><span class="o">.</span><span class="n">Number</span><span class="p">,</span>
+                        <span class="n">output_nest</span><span class="o">=</span><span class="n">from_nest</span><span class="p">,</span>
+                        <span class="n">to_block</span><span class="o">=</span><span class="n">Block</span><span class="p">(</span><span class="n">operation</span><span class="o">=</span><span class="n">Operation</span><span class="p">(</span><span class="n">operation_id</span><span class="o">=</span><span class="n">to_operation_id</span><span class="p">,</span>
+                                                           <span class="n">inputs</span><span class="o">=</span><span class="n">to_input</span><span class="p">,</span>
+                                                           <span class="n">outputs</span><span class="o">=</span><span class="n">to_output</span><span class="p">),</span>
+                                       <span class="n">options</span><span class="o">=</span><span class="n">to_key_values</span><span class="p">),</span>
+                        <span class="n">to_number</span><span class="o">=</span><span class="n">to_node</span><span class="o">.</span><span class="n">Number</span><span class="p">,</span>
+                        <span class="n">input_nest</span><span class="o">=</span><span class="n">to_nest</span>
+                    <span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_input_nest</span><span class="p">(</span><span class="n">from_node</span><span class="p">):</span>
+                <span class="k">pass</span>
+            <span class="k">elif</span> <span class="n">from_node</span> <span class="o">!=</span> <span class="n">GraphWithRepetitiveNodesWithRoot</span><span class="o">.</span><span class="n">ROOT</span><span class="p">:</span>
+                <span class="n">from_operation_id</span><span class="p">,</span> <span class="n">from_key_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_block_id</span><span class="p">(</span><span class="n">from_node</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">to_node</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_list_of_adjacent_nodes</span><span class="p">(</span><span class="n">from_node</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_input_nest</span><span class="p">(</span><span class="n">to_node</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_output_nest</span><span class="p">(</span><span class="n">to_node</span><span class="p">):</span>
+                        <span class="n">to_operation_id</span><span class="p">,</span> <span class="n">to_key_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_block_id</span><span class="p">(</span><span class="n">to_node</span><span class="p">)</span>
+                        <span class="n">from_input</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="n">from_operation_id</span><span class="p">,</span>
+                                            <span class="nb">tuple</span><span class="p">(</span><span class="n">from_key_values</span><span class="o">.</span><span class="n">items</span><span class="p">()),</span>
+                                            <span class="n">from_node</span><span class="o">.</span><span class="n">Number</span><span class="p">],</span>
+                        <span class="n">from_output</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[</span><span class="n">from_operation_id</span><span class="p">,</span>
+                                              <span class="nb">tuple</span><span class="p">(</span><span class="n">from_key_values</span><span class="o">.</span><span class="n">items</span><span class="p">()),</span>
+                                              <span class="n">from_node</span><span class="o">.</span><span class="n">Number</span><span class="p">]</span>
+                        <span class="n">to_input</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="n">to_operation_id</span><span class="p">,</span>
+                                          <span class="nb">tuple</span><span class="p">(</span><span class="n">to_key_values</span><span class="o">.</span><span class="n">items</span><span class="p">()),</span>
+                                          <span class="n">to_node</span><span class="o">.</span><span class="n">Number</span><span class="p">]</span>
+                        <span class="n">to_output</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[</span><span class="n">to_operation_id</span><span class="p">,</span>
+                                            <span class="nb">tuple</span><span class="p">(</span><span class="n">to_key_values</span><span class="o">.</span><span class="n">items</span><span class="p">()),</span>
+                                            <span class="n">to_node</span><span class="o">.</span><span class="n">Number</span><span class="p">]</span>
+                        <span class="n">workflow</span><span class="o">.</span><span class="n">add_connection_by_execution</span><span class="p">(</span>
+                            <span class="n">from_block</span><span class="o">=</span><span class="n">Block</span><span class="p">(</span><span class="n">operation</span><span class="o">=</span><span class="n">Operation</span><span class="p">(</span><span class="n">operation_id</span><span class="o">=</span><span class="n">from_operation_id</span><span class="p">,</span>
+                                                                 <span class="n">inputs</span><span class="o">=</span><span class="n">from_input</span><span class="p">,</span>
+                                                                 <span class="n">outputs</span><span class="o">=</span><span class="n">from_output</span><span class="p">),</span>
+                                             <span class="n">options</span><span class="o">=</span><span class="n">from_key_values</span><span class="p">),</span>
+                            <span class="n">from_number</span><span class="o">=</span><span class="n">from_node</span><span class="o">.</span><span class="n">Number</span><span class="p">,</span>
+                            <span class="n">to_block</span><span class="o">=</span><span class="n">Block</span><span class="p">(</span><span class="n">Operation</span><span class="p">(</span><span class="n">operation_id</span><span class="o">=</span><span class="n">to_node</span><span class="o">.</span><span class="n">Label</span><span class="p">,</span>
+                                                     <span class="n">inputs</span><span class="o">=</span><span class="n">to_input</span><span class="p">,</span>
+                                                     <span class="n">outputs</span><span class="o">=</span><span class="n">to_output</span><span class="p">),</span>
+                                           <span class="n">options</span><span class="o">=</span><span class="n">to_key_values</span><span class="p">),</span>
+                            <span class="n">to_number</span><span class="o">=</span><span class="n">to_node</span><span class="o">.</span><span class="n">Number</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">workflow</span></div>
+
+<div class="viewcode-block" id="CompleteWorkflowToGraphConverter.convert_graph_map"><a class="viewcode-back" href="../../../../graph_diff.nirvana_object_model.workflow_to_graph_converter.html#graph_diff.nirvana_object_model.workflow_to_graph_converter.complete_workflow_to_graph_converter.CompleteWorkflowToGraphConverter.convert_graph_map">[docs]</a>    <span class="k">def</span> <span class="nf">convert_graph_map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph_map</span><span class="p">:</span> <span class="n">GraphMap</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">Workflow</span><span class="p">,</span> <span class="n">GraphDotColorer</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Converts graph map to workflow and colorer object.</span>
+
+<span class="sd">        :param graph_map:   graph map to transform</span>
+<span class="sd">        :return:            workflow and colorer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">matched_color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matched_color</span>
+        <span class="n">added_color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">added_color</span>
+        <span class="n">deleted_color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">deleted_color</span>
+
+        <span class="n">graph_map</span><span class="o">.</span><span class="n">eval_difference_complete</span><span class="p">()</span>
+
+        <span class="n">workflow</span> <span class="o">=</span> <span class="n">Workflow</span><span class="p">()</span>
+
+        <span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">defaultdict</span>
+        <span class="n">inputs</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">set</span><span class="p">)</span>
+        <span class="n">outputs</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">set</span><span class="p">)</span>
+        <span class="n">nest_to_center</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">from_node</span><span class="p">,</span> <span class="n">to_node</span> <span class="ow">in</span> <span class="n">graph_map</span><span class="o">.</span><span class="n">get_edge_overlap_from_second</span><span class="p">()</span> \
+                                  <span class="o">+</span> <span class="n">graph_map</span><span class="o">.</span><span class="n">get_edges_in_2_not_in_1</span><span class="p">():</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_input_nest</span><span class="p">(</span><span class="n">from_node</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_block</span><span class="p">(</span><span class="n">to_node</span><span class="p">):</span>
+                <span class="n">from_operation_id</span><span class="p">,</span> <span class="n">from_key_values</span><span class="p">,</span> <span class="n">from_nest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_input_nest</span><span class="p">(</span><span class="n">from_node</span><span class="p">)</span>
+                <span class="n">to_operation_id</span><span class="p">,</span> <span class="n">to_key_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_block_id</span><span class="p">(</span><span class="n">to_node</span><span class="p">)</span>
+
+                <span class="k">assert</span> <span class="n">to_operation_id</span> <span class="o">==</span> <span class="n">from_operation_id</span>
+                <span class="k">assert</span> <span class="n">to_key_values</span> <span class="o">==</span> <span class="n">from_key_values</span>
+
+                <span class="n">inputs</span><span class="p">[</span><span class="n">to_node</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">from_nest</span><span class="p">)</span>
+                <span class="n">nest_to_center</span><span class="p">[</span><span class="n">from_node</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">to_node</span><span class="p">,</span> <span class="mi">2</span>
+
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_block</span><span class="p">(</span><span class="n">from_node</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_output_nest</span><span class="p">(</span><span class="n">to_node</span><span class="p">):</span>
+                <span class="n">from_operation_id</span><span class="p">,</span> <span class="n">from_key_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_block_id</span><span class="p">(</span><span class="n">from_node</span><span class="p">)</span>
+                <span class="n">to_operation_id</span><span class="p">,</span> <span class="n">to_key_values</span><span class="p">,</span> <span class="n">to_nest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_output_nest</span><span class="p">(</span><span class="n">to_node</span><span class="p">)</span>
+
+                <span class="k">assert</span> <span class="n">to_operation_id</span> <span class="o">==</span> <span class="n">from_operation_id</span>
+                <span class="k">assert</span> <span class="n">to_key_values</span> <span class="o">==</span> <span class="n">from_key_values</span>
+
+                <span class="n">outputs</span><span class="p">[</span><span class="n">from_node</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">to_nest</span><span class="p">)</span>
+                <span class="n">nest_to_center</span><span class="p">[</span><span class="n">to_node</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_node</span><span class="p">,</span> <span class="mi">2</span>
+
+        <span class="k">for</span> <span class="n">from_node</span><span class="p">,</span> <span class="n">to_node</span> <span class="ow">in</span> <span class="n">graph_map</span><span class="o">.</span><span class="n">get_edges_in_1_not_in_2</span><span class="p">()</span> \
+                                  <span class="o">+</span> <span class="n">graph_map</span><span class="o">.</span><span class="n">get_edge_overlap_from_first</span><span class="p">():</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_input_nest</span><span class="p">(</span><span class="n">from_node</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_block</span><span class="p">(</span><span class="n">to_node</span><span class="p">):</span>
+                <span class="n">from_operation_id</span><span class="p">,</span> <span class="n">from_key_values</span><span class="p">,</span> <span class="n">from_nest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_input_nest</span><span class="p">(</span><span class="n">from_node</span><span class="p">)</span>
+                <span class="n">to_operation_id</span><span class="p">,</span> <span class="n">to_key_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_block_id</span><span class="p">(</span><span class="n">to_node</span><span class="p">)</span>
+
+                <span class="k">assert</span> <span class="n">to_operation_id</span> <span class="o">==</span> <span class="n">from_operation_id</span>
+                <span class="k">assert</span> <span class="n">to_key_values</span> <span class="o">==</span> <span class="n">from_key_values</span>
+
+                <span class="n">inputs</span><span class="p">[</span><span class="n">to_node</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">from_nest</span><span class="p">)</span>
+                <span class="n">nest_to_center</span><span class="p">[</span><span class="n">from_node</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">to_node</span><span class="p">,</span> <span class="mi">1</span>
+
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_block</span><span class="p">(</span><span class="n">from_node</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_output_nest</span><span class="p">(</span><span class="n">to_node</span><span class="p">):</span>
+                <span class="n">from_operation_id</span><span class="p">,</span> <span class="n">from_key_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_block_id</span><span class="p">(</span><span class="n">from_node</span><span class="p">)</span>
+                <span class="n">to_operation_id</span><span class="p">,</span> <span class="n">to_key_values</span><span class="p">,</span> <span class="n">to_nest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_output_nest</span><span class="p">(</span><span class="n">to_node</span><span class="p">)</span>
+
+                <span class="k">assert</span> <span class="n">to_operation_id</span> <span class="o">==</span> <span class="n">from_operation_id</span>
+                <span class="k">assert</span> <span class="n">to_key_values</span> <span class="o">==</span> <span class="n">from_key_values</span>
+
+                <span class="n">outputs</span><span class="p">[</span><span class="n">from_node</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">to_nest</span><span class="p">)</span>
+                <span class="n">nest_to_center</span><span class="p">[</span><span class="n">to_node</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">from_node</span><span class="p">,</span> <span class="mi">1</span>
+
+        <span class="n">block_colors</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">blocks</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">graph_map</span><span class="o">.</span><span class="n">get_node_overlap_from_second</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_block</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="n">operation_id</span><span class="p">,</span> <span class="n">key_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_block_id</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+            <span class="n">key_values_tuple</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">key_values</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+            <span class="n">block</span> <span class="o">=</span> <span class="n">Block</span><span class="p">(</span><span class="n">Operation</span><span class="p">(</span><span class="n">operation_id</span><span class="o">=</span><span class="n">operation_id</span><span class="p">,</span>
+                                    <span class="n">inputs</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="n">node</span><span class="p">,</span> <span class="mi">2</span><span class="p">]),</span>
+                                    <span class="n">outputs</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="n">node</span><span class="p">,</span> <span class="mi">2</span><span class="p">])),</span>
+                          <span class="n">options</span><span class="o">=</span><span class="n">key_values_tuple</span><span class="p">)</span>
+            <span class="n">blocks</span><span class="p">[</span><span class="n">node</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">block</span><span class="p">,</span> <span class="n">workflow</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+            <span class="n">block_colors</span><span class="p">[</span><span class="n">blocks</span><span class="p">[</span><span class="n">node</span><span class="p">,</span> <span class="mi">2</span><span class="p">]]</span> <span class="o">=</span> <span class="n">matched_color</span>
+
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">graph_map</span><span class="o">.</span><span class="n">get_nodes_in_2_not_in_1</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_block</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="n">operation_id</span><span class="p">,</span> <span class="n">key_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_block_id</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+            <span class="n">key_values_tuple</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">key_values</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+            <span class="n">block</span> <span class="o">=</span> <span class="n">Block</span><span class="p">(</span><span class="n">Operation</span><span class="p">(</span><span class="n">operation_id</span><span class="o">=</span><span class="n">operation_id</span><span class="p">,</span>
+                                    <span class="n">inputs</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="n">node</span><span class="p">,</span> <span class="mi">2</span><span class="p">]),</span>
+                                    <span class="n">outputs</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="n">node</span><span class="p">,</span> <span class="mi">2</span><span class="p">])),</span>
+                          <span class="n">options</span><span class="o">=</span><span class="n">key_values_tuple</span><span class="p">)</span>
+            <span class="n">blocks</span><span class="p">[</span><span class="n">node</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">block</span><span class="p">,</span> <span class="n">workflow</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+            <span class="n">block_colors</span><span class="p">[</span><span class="n">blocks</span><span class="p">[</span><span class="n">node</span><span class="p">,</span> <span class="mi">2</span><span class="p">]]</span> <span class="o">=</span> <span class="n">added_color</span>
+
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">graph_map</span><span class="o">.</span><span class="n">get_nodes_in_1_not_in_2</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_block</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="n">operation_id</span><span class="p">,</span> <span class="n">key_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_block_id</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+            <span class="n">key_values_tuple</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">key_values</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+            <span class="n">block</span> <span class="o">=</span> <span class="n">Block</span><span class="p">(</span><span class="n">Operation</span><span class="p">(</span><span class="n">operation_id</span><span class="o">=</span><span class="n">operation_id</span><span class="p">,</span>
+                                    <span class="n">inputs</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="n">node</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span>
+                                    <span class="n">outputs</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="n">node</span><span class="p">,</span> <span class="mi">1</span><span class="p">])),</span>
+                          <span class="n">options</span><span class="o">=</span><span class="n">key_values_tuple</span><span class="p">)</span>
+            <span class="n">blocks</span><span class="p">[</span><span class="n">node</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">block</span><span class="p">,</span> <span class="n">workflow</span><span class="o">.</span><span class="n">add_block</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+            <span class="n">block_colors</span><span class="p">[</span><span class="n">blocks</span><span class="p">[</span><span class="n">node</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">deleted_color</span>
+
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">graph_map</span><span class="o">.</span><span class="n">get_node_overlap_from_first</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_block</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="n">map_node</span> <span class="o">=</span> <span class="n">graph_map</span><span class="o">.</span><span class="n">map_from_1</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+            <span class="n">blocks</span><span class="p">[</span><span class="n">node</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">blocks</span><span class="p">[</span><span class="n">map_node</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+            <span class="n">block_colors</span><span class="p">[</span><span class="n">blocks</span><span class="p">[</span><span class="n">node</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">matched_color</span>
+
+        <span class="n">data_connection_colors</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">exc_connection_colors</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">from_node</span><span class="p">,</span> <span class="n">to_node</span> <span class="ow">in</span> <span class="n">graph_map</span><span class="o">.</span><span class="n">get_edges_in_2_not_in_1</span><span class="p">():</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_output_nest</span><span class="p">(</span><span class="n">from_node</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_input_nest</span><span class="p">(</span><span class="n">to_node</span><span class="p">):</span>
+                <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">from_nest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_output_nest</span><span class="p">(</span><span class="n">from_node</span><span class="p">)</span>
+                <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">to_nest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_input_nest</span><span class="p">(</span><span class="n">to_node</span><span class="p">)</span>
+                <span class="n">from_nest_block</span><span class="p">,</span> <span class="n">from_nest_block_number</span> <span class="o">=</span> <span class="n">blocks</span><span class="p">[</span><span class="n">nest_to_center</span><span class="p">[</span><span class="n">from_node</span><span class="p">,</span> <span class="mi">2</span><span class="p">]]</span>
+                <span class="n">to_nest_block</span><span class="p">,</span> <span class="n">to_nest_block_number</span> <span class="o">=</span> <span class="n">blocks</span><span class="p">[</span><span class="n">nest_to_center</span><span class="p">[</span><span class="n">to_node</span><span class="p">,</span> <span class="mi">2</span><span class="p">]]</span>
+                <span class="n">workflow</span><span class="o">.</span><span class="n">add_connection_by_data</span><span class="p">(</span><span class="n">from_block</span><span class="o">=</span><span class="n">from_nest_block</span><span class="p">,</span>
+                                                <span class="n">from_number</span><span class="o">=</span><span class="n">from_nest_block_number</span><span class="p">,</span>
+                                                <span class="n">output_nest</span><span class="o">=</span><span class="n">from_nest</span><span class="p">,</span>
+                                                <span class="n">to_block</span><span class="o">=</span><span class="n">to_nest_block</span><span class="p">,</span>
+                                                <span class="n">to_number</span><span class="o">=</span><span class="n">to_nest_block_number</span><span class="p">,</span>
+                                                <span class="n">input_nest</span><span class="o">=</span><span class="n">to_nest</span><span class="p">)</span>
+                <span class="n">data_connection_colors</span><span class="p">[</span><span class="n">from_nest_block</span><span class="p">,</span>
+                                       <span class="n">from_nest_block_number</span><span class="p">,</span>
+                                       <span class="n">from_nest</span><span class="p">,</span>
+                                       <span class="n">to_nest_block</span><span class="p">,</span>
+                                       <span class="n">to_nest_block_number</span><span class="p">,</span>
+                                       <span class="n">to_nest</span><span class="p">]</span> <span class="o">=</span> <span class="n">added_color</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_block</span><span class="p">(</span><span class="n">from_node</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_block</span><span class="p">(</span><span class="n">to_node</span><span class="p">):</span>
+                <span class="n">from_block</span><span class="p">,</span> <span class="n">from_number</span> <span class="o">=</span> <span class="n">blocks</span><span class="p">[</span><span class="n">from_node</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+                <span class="n">to_block</span><span class="p">,</span> <span class="n">to_number</span> <span class="o">=</span> <span class="n">blocks</span><span class="p">[</span><span class="n">to_node</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+                <span class="n">workflow</span><span class="o">.</span><span class="n">add_connection_by_execution</span><span class="p">(</span><span class="n">from_block</span><span class="o">=</span><span class="n">from_block</span><span class="p">,</span>
+                                                     <span class="n">from_number</span><span class="o">=</span><span class="n">from_number</span><span class="p">,</span>
+                                                     <span class="n">to_block</span><span class="o">=</span><span class="n">to_block</span><span class="p">,</span>
+                                                     <span class="n">to_number</span><span class="o">=</span><span class="n">to_number</span><span class="p">)</span>
+                <span class="n">exc_connection_colors</span><span class="p">[</span><span class="n">from_block</span><span class="p">,</span>
+                                      <span class="n">from_number</span><span class="p">,</span>
+                                      <span class="n">to_block</span><span class="p">,</span>
+                                      <span class="n">to_number</span><span class="p">]</span> <span class="o">=</span> <span class="n">added_color</span>
+
+        <span class="k">for</span> <span class="n">from_node</span><span class="p">,</span> <span class="n">to_node</span> <span class="ow">in</span> <span class="n">graph_map</span><span class="o">.</span><span class="n">get_edge_overlap_from_second</span><span class="p">()</span> <span class="o">+</span> <span class="n">graph_map</span><span class="o">.</span><span class="n">get_edges_in_2_not_in_1</span><span class="p">():</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_output_nest</span><span class="p">(</span><span class="n">from_node</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_input_nest</span><span class="p">(</span><span class="n">to_node</span><span class="p">):</span>
+                <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">from_nest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_output_nest</span><span class="p">(</span><span class="n">from_node</span><span class="p">)</span>
+                <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">to_nest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_input_nest</span><span class="p">(</span><span class="n">to_node</span><span class="p">)</span>
+                <span class="n">from_nest_block</span><span class="p">,</span> <span class="n">from_nest_block_number</span> <span class="o">=</span> <span class="n">blocks</span><span class="p">[</span><span class="n">nest_to_center</span><span class="p">[</span><span class="n">from_node</span><span class="p">,</span> <span class="mi">2</span><span class="p">]]</span>
+                <span class="n">to_nest_block</span><span class="p">,</span> <span class="n">to_nest_block_number</span> <span class="o">=</span> <span class="n">blocks</span><span class="p">[</span><span class="n">nest_to_center</span><span class="p">[</span><span class="n">to_node</span><span class="p">,</span> <span class="mi">2</span><span class="p">]]</span>
+                <span class="n">workflow</span><span class="o">.</span><span class="n">add_connection_by_data</span><span class="p">(</span><span class="n">from_block</span><span class="o">=</span><span class="n">from_nest_block</span><span class="p">,</span>
+                                                <span class="n">from_number</span><span class="o">=</span><span class="n">from_nest_block_number</span><span class="p">,</span>
+                                                <span class="n">output_nest</span><span class="o">=</span><span class="n">from_nest</span><span class="p">,</span>
+                                                <span class="n">to_block</span><span class="o">=</span><span class="n">to_nest_block</span><span class="p">,</span>
+                                                <span class="n">to_number</span><span class="o">=</span><span class="n">to_nest_block_number</span><span class="p">,</span>
+                                                <span class="n">input_nest</span><span class="o">=</span><span class="n">to_nest</span><span class="p">)</span>
+                <span class="n">data_connection_colors</span><span class="p">[</span><span class="n">from_nest_block</span><span class="p">,</span>
+                                       <span class="n">from_nest_block_number</span><span class="p">,</span>
+                                       <span class="n">from_nest</span><span class="p">,</span>
+                                       <span class="n">to_nest_block</span><span class="p">,</span>
+                                       <span class="n">to_nest_block_number</span><span class="p">,</span>
+                                       <span class="n">to_nest</span><span class="p">]</span> <span class="o">=</span> <span class="n">matched_color</span> \
+                    <span class="k">if</span> <span class="n">from_node</span> <span class="ow">in</span> <span class="n">graph_map</span><span class="o">.</span><span class="n">get_node_overlap_from_second</span><span class="p">()</span> \
+                       <span class="ow">and</span> <span class="n">to_node</span> <span class="ow">in</span> <span class="n">graph_map</span><span class="o">.</span><span class="n">get_node_overlap_from_second</span><span class="p">()</span> \
+                    <span class="k">else</span> <span class="n">added_color</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_block</span><span class="p">(</span><span class="n">from_node</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_block</span><span class="p">(</span><span class="n">to_node</span><span class="p">):</span>
+                <span class="n">from_block</span><span class="p">,</span> <span class="n">from_number</span> <span class="o">=</span> <span class="n">blocks</span><span class="p">[</span><span class="n">from_node</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+                <span class="n">to_block</span><span class="p">,</span> <span class="n">to_number</span> <span class="o">=</span> <span class="n">blocks</span><span class="p">[</span><span class="n">to_node</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+                <span class="n">workflow</span><span class="o">.</span><span class="n">add_connection_by_execution</span><span class="p">(</span><span class="n">from_block</span><span class="o">=</span><span class="n">from_block</span><span class="p">,</span>
+                                                     <span class="n">from_number</span><span class="o">=</span><span class="n">from_number</span><span class="p">,</span>
+                                                     <span class="n">to_block</span><span class="o">=</span><span class="n">to_block</span><span class="p">,</span>
+                                                     <span class="n">to_number</span><span class="o">=</span><span class="n">to_number</span><span class="p">)</span>
+                <span class="n">exc_connection_colors</span><span class="p">[</span><span class="n">from_block</span><span class="p">,</span>
+                                      <span class="n">from_number</span><span class="p">,</span>
+                                      <span class="n">to_block</span><span class="p">,</span>
+                                      <span class="n">to_number</span><span class="p">]</span> <span class="o">=</span> <span class="n">matched_color</span> \
+                    <span class="k">if</span> <span class="n">from_node</span> <span class="ow">in</span> <span class="n">graph_map</span><span class="o">.</span><span class="n">get_node_overlap_from_second</span><span class="p">()</span> \
+                       <span class="ow">and</span> <span class="n">to_node</span> <span class="ow">in</span> <span class="n">graph_map</span><span class="o">.</span><span class="n">get_node_overlap_from_second</span><span class="p">()</span> \
+                    <span class="k">else</span> <span class="n">added_color</span>
+
+        <span class="k">for</span> <span class="n">from_node</span><span class="p">,</span> <span class="n">to_node</span> <span class="ow">in</span> <span class="n">graph_map</span><span class="o">.</span><span class="n">get_edges_in_1_not_in_2</span><span class="p">():</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_output_nest</span><span class="p">(</span><span class="n">from_node</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_input_nest</span><span class="p">(</span><span class="n">to_node</span><span class="p">):</span>
+                <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">from_nest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_output_nest</span><span class="p">(</span><span class="n">from_node</span><span class="p">)</span>
+                <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">to_nest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_input_nest</span><span class="p">(</span><span class="n">to_node</span><span class="p">)</span>
+                <span class="n">from_nest_block</span><span class="p">,</span> <span class="n">from_nest_block_number</span> <span class="o">=</span> <span class="n">blocks</span><span class="p">[</span><span class="n">nest_to_center</span><span class="p">[</span><span class="n">from_node</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+                <span class="n">to_nest_block</span><span class="p">,</span> <span class="n">to_nest_block_number</span> <span class="o">=</span> <span class="n">blocks</span><span class="p">[</span><span class="n">nest_to_center</span><span class="p">[</span><span class="n">to_node</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+                <span class="n">workflow</span><span class="o">.</span><span class="n">add_connection_by_data</span><span class="p">(</span><span class="n">from_block</span><span class="o">=</span><span class="n">from_nest_block</span><span class="p">,</span>
+                                                <span class="n">from_number</span><span class="o">=</span><span class="n">from_nest_block_number</span><span class="p">,</span>
+                                                <span class="n">output_nest</span><span class="o">=</span><span class="n">from_nest</span><span class="p">,</span>
+                                                <span class="n">to_block</span><span class="o">=</span><span class="n">to_nest_block</span><span class="p">,</span>
+                                                <span class="n">to_number</span><span class="o">=</span><span class="n">to_nest_block_number</span><span class="p">,</span>
+                                                <span class="n">input_nest</span><span class="o">=</span><span class="n">to_nest</span><span class="p">)</span>
+                <span class="n">data_connection_colors</span><span class="p">[</span><span class="n">from_nest_block</span><span class="p">,</span>
+                                       <span class="n">from_nest_block_number</span><span class="p">,</span>
+                                       <span class="n">from_nest</span><span class="p">,</span>
+                                       <span class="n">to_nest_block</span><span class="p">,</span>
+                                       <span class="n">to_nest_block_number</span><span class="p">,</span>
+                                       <span class="n">to_nest</span><span class="p">]</span> <span class="o">=</span> <span class="n">deleted_color</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_block</span><span class="p">(</span><span class="n">from_node</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_block</span><span class="p">(</span><span class="n">to_node</span><span class="p">):</span>
+                <span class="n">from_block</span><span class="p">,</span> <span class="n">from_number</span> <span class="o">=</span> <span class="n">blocks</span><span class="p">[</span><span class="n">from_node</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+                <span class="n">to_block</span><span class="p">,</span> <span class="n">to_number</span> <span class="o">=</span> <span class="n">blocks</span><span class="p">[</span><span class="n">to_node</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+                <span class="n">workflow</span><span class="o">.</span><span class="n">add_connection_by_execution</span><span class="p">(</span><span class="n">from_block</span><span class="o">=</span><span class="n">from_block</span><span class="p">,</span>
+                                                     <span class="n">from_number</span><span class="o">=</span><span class="n">from_number</span><span class="p">,</span>
+                                                     <span class="n">to_block</span><span class="o">=</span><span class="n">to_block</span><span class="p">,</span>
+                                                     <span class="n">to_number</span><span class="o">=</span><span class="n">to_number</span><span class="p">)</span>
+                <span class="n">exc_connection_colors</span><span class="p">[</span><span class="n">from_block</span><span class="p">,</span>
+                                      <span class="n">from_number</span><span class="p">,</span>
+                                      <span class="n">to_block</span><span class="p">,</span>
+                                      <span class="n">to_number</span><span class="p">]</span> <span class="o">=</span> <span class="n">deleted_color</span>
+
+        <span class="k">return</span> <span class="n">workflow</span><span class="p">,</span> <span class="n">GraphMapDotColorer</span><span class="p">(</span><span class="n">block_colors</span><span class="p">,</span> <span class="n">data_connection_colors</span><span class="p">,</span> <span class="n">exc_connection_colors</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">graph_diff alpha 0.1.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Aleksandr Bzikadze.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.3.
+    </div>
+  </body>
+</html>

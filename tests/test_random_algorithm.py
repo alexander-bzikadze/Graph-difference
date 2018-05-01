@@ -36,11 +36,10 @@ class RandomGraphTest(unittest.TestCase):
                           # Cpp.BaselineAlgorithm(),
                           # Cpp.BaselineWithChopAlgorithm(),
                           # CppRun.OrderedAntAlgorithm(),
-                          # CppImport.OrderedAntAlgorithm(),
                           # CppImport.BaselineWithChopAlgorithm(),
-                          # CppImport.LinAntAlgorithm(),
+                          CppImport.OrderedAntAlgorithm(),
                           # SimAnnealAlgorithm(),
-                          ComposedGraphDiffAlgorithm(CppImport.LinAntAlgorithm(), SimAnnealAlgorithm())
+                          # ComposedGraphDiffAlgorithm(CppImport.OrderedAntAlgorithm(), SimAnnealAlgorithm())
                       ]], [])
 
     @parameterized.expand(parameters)

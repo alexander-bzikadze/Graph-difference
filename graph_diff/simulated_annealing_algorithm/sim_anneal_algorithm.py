@@ -30,7 +30,16 @@ class SimAnnealAlgorithm(GraphDiffAlgorithmWithInit):
         self.current_solution = None
         self.nodes1, self.edges1 = None, None
         self.nodes2, self.edges2 = None, None
+        self.inverse_edges1 = None
+        self.inverse_edges2 = None
         self.printer = None
+
+    def __inverse_edges(self, edges):
+        inverse_edges = [set() for _ in range(0, len(edges))]
+        for i, edge_list in enumerate(edges):
+            for j in edge_list:
+                inverse_edges[j].add(i)
+        return inverse_edges
 
     def construct_diff(self,
                        graph1: GraphWithRepetitiveNodesWithRoot,
@@ -44,6 +53,10 @@ class SimAnnealAlgorithm(GraphDiffAlgorithmWithInit):
         self.printer = GraphPrinter(self.graph1, self.graph2)
         self.nodes1, self.edges1 = self.printer.graph_transformer_first()
         self.nodes2, self.edges2 = self.printer.graph_transformer_second()
+        self.edges1 = list(map(set, self.edges1))
+        self.edges2 = list(map(set, self.edges2))
+        self.inverse_edges1 = self.__inverse_edges(self.edges1)
+        self.inverse_edges2 = self.__inverse_edges(self.edges2)
         self.edges1, self.edges2 = list(map(set, self.edges1)), list(map(set, self.edges2))
 
         if self.init_solution is None:
@@ -67,10 +80,9 @@ class SimAnnealAlgorithm(GraphDiffAlgorithmWithInit):
             if same_score == self.NUMBER_OF_ITERATIONS_WITH_THE_SAME_SCORE:
                 break
 
-            x = self._take_step()
-            x_energy = self._score(x)
+            x, x_energy = self._take_step(energy)
             alpha = numpy.random.uniform(0, 1)
-            if alpha < math.exp(-(energy - x_energy) / self.time_law(_)):
+            if alpha < numpy.exp(-(energy - x_energy) / self.time_law(_)):
                 self.current_solution = x
                 energy = x_energy
                 same_score = 0
@@ -80,8 +92,7 @@ class SimAnnealAlgorithm(GraphDiffAlgorithmWithInit):
 
     @staticmethod
     def time_law(k: int):
-        t0 = 100
-        return t0 / k
+        return SimAnnealAlgorithm.T0 / k
 
     def set_init(self, new_init: GraphMap):
         self.init_solution = copy(new_init)
@@ -109,9 +120,10 @@ class SimAnnealAlgorithm(GraphDiffAlgorithmWithInit):
         return score
 
     def _take_step(self,
+                   energy: int,
                    num_try=0):
         if num_try == 10:
-            return self.current_solution
+            return self.current_solution, energy
 
         solution = copy(self.current_solution)
 
@@ -121,18 +133,47 @@ class SimAnnealAlgorithm(GraphDiffAlgorithmWithInit):
         choice = [i for i, (l, _) in enumerate(self.nodes2) if l == label]
 
         if len(choice) < 2:
-            return self._take_step(num_try + 1)
+            return self._take_step(energy, num_try + 1)
 
         change_with = randint(0, len(choice) - 1)
         change_with = choice[change_with]
 
         i = [i for i, x in enumerate(solution) if x == change_with]
 
-        if not i:
-            solution[change] = change_with
-        elif len(i) == 1:
-            solution[change], solution[i[0]] = solution[i[0]], solution[change]
-        else:
-            assert False
+        assert len(i) == 1
+        previous = i[0]
 
-        return solution
+        if previous == change:
+            return self._take_step(energy, num_try + 1)
+
+        for j in self.edges1[change]:
+            if solution[j] in self.edges2[solution[change]]:
+                energy -= 1
+        for j in self.inverse_edges1[change]:
+            if solution[j] in self.inverse_edges2[solution[change]]:
+                energy -= 1
+
+        for j in self.edges1[previous]:
+            if solution[j] in self.edges2[solution[previous]] and j != change:
+                energy -= 1
+        for j in self.inverse_edges1[previous]:
+            if solution[j] in self.inverse_edges2[solution[previous]] and j != change:
+                energy -= 1
+
+        solution[change], solution[previous] = solution[previous], solution[change]
+
+        for j in self.edges1[change]:
+            if solution[j] in self.edges2[solution[change]]:
+                energy += 1
+        for j in self.inverse_edges1[change]:
+            if solution[j] in self.inverse_edges2[solution[change]]:
+                energy += 1
+
+        for j in self.edges1[previous]:
+            if solution[j] in self.edges2[solution[previous]] and j != change:
+                energy += 1
+        for j in self.inverse_edges1[previous]:
+            if solution[j] in self.inverse_edges2[solution[previous]] and j != change:
+                energy += 1
+
+        return solution, energy
